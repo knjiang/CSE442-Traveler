@@ -15,12 +15,23 @@ Including another URLconf
 """
 from django.urls import path, include
 from django.contrib.auth.models import User
-from rest_framework import routers
+from rest_framework import routers,serializers,viewsets
 from profiles.viewsets import ProfileViewSet,LanguageViewSet
+
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ['url', 'username', 'email', 'groups']
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 router = routers.DefaultRouter()
 router.register(r'profiles', ProfileViewSet)
 router.register(r'languages', LanguageViewSet)
+router.register(r'users', UserViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

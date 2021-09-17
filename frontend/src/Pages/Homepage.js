@@ -9,10 +9,33 @@ class Homepage extends Component {
     /*The locations state is currently containing placeholders until database is set up*/
     super(props);
     this.state = {
-      locations: ['location_1', 'location_2']
+      locations: ['location_1', 'location_2'],
+      users: null
     }; 
   }
-
+  /*
+  componentDidMount() {
+    fetch("http://localhost:8000/users/", 
+    {
+      method: "GET",
+      mode: 'cors',
+      headers: {
+        'Access-Control-Allow-Origin':'http://localhost:8000'
+      }
+    })
+    .then(
+      (result) => {
+        alert("Fetching Successful")
+        this.setState({
+          users: result
+        });
+      },
+      (error) => {
+        alert(error)
+      }
+    )
+  } 
+  */
   render(){
     return (
       <div>
@@ -27,6 +50,7 @@ class Homepage extends Component {
                 ))}
               </div>
           </div>
+          <h1>users from fetch: {this.state.users}</h1>
       </div>
     );
   }

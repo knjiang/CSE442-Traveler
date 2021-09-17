@@ -7,14 +7,19 @@ class Specific_Location extends Component {
     super(props)
     this.state={
       current_location: null,
-      saved: 'False'
     }
+
+    this.saveLocation = this.saveLocation.bind(this)
   }
   
   componentDidMount() {
     /*Leave this for database fetching*/
     let pathname = this.props.location.pathname.substr(11)
     this.setState({current_location: pathname})
+  }
+
+  saveLocation() {
+    /*Save location to database*/
   }
   
   render (){
@@ -23,8 +28,7 @@ class Specific_Location extends Component {
         return(
             <div>
                 <h1>Welcome to {this.state.current_location}</h1>
-                <button onClick = {() => this.setState({saved: 'True'})}>Save to list</button>
-                <h1>Location saved: {this.state.saved}</h1>
+                <button onClick = {() => (this.setState({saved: 'True'}, this.saveLocation))}>Save to list</button>
             </div>
         );
     }
