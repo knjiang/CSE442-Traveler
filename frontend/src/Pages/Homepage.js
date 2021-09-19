@@ -63,6 +63,8 @@ class Homepage extends Component {
                 ))}
               </DropdownButton>
               </div>
+            <button id="forumButton" title="forum button">Forum Button
+            </button>
           </div>
           <h1>users from fetch: {this.state.users}</h1>
       </div>
