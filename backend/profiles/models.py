@@ -8,7 +8,7 @@ class Profile(models.Model):
     from_location = models.TextField(max_length=30)
 
     def __str__(self):
-        return self.user.__str__
+        return self.user.username
 
 class Language(models.Model):
     name = models.TextField(max_length=30)
