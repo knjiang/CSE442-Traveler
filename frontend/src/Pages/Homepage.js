@@ -1,7 +1,7 @@
-import { Component } from "react"
+import { Component, useEffect } from "react"
 import './Homepage.css'
 import { Link , BrowserRouter as Router } from 'react-router-dom';
-import { DropdownButton, Dropdown, Button } from 'react-bootstrap'
+import { DropdownButton, Dropdown, Form, FormControl, Button } from 'react-bootstrap'
 
 class Homepage extends Component {
 
@@ -11,11 +11,15 @@ class Homepage extends Component {
     super(props);
     this.state = {
       locations: ['location_1', 'location_2'],
-      users: null
+      users: null,
+      search_query: '',
+      data: []
     }; 
   }
   
   componentDidMount() {
+
+
     /*
     fetch("http://localhost:8000/users/", 
     {
@@ -38,10 +42,64 @@ class Homepage extends Component {
     )
     */
   } 
-  
+
+  getQuery = (e) => {
+    // alert("Something happened")
+    console.log(this.state.search_query)
+    e.preventDefault();
+    fetch("http://localhost:8000/users/" + this.state.search_query,
+    {
+      method: "GET",
+      mode: 'cors',
+      json: true,
+      headers: {
+        'Access-Control-Allow-Origin':'http://localhost:8000'
+      }
+    })
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      this.setState(() => {
+        return {
+          data
+        };
+      });
+    });
+  }
+
+  findUser = (e) => {
+    this.setState({search_query: e.target.value});
+  }
+
   render(){
     return (
       <div>
+        <h1>Change detected: {this.state.search_query}</h1>
+          <form ref="form" onSubmit={this.getQuery}>
+            <input
+                placeholder="Search Travel Buddies"
+                // name="s"
+                method="get"
+                type='text'
+                onChange={this.findUser}
+            />
+            <button type='submit'>Find</button>
+          </form>
+
+
+        {/* <ul>
+          {this.state.data.map(user => {
+            return (
+              <li key={user.id}>
+                {user.username} - {user.email}
+              </li>
+            );
+          })}
+        </ul> */}
+
+        
+
           <h1>Welcome to the Traveler Homepage</h1>
           <div>
             <h1>Locations</h1>
