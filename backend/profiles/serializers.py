@@ -10,7 +10,10 @@ class ProfileSerializer(serializers.ModelSerializer):
     languages = LanguageSerializer(many=True,read_only=True)
     class Meta:
         model = Profile
+<<<<<<< HEAD
         fields = '__all__'
+=======
+>>>>>>> 3e1f2d283607283cee1a972783b8d0f9bc999b5a
 
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:

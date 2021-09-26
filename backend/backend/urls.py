@@ -30,5 +30,8 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/google/', GoogleLogin.as_view(), name='google_login'),
+<<<<<<< HEAD
     path('api/profiles/', include('profiles.urls'))
+=======
+>>>>>>> 3e1f2d283607283cee1a972783b8d0f9bc999b5a
 ]
