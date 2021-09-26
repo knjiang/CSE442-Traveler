@@ -12,7 +12,14 @@ class Profile(models.Model):
 
 class Language(models.Model):
     name = models.TextField(max_length=30)
-    user = models.ForeignKey(Profile,on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+class Location(models.Model):
+    name = models.TextField(max_length=30)
+    profile = models.ForeignKey(Profile,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

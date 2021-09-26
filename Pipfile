@@ -9,6 +9,7 @@ authlib = "*"
 requests = "*"
 djangorestframework = "*"
 python-dotenv = "*"
+django-cors-headers = "*"
 
 [requires]
 python_version = "3.7"
