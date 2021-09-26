@@ -22,12 +22,14 @@ function Homepage(){
       getProfile(cookies.token)
       .then(response => response.json())
       .then(data => {
-        setUser({
-          logged_in: true,
-          name: data.first_name,
-          email: data.email,
-          from_location: data.from_location
-        })
+        if (!data.detail){
+          setUser({
+            logged_in: true,
+            name: data.first_name,
+            email: data.email,
+            from_location: data.from_location
+          })
+        }
       })
     }
   })
