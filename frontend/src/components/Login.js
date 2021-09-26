@@ -1,24 +1,13 @@
 import React from 'react';
 import GoogleLogin from 'react-google-login';
 import { useCookies } from 'react-cookie';
+import { loginBackend} from '../apis/auth';
 
 function Login(){
     const [cookies,setCookie] = useCookies(['token']);
 
     const onSuccess = (res) => {
-        fetch("http://localhost:8000/dj-rest-auth/google/",
-        {
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            },
-            method: "POST",
-            body: JSON.stringify({
-              "access_token": res.accessToken,
-              "code": "",
-              "id_token": "",
-          })
-        })
+        loginBackend(res.accessToken)
         .then(response => response.json())
         .then(data => {
             setCookie('token', data.key, { path: '/' });
