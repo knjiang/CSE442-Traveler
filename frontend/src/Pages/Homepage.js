@@ -88,11 +88,6 @@ function Homepage(){
     });
   }
 
-  const handleListChange = (e) => {
-    e.preventDefault()
-    setList({name: e.target.value, })
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault()
     //JSON.parse(list.name) is payload
