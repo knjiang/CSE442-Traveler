@@ -55,10 +55,12 @@ function Homepage(){
     });
   }
 
+
   return(
     <div>
       <h1>Welcome to the Traveler Homepage</h1>
       {!user.logged_in && <Login/>}
+      <button id="forumButton" title="forum button"><a href = "/forum"> Forum Button </a></button>
       <br/>
       {user.logged_in && <Button variant="outline-dark" onClick = {logoutUser}>
       Logout
