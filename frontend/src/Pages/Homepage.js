@@ -15,6 +15,7 @@ function Homepage(){
     name: "None",
     email: "None",
     from_location: "",
+    search_query: '',
   })
 
   useEffect(() => {
