@@ -18,6 +18,7 @@ function Homepage(){
     name: "None",
     email: "None",
     from_location: "",
+    search_query: '',
   })
 
   const {value:listName,bind:listNameBind,reset:resetListName } = useTextInput('')
@@ -31,6 +32,23 @@ function Homepage(){
   const [location, setLocation] = useState({
     location: []
   })
+
+  useEffect(() => {
+    getLocation()
+    .then(response => response.json())
+    .then(data => {
+      if (data){
+        setLocation({location: (data.map(({id, name}) => [name]))})
+      }
+    })
+    getList(cookies.token)
+    .then(response => response.json())
+    .then(data =>{
+      if (data){
+        setList({lists: (data.map(({id, name}) => [name]))})
+      }
+    })
+  }, [])
 
   useEffect(() => {
     if (cookies.token && !user.logged_in){
@@ -47,21 +65,7 @@ function Homepage(){
         }
       })
     }
-    getLocation()
-    .then(response => response.json())
-    .then(data => {
-      if (data){
-        setLocation({location: (data.map(({id, name}) => [name]))})
-      }
-    })
-    getList(cookies.token)
-    .then(response => response.json())
-    .then(data =>{
-      if (!data){
-        setList({lists: (data.map(({id, name}) => [name]))})
-      }
-    })
-  }, [])
+  })
 
   const location_set = () => {
     return user.from_location != ""
@@ -138,7 +142,7 @@ function Homepage(){
         </label>
         <input type="submit" value="Submit"/>
       </form>
-      <p>Your saved Lists are: {list.lists}</p>
+      <p>Your saved list[s]: {list.lists}</p>
     </div>
   )
 }
