@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.urls import path, include
 from rest_framework import routers
-from profiles.viewsets import ProfileViewSet,LanguageViewSet,LocationViewSet
+from profiles.viewsets import ProfileViewSet,LanguageViewSet,ListViewSet,LocationViewSet,SavedLocationViewSet
 from .viewsets import UserViewSet
 from login.views import GoogleLogin
 
@@ -23,7 +23,9 @@ router = routers.DefaultRouter()
 router.register(r'profiles', ProfileViewSet)
 router.register(r'languages', LanguageViewSet)
 router.register(r'users', UserViewSet)
+router.register(r'lists', ListViewSet)
 router.register(r'locations', LocationViewSet)
+router.register(r'savedlocations', SavedLocationViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

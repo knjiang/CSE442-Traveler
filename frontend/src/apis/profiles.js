@@ -12,6 +12,16 @@ const getProfile = (token) => {
     })
 }
 
+const getList = (token) => {
+    return fetch(`${BASE_URL}/lists/`,
+    {
+        headers: {
+            'Authorization' : 'Token ' + token
+        },
+        method: "GET",
+    })
+}
+
 const changeLocation = (token,location) => {
     return fetch(`${BASE_URL}/api/profiles/change_location/`,
     {
@@ -27,4 +37,20 @@ const changeLocation = (token,location) => {
     })
 }
 
-export {getProfile, changeLocation}
+const changeList = (token,name,list) => {
+    return fetch(`${BASE_URL}/api/profiles/change_list`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "name" : name,
+            "list" : list
+        }),
+    })
+}
+
+export {getProfile, getList, changeLocation, changeList}
