@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { getProfile } from '../apis/profiles';
 import { getQuery } from '../apis/profiles';
 
 function Search_Users(){

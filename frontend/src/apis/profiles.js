@@ -12,6 +12,16 @@ const getProfile = (token) => {
     })
 }
 
+const getList = (token) => {
+    return fetch(`${BASE_URL}/lists/`,
+    {
+        headers: {
+            'Authorization' : 'Token ' + token
+        },
+        method: "GET",
+    })
+}
+
 const changeLocation = (token,location) => {
     return fetch(`${BASE_URL}/api/profiles/change_location/`,
     {
@@ -27,6 +37,22 @@ const changeLocation = (token,location) => {
     })
 }
 
+const changeList = (token,name,list) => {
+    return fetch(`${BASE_URL}/api/profiles/change_list`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "name" : name,
+            "list" : list
+        }),
+    })
+}
+
 const getQuery = (e,email) => {
     e.preventDefault()
     const encoded_input = encodeURIComponent(email)
@@ -35,4 +61,4 @@ const getQuery = (e,email) => {
     }) 
 }
 
-export {getProfile, changeLocation, getQuery}
+export {getProfile, changeLocation, getQuery, changeList, getList}

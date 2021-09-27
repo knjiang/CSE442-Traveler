@@ -6,6 +6,9 @@ import { useCookies } from 'react-cookie';
 import { logoutBackend} from '../apis/auth';
 import { getProfile } from '../apis/profiles';
 import LocationForm from "../components/LocationForm";
+import { getLocation } from "../apis/locations";
+import { changeList, getList } from '../apis/profiles';
+import { useTextInput} from '../hooks/text-input';
 
 function Homepage(){
   const [cookies,setCookie, removeCookie] = useCookies(['token']);
@@ -17,6 +20,28 @@ function Homepage(){
     from_location: "",
     search_query: '',
   })
+
+  const {value:listName,bind:listNameBind,reset:resetListName } = useTextInput('')
+  const {value:locationList,bind:locationListBind,reset:resetLocationList } = useTextInput('')
+
+  const [list,setList] = useState({
+    name: "",
+    lists: []
+  })
+
+  const [location, setLocation] = useState({
+    location: []
+  })
+
+  useEffect(() => {
+    getLocation()
+    .then(response => response.json())
+    .then(data => {
+      if (data){
+        setLocation({location: (data.map(({id, name}) => [name]))})
+      }
+    })
+  }, [])
 
   useEffect(() => {
     if (cookies.token && !user.logged_in){
@@ -30,6 +55,14 @@ function Homepage(){
             email: data.email,
             from_location: data.from_location
           })
+        }
+      })
+    getList(cookies.token)
+    .then(response => response.json())
+    .then(data =>{
+      console.log(data)
+      if (!data.detail){
+        setList({lists: (data.map(({id, name}) => [name]))})
         }
       })
     }
@@ -55,6 +88,33 @@ function Homepage(){
     });
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    //JSON.parse(list.name) is payload
+    changeList(cookies.token,listName,locationList)
+    resetListName()
+    resetLocationList()
+  }
+
+  const locations_dropDown = () => {
+    if (location){
+      return(
+        <DropdownButton id="dropdown-basic-button" title="Choose your location">
+            {location.location.map((locations, index) => (
+                <div className = "Location_Boxes">
+                  <Dropdown.Item href = {'/locations/' + locations}>{locations}</Dropdown.Item>
+                </div>
+            ))}
+          </DropdownButton>
+      )
+    }
+    else {
+      return (
+        <DropdownButton id="dropdown-basic-button" title="Choose your location">
+        </DropdownButton>
+      )
+    }
+  }
 
   return(
     <div>
@@ -70,6 +130,19 @@ function Homepage(){
       <br/>
       {user.logged_in && !location_set() && <LocationForm/>}
       {user.logged_in && location_set() && <p>You are from {user.from_location}</p>}
+      {locations_dropDown()}
+      <br/>
+      <form onSubmit = {(e) => handleSubmit(e)}>
+        <label>
+          Create new list:
+          <br/>
+          <p>List name:<input type="text" {...listNameBind} /> </p>
+          <br/>
+          <p>Locations:<input type="text" {...locationListBind}/></p>
+        </label>
+        <input type="submit" value="Submit"/>
+      </form>
+      <p>Your saved list[s]: {list.lists}</p>
     </div>
   )
 }
