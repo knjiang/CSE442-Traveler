@@ -1,4 +1,4 @@
-// All profiles-related API calls
+// All location-related API calls
 
 import {BASE_URL} from './base';
 

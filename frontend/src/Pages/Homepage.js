@@ -41,13 +41,6 @@ function Homepage(){
         setLocation({location: (data.map(({id, name}) => [name]))})
       }
     })
-    getList(cookies.token)
-    .then(response => response.json())
-    .then(data =>{
-      if (data){
-        setList({lists: (data.map(({id, name}) => [name]))})
-      }
-    })
   }, [])
 
   useEffect(() => {
@@ -62,6 +55,14 @@ function Homepage(){
             email: data.email,
             from_location: data.from_location
           })
+        }
+      })
+    getList(cookies.token)
+    .then(response => response.json())
+    .then(data =>{
+      console.log(data)
+      if (!data.detail){
+        setList({lists: (data.map(({id, name}) => [name]))})
         }
       })
     }
@@ -124,6 +125,7 @@ function Homepage(){
     <div>
       <h1>Welcome to the Traveler Homepage</h1>
       {!user.logged_in && <Login/>}
+      <button id="forumButton" title="forum button"><a href = "/forum"> Forum Button </a></button>
       <br/>
       {user.logged_in && <Button variant="outline-dark" onClick = {logoutUser}>
       Logout
@@ -134,11 +136,14 @@ function Homepage(){
       {user.logged_in && !location_set() && <LocationForm/>}
       {user.logged_in && location_set() && <p>You are from {user.from_location}</p>}
       {locations_dropDown()}
+      <br/>
       <form onSubmit = {(e) => handleSubmit(e)}>
         <label>
           Create new list:
-          <input type="text" {...listNameBind} /> <br/>
-          <input type="text" {...locationListBind}/>
+          <br/>
+          <p>List name:<input type="text" {...listNameBind} /> </p>
+          <br/>
+          <p>Locations:<input type="text" {...locationListBind}/></p>
         </label>
         <input type="submit" value="Submit"/>
       </form>

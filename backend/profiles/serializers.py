@@ -6,15 +6,15 @@ class LanguageSerializer(serializers.ModelSerializer):
         model = Language
         fields = '__all__'
 
-class ListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LocationList
-        fields = '__all__'
-
 class SavedLocationSerializer(serializers.ModelSerializer):
-    lists = ListSerializer(many=True,read_only=True)
     class Meta:
         model = SavedLocation
+        fields = '__all__'
+
+class ListSerializer(serializers.ModelSerializer):
+    SavedLocation = SavedLocationSerializer(many=True,read_only=True)
+    class Meta:
+        model = LocationList
         fields = '__all__'
 
 class LocationSerializer(serializers.ModelSerializer):

@@ -53,4 +53,12 @@ const changeList = (token,name,list) => {
     })
 }
 
-export {getProfile, getList, changeLocation, changeList}
+const getQuery = (e,email) => {
+    e.preventDefault()
+    const encoded_input = encodeURIComponent(email)
+    return fetch(`${BASE_URL}/api/profiles/search_user/?user_email=${encoded_input}`, {
+    method: "GET",
+    }) 
+}
+
+export {getProfile, changeLocation, getQuery, changeList, getList}
