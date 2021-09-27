@@ -1,9 +1,8 @@
 import { Component } from "react"
-import './Homepage.css'
-import { Link , BrowserRouter as Router } from 'react-router-dom';
+import './UserProfile.css'
 import traveler from './images/traveler.jpg';
 
-class Browse_Locations extends Component {
+class UserProfile extends Component {
 
   render(){
     return (
@@ -40,4 +39,4 @@ class Browse_Locations extends Component {
   }
 }
 
-export default Browse_Locations
+export default UserProfile
