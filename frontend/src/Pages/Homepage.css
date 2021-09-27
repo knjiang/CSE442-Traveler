@@ -12,6 +12,10 @@
     width: 100%;
 }
 
+#forumButton a{
+    text-decoration: none;
+}
+
 #forumButton{
     background-color: deepskyblue;
     color: white;
@@ -20,4 +24,5 @@
     border-radius: 5px;
     margin: 10px 0;
     cursor: pointer;
+
 }
