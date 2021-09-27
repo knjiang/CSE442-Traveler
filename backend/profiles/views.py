@@ -42,3 +42,20 @@ class ChangeLocationView(APIView):
         profile.save()
         return Response()
     
+class SearchUserView(APIView):
+    """
+    View to get searched user
+
+    """
+    def get(self, request, format=None):
+        searched_email = request.query_params.get('user_email')
+        print(searched_email)
+        user_query = get_object_or_404(Profile,user__email=searched_email)
+        
+        # print(user_query.from_location)
+        
+        return Response({
+            "first_name" : user_query.user.first_name,
+            "email" : user_query.user.email,
+            "from_location" : user_query.from_location,
+        })
