@@ -1,5 +1,5 @@
 // Base Settings for API Calls
 
-const BASE_URL = 'http://localhost:8000';
+const BASE_URL = '';
 
 export {BASE_URL};
