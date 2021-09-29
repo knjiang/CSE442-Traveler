@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-0tztqs88!m(q!palb(y5hz+k-vvr2xnioe*7y@d$zgwd$o$f5z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["https://traveler-project.herokuapp.com"]
 
 
 # Application definition
@@ -67,6 +67,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
+    "https://traveler-project.herokuapp.com",
     "http://localhost:3000",
     "http://frontend:3000",
 ]
