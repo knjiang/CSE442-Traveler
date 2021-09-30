@@ -1,41 +1,53 @@
-import { Component } from "react"
+import { useEffect, useState } from "react"
+import { getLocation } from "../apis/locations";
+import { changeList, getList } from '../apis/profiles';
+import { Link } from 'react-router-dom'
 
 /*This is the page that shows the location the user clicked*/
 
-class Specific_Location extends Component {
-    constructor(props) {
-    super(props)
-    this.state={
-      current_location: null,
-    }
+function Specific_Location (props) {
 
-    this.saveLocation = this.saveLocation.bind(this)
-  }
-  
-  componentDidMount() {
-    /*Leave this for database fetching*/
-    let pathname = this.props.location.pathname.substr(11)
-    this.setState({current_location: pathname})
-  }
+  const [currentLocation,setLocation] = useState(false)
 
-  saveLocation() {
-    /*Save location to database*/
-  }
-  
-  render (){
-    let check_location = this.props.location.pathname.slice(0, 10);
-    if (check_location == '/locations'){
-        return(
-            <div>
-                <h1>Welcome to {this.state.current_location}</h1>
-                <button onClick = {() => (this.setState({saved: 'True'}, this.saveLocation))}>Save to list</button>
-            </div>
-        );
+  const [realLocation,setReal] = useState(false)
+
+  const [savedLists,setLists] = useState([])
+
+  useEffect (() => {
+    if (!currentLocation){
+      console.log("Getting path")
+      const pathname = props.location.pathname.substr(11)
+      if (pathname){
+        setLocation(pathname)
+        console.log(pathname, currentLocation)
+      }
     }
-    else {
+    else{
+      getLocation()
+      .then(response => response.json())
+      .then(data => {
+        if (data){
+          let realLocations = (data.map(({id, name}) => name))
+          if (realLocations.includes(currentLocation)){
+            setReal(true)
+          }
+        }
+      })
+    }
+  })
+
+  const check_location = props.location.pathname.slice(0, 10);
+  if (check_location != '/locations'){
         return(<h1>The following page does not exist, please check your spelling</h1>)
-    }
-    }   
+  }
+  return(
+    <div>
+        <h1>Welcome to {currentLocation}</h1>
+        <button >Save to list</button>
+        <Link to = '/'><button>Homepage</button></Link>
+        <p>{realLocation}, {currentLocation}</p>
+    </div>
+    )
 }
 
 export default Specific_Location 
