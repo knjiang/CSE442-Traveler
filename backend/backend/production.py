@@ -3,7 +3,7 @@ from .settings import *
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [os.environ.get("PRODUCTION_HOST")]
 CSRF_TRUSTED_ORIGINS = [os.environ.get("PRODUCTION_HOST")]
