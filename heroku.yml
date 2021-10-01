@@ -1,9 +1,7 @@
 build:
     docker:
-      web: frontend/Dockerfile
-      backend: Dockerfile
+      web: Dockerfile
 
 run:
-    web: npm run start
-    backend: pipenv run python3 backend/manage.py runserver 0.0.0.0:8000
+    web: pipenv run python3 backend/manage.py runserver 0.0.0.0:$PORT
       

@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path, include
+from django.urls import path, include, re_path
 from rest_framework import routers
 from profiles.viewsets import ProfileViewSet,LanguageViewSet,ListViewSet,LocationViewSet,SavedLocationViewSet
 from .viewsets import UserViewSet
@@ -28,7 +28,7 @@ router.register(r'locations', LocationViewSet)
 router.register(r'savedlocations', SavedLocationViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    re_path(".*", TemplateView.as_view(template_name="index.html")),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/google/', GoogleLogin.as_view(), name='google_login'),
