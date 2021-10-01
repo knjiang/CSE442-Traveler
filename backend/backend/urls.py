@@ -30,7 +30,7 @@ router.register(r'locations', LocationViewSet)
 router.register(r'savedlocations', SavedLocationViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/router/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/google/', GoogleLogin.as_view(), name='google_login'),

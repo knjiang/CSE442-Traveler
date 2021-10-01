@@ -13,7 +13,7 @@ const getProfile = (token) => {
 }
 
 const getList = (token) => {
-    return fetch(`${BASE_URL}/lists/`,
+    return fetch(`${BASE_URL}/api/router/lists/`,
     {
         headers: {
             'Authorization' : 'Token ' + token
