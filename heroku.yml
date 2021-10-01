@@ -1,7 +1,10 @@
 build:
     docker:
       web: Dockerfile
-
+release:
+  image: web
+  command:
+    - pipenv run python3 backend/manage.py migrate
 run:
     web: pipenv run python3 backend/manage.py runserver 0.0.0.0:$PORT
       
