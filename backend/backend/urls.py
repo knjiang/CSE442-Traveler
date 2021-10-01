@@ -18,6 +18,7 @@ from rest_framework import routers
 from profiles.viewsets import ProfileViewSet,LanguageViewSet,ListViewSet,LocationViewSet,SavedLocationViewSet
 from .viewsets import UserViewSet
 from login.views import GoogleLogin
+from django.views.generic.base import TemplateView
 
 router = routers.DefaultRouter()
 router.register(r'profiles', ProfileViewSet)

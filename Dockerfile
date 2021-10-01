@@ -4,7 +4,8 @@ FROM python:3.7
 RUN apt-get update && apt-get install -y --no-install-recommends gcc
 RUN pip3 install --no-cache-dir --trusted-host pypi.python.org pipenv
 COPY Pipfile* ./
-RUN pipenv install --deploy --ignore-pipfile
+RUN pipenv lock --keep-outdated --requirements > requirements.txt
+RUN pip3 install -r requirements.txt
 COPY backend backend
 
 # install js dependencies
@@ -25,7 +26,7 @@ RUN mkdir /backend/staticfiles
 WORKDIR /
 RUN DJANGO_SETTINGS_MODULE=backend.production \
   SECRET_KEY=somethingsupersecret \
-  pipenv run python3 backend/manage.py collectstatic --noinput 
+  python3 backend/manage.py collectstatic --noinput 
 
 EXPOSE $PORT
-CMD pipenv run python3 backend/manage.py runserver 0.0.0.0:$PORT
+CMD python3 backend/manage.py runserver 0.0.0.0:$PORT
