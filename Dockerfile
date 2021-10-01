@@ -23,7 +23,9 @@ RUN mkdir /backend/staticfiles
 
 # run django production
 WORKDIR /
-RUN pipenv run python3 backend/manage.py collectstatic --noinput 
+RUN DJANGO_SETTINGS_MODULE=backend.production \
+  SECRET_KEY=somethingsupersecret \
+  pipenv run python3 backend/manage.py collectstatic --noinput 
 
 EXPOSE $PORT
 CMD pipenv run python3 backend/manage.py runserver 0.0.0.0:$PORT
