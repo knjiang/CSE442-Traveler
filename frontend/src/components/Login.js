@@ -11,7 +11,6 @@ function Login(){
         .then(response => response.json())
         .then(data => {
             setCookie('token', data.key, { path: '/' });
-             console.log('Success:', data);
         })
         .catch((error) => {
         console.error('Error:', error);
@@ -19,7 +18,7 @@ function Login(){
     }
 
     const onFailure = (res) => {
-        console.log(res);
+        alert("failed to login")
     }
 
     return (

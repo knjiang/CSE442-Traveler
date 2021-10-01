@@ -60,7 +60,6 @@ function Homepage(){
     getList(cookies.token)
     .then(response => response.json())
     .then(data =>{
-      console.log(data)
       if (!data.detail){
         setList({lists: (data.map(({id, name}) => [name]))})
         }

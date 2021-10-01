@@ -1,13 +1,14 @@
 // All authentication-related API calls
 
-import {BASE_URL} from './base';
+import {BASE_URL,getCsrfToken} from './base';
 
-const loginBackend = (accessToken) => {
+const loginBackend = async(accessToken) => {
     return fetch(`${BASE_URL}/dj-rest-auth/google/`,
     {
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-CSRFToken': await getCsrfToken(),
         },
         method: "POST",
         body: JSON.stringify({
@@ -18,13 +19,14 @@ const loginBackend = (accessToken) => {
     })
 }
 
-const logoutBackend = (token) => {
+const logoutBackend = async(token) => {
     return fetch(`${BASE_URL}/dj-rest-auth/logout/`,
     {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization' : 'Token ' + token
+          'Authorization' : 'Token ' + token,
+          'X-CSRFToken': await getCsrfToken(),
         },
         method: "POST",
     })
