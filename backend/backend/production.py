@@ -1,5 +1,6 @@
 import os
 from .settings import *
+import dj_database_url
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
@@ -20,3 +21,4 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = "/static/"
 
 WHITENOISE_ROOT = os.path.join(BASE_DIR, "../", "frontend", "build", "root")
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)

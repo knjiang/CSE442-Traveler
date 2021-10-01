@@ -12,6 +12,7 @@ python-dotenv = "*"
 django-cors-headers = "*"
 django-allauth = "*"
 whitenoise = "*"
+dj-database-url = "*"
 
 [requires]
 python_version = "3.7"
