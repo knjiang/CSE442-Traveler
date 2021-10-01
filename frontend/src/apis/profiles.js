@@ -1,6 +1,6 @@
 // All profiles-related API calls
 
-import {BASE_URL} from './base';
+import {BASE_URL, getCsrfToken} from './base';
 
 const getProfile = (token) => {
     return fetch(`${BASE_URL}/api/profiles/get_profile/`,
@@ -22,13 +22,14 @@ const getList = (token) => {
     })
 }
 
-const changeLocation = (token,location) => {
+const changeLocation = async(token,location) => {
     return fetch(`${BASE_URL}/api/profiles/change_location/`,
     {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization' : 'Token ' + token
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
         },
         method: "POST",
         body : JSON.stringify({
@@ -37,13 +38,14 @@ const changeLocation = (token,location) => {
     })
 }
 
-const changeList = (token,name,list) => {
+const changeList = async(token,name,list) => {
     return fetch(`${BASE_URL}/api/profiles/change_list`,
     {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization' : 'Token ' + token
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
         },
         method: "POST",
         body : JSON.stringify({

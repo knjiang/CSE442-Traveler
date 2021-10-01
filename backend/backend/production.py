@@ -6,6 +6,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = False
 
 ALLOWED_HOSTS = [os.environ.get("PRODUCTION_HOST")]
+CSRF_TRUSTED_ORIGINS = [os.environ.get("PRODUCTION_HOST")]
 
 INSTALLED_APPS.extend(["whitenoise.runserver_nostatic"])
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
