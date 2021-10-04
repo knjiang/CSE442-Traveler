@@ -1,14 +1,25 @@
-import { useState } from "react"
-import { getQuery } from '../apis/profiles';
+import {useState,useEffect} from "react"
+import { getQuery, getUserList } from '../apis/profiles';
 
 function Search_Users(){
 
+  const [filter, setFilter] = useState('')
+  const [usernames, setUsernames] = useState([])
     const [user,setUser] = useState({
         search_query: '',
         username: '',
         email: '',
         from_location: '',
     })
+
+    useEffect(() => {
+      getUserList()
+      .then(response => response.json())
+      .then(data => {
+          setUsernames(data.users)
+      })
+
+    }, [])
     
     const findUser = (e) => {
         setUser({
@@ -31,13 +42,18 @@ function Search_Users(){
               })
             }>
             <input
+              value={filter}
               method="get"
               type='text'
               placeholder="Search Travel Buddies"
-              onChange={(e) => findUser(e)}
+              onChange={e => { findUser(e); setFilter(e.target.value) }}
             />
             <button type='submit'>Find</button>
           </form>
+          <ul>
+            {usernames.filter(u => u.includes(filter) || filter === '')
+              .map(u => <li> {u} </li>)}
+          </ul>
           <br/>
           <br/>
           <h1> Search result with: {user.email} </h1>
