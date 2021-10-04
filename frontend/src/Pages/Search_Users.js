@@ -29,7 +29,6 @@ function Search_Users(){
     
     return(
         <div>
-          {/* <h1>Change detected: {user.search_query}</h1> */}
           <form onSubmit={
               (e) => getQuery(e,user.search_query)
               .then(response => response.json())
@@ -38,7 +37,7 @@ function Search_Users(){
                     username: data.first_name,
                     email: data.email,
                     from_location: data.from_location
-                  })
+                  }); setFilter('')
               })
             }>
             <input
