@@ -53,6 +53,21 @@ const changeList = (token,name,list) => {
     })
 }
 
+const addList = (token,listName) => {
+    return fetch(`${BASE_URL}/api/profiles/add_list`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "listName" : listName
+        }),
+    })
+}
+
 const getQuery = (e,email) => {
     e.preventDefault()
     const encoded_input = encodeURIComponent(email)

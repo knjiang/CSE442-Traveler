@@ -74,6 +74,38 @@ class ChangeListView(APIView):
             SavedLocation.objects.create(name=loc_obj,list=my_location_list)
         return Response()
 
+class AddListView(APIView):
+    """
+    View to change list
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        """
+        Change Profile Location
+        Parameters:
+        {
+            'name' : <list_name> (string)
+            'list' : [<location_name>] (array of strings)
+        }
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        list_name = request.data['listName']
+        if LocationList.objects.filter(profile=profile,name=list_name).exists():
+            my_location_list = LocationList.objects.get(profile=profile,name=list_name)
+        else:
+            my_location_list = LocationList.objects.create(profile=profile,name=list_name)
+        location_list = request.data['list'].split(",")
+        for location in location_list:
+            if Location.objects.filter(name=location).exists():
+                loc_obj = Location.objects.get(name=location)
+            else:
+                loc_obj = Location.objects.create(name=location)
+            SavedLocation.objects.create(name=loc_obj,list=my_location_list)
+        return Response()
+
 class SearchUserView(APIView):
     """
     View to get searched user
