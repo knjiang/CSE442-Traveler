@@ -76,7 +76,7 @@ function Specific_Location (props) {
         {user.logged_in && <button>Save to list</button>}
         <Link to = '/'><button>Homepage</button></Link>
         <p>{realLocation}, {currentLocation}</p>
-        <SaveLocationtoList parentCookies = {cookies} parentUser = {user}/>
+        <SaveLocationtoList parentCurrentLocation = {currentLocation} parentCookies = {cookies} parentUser = {user}/>
     </div>
     )
 }

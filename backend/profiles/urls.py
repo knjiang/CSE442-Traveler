@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import GetProfileView, ChangeLocationView, ChangeListView, SearchUserView, AddListView,AddDeleteLocationList
 
+
 app_name = "profiles"
 
 urlpatterns = [
