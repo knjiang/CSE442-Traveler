@@ -82,4 +82,4 @@ const getUserList = () => {
     return fetch(`${BASE_URL}/api/profiles/search_filter/`) 
 }
 
-export {getProfile, changeLocation, getQuery, addDeleteLocationList, getList, addList}
+export {getProfile, changeLocation, getQuery, addDeleteLocationList, getList, addList, getUserList}
