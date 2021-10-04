@@ -2,11 +2,11 @@ import { useEffect, useState } from "react"
 import { getLocation } from "../apis/locations";
 import { changeList, getList } from '../apis/profiles';
 import { Link } from 'react-router-dom'
-import SaveListForm from '../components/SaveListForm'
 import { useCookies } from 'react-cookie';
 import { getProfile } from '../apis/profiles';
 import NavBar from '../components/NavBar'
 import SaveLocationtoList from "../components/SaveLocationToList";
+import LocationForm from "../components/LocationForm";
 
 /*This is the page that shows the location the user clicked*/
 
@@ -20,6 +20,10 @@ function Specific_Location (props) {
 
   const [cookies,setCookie, removeCookie] = useCookies(['token']);
 
+  const [location, setTempLocation] = useState({
+    location: []
+  })
+
   const [user,setUser] = useState({
     logged_in : false,
     name: "None",
@@ -30,12 +34,11 @@ function Specific_Location (props) {
 
   useEffect (() => {
     if (!currentLocation){
-      console.log("Getting path")
       const pathname = props.location.pathname.substr(11)
       if (pathname){
         setLocation(pathname)
-        console.log(pathname, currentLocation)
       }
+      
     }
     else{
       getLocation()
@@ -66,19 +69,22 @@ function Specific_Location (props) {
   })
 
   const check_location = props.location.pathname.slice(0, 10);
-  if (check_location != '/locations'){
-        return(<h1>The following page does not exist, please check your spelling</h1>)
+  if (check_location == '/locations' && currentLocation && realLocation) {
+    return(
+      <div>
+        <NavBar parentUser = {user} parentSetUser = {setUser}/>
+          <h1>Welcome to {currentLocation}</h1>
+          {user.logged_in && <button>Save to list</button>}
+          <Link to = '/'><button>Homepage</button></Link>
+          <SaveLocationtoList parentCurrentLocation = {currentLocation} parentCookies = {cookies} parentUser = {user}/>
+  
+      </div>
+      )
   }
-  return(
-    <div>
-      <NavBar parentUser = {user} parentSetUser = {setUser}/>
-        <h1>Welcome to {currentLocation}</h1>
-        {user.logged_in && <button>Save to list</button>}
-        <Link to = '/'><button>Homepage</button></Link>
-        <p>{realLocation}, {currentLocation}</p>
-        <SaveLocationtoList parentCurrentLocation = {currentLocation} parentCookies = {cookies} parentUser = {user}/>
-    </div>
-    )
+  else{
+    return(<h1>The following page does not exist, please check your spelling</h1>)
+  }
+
 }
 
 export default Specific_Location 

@@ -7,8 +7,6 @@ import { logoutBackend} from '../apis/auth';
 import { getProfile } from '../apis/profiles';
 import LocationForm from "../components/LocationForm";
 import { getLocation } from "../apis/locations";
-import { changeList, getList } from '../apis/profiles';
-import SaveListForm from '../components/SaveListForm'
 import NavBar from '../components/NavBar'
 
 function Homepage(){
@@ -106,11 +104,12 @@ function Homepage(){
       {user.logged_in && <h1>Hello {user.name}!</h1>}
       <br/>
       <br/>
+
       {user.logged_in && !location_set() && <LocationForm/>}
       {user.logged_in && location_set() && <p>You are from {user.from_location}</p>}
       {locations_dropDown()}
       <br/>
-     <SaveListForm parentCookies = {cookies} parentUser = {user}/>
+
     </div>
   )
 }

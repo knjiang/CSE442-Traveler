@@ -11,53 +11,55 @@ function SaveLocationToList(props){
         lists: null
       })
     const {value:newList,bind:newListBind,reset:resetNewList } = useTextInput('')
-    const [show, setShow] = useState(false); //For modal
-    const [showE, setShowError] = useState(false); // For error alert
-    const [showS, setShowSuccess] = useState(false); // For success alert
+    const [showNewList, setNLShow] = useState(false); //For list add modal
+    const [showNewListE, setNLShowError] = useState(false); // For list add error alert
+    const [showNewListS, setNLShowSuccess] = useState(false); // For list add success alert
+
+    const [showSaveLocation, setSLShow] = useState(false); //For modal
+    const [showSaveLocationE, setSLShowError] = useState(false); // For error alert
+    const [showSaveLocationS, setSLShowSuccess] = useState(false); // For success alert
 
     const cookies = props.parentCookies
     const user = props.parentUser
     const currentLocation = props.parentCurrentLocation
 
     const handleSubmit = () => {
-        console.log(newList)
         addList(cookies.token, newList)
         .then(res => {
             if (res.ok){
-                setShowSuccess(true)
+                setNLShowSuccess(true)
             }
             else{
-                setShowError(true)
+                setNLShowError(true)
             }
         })
         
         resetNewList()
       }
 
-    const handleADLocationList = () => {
-        addDeleteLocationList(cookies.token, list, currentLocation, true)
+    const handleADLocationList = (list) => {
+        addDeleteLocationList(cookies.token, list, currentLocation)
         .then(res => {
             if (res.ok){
-                alert("NICE")
+                setSLShowSuccess(true)
             }
             else{
-                alert("NO")
+                setSLShowError(true)
             }
         })
     }
 
     const list_dropDown = () => {
     if (list.lists){
-        console.log(list)
         return(
-        <DropdownButton id="dropdown-basic-button" title="Add to list">
+        <DropdownButton id="dropdown-basic-button" title="Add to list" onSelect={(eventKey) => handleADLocationList(eventKey)}>
             {list.lists.map((list, index) => (
                 <div className = "Location_Boxes">
-                    <Dropdown.Item onClick = {() => handleADLocationList()}>{list}</Dropdown.Item>
+                    <Dropdown.Item eventKey={list} >{list}</Dropdown.Item>
                 </div>
             ))}
             <div className = "Location_Boxes">
-                <Dropdown.Item onClick = {() => setShow(true)}>Add new list</Dropdown.Item>
+                <Dropdown.Item onClick = {() => setNLShow(true)}>Add new list</Dropdown.Item>
             </div>
             </DropdownButton>
         )
@@ -65,7 +67,7 @@ function SaveLocationToList(props){
     else {
         return (
         <DropdownButton id="dropdown-basic-button" title="Choose your location">
-            <Dropdown.Item onClick = {() => setShow(true)} >Add new list</Dropdown.Item>
+            <Dropdown.Item onClick = {() => setNLShow(true)} >Add new list</Dropdown.Item>
         </DropdownButton>
         )
     }
@@ -76,7 +78,6 @@ function SaveLocationToList(props){
             getList(cookies.token)
             .then(response => response.json())
             .then(data =>{
-            console.log(data)
             if (!data.detail){
                 setList({lists: (data.map(({id, name}) => name))})
                 }
@@ -84,20 +85,34 @@ function SaveLocationToList(props){
         }
     }, [])
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => setNLShow(false);
 
     return (
         <div>
             {list_dropDown()}
-            <Modal show={show} onHide={handleClose}>
-                    <Alert show={showE} variant="danger" onClose={() => setShowError(false)} dismissible>
+            <Alert show={showSaveLocationE} variant="danger" onClose={() => setSLShowError(false)} dismissible>
+                    <Alert.Heading>Error!</Alert.Heading>
+                    <p>
+                    Error, Location already in list.
+                    </p>
+                </Alert>                   
+                
+                <Alert show={showSaveLocationS} variant="success" onClose={() => setSLShowSuccess(false)} dismissible>
+                    <Alert.Heading>Success!</Alert.Heading>
+                    <p>
+                    Location has been added to selected list.
+                    </p>
+                </Alert>
+
+            <Modal show={showNewList} onHide={handleClose}>
+                    <Alert show={showNewListE} variant="danger" onClose={() => setNLShowError(false)} dismissible>
                             <Alert.Heading>Error!</Alert.Heading>
                             <p>
                             List name exists, please enter a different name.
                             </p>
                         </Alert>                   
                         
-                        <Alert show={showS} variant="success" onClose={() => setShowSuccess(false)} dismissible>
+                        <Alert show={showNewListS} variant="success" onClose={() => setNLShowSuccess(false)} dismissible>
                             <Alert.Heading>Success!</Alert.Heading>
                             <p>
                             List has been added to your profile.

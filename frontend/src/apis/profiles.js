@@ -38,28 +38,8 @@ const changeLocation = async(token,location) => {
     })
 }
 
-//Nrrds delete once add delete are functioning
-const changeList = async(token,name,list) => {
-    return fetch(`${BASE_URL}/api/profiles/change_list`,
-    {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization' : 'Token ' + token,
-            'X-CSRFToken': await getCsrfToken(),
-        },
-        method: "POST",
-        body : JSON.stringify({
-            "name" : name,
-            "list" : list
-        }),
-    })
-}
-
-const addDeleteLocationList = async(token,listName,locationName,operation) => { 
-    let cookie = await getCsrfToken()
-    console.log(cookie)
-    return fetch(`${BASE_URL}/api/profiles/add_delete_location_list`,
+const addDeleteLocationList = async(token,listName,locationName) => { 
+    return fetch(`${BASE_URL}/api/profiles/add_delete_location_list/`,
     {
         headers: {
             'Accept': 'application/json',
@@ -71,7 +51,6 @@ const addDeleteLocationList = async(token,listName,locationName,operation) => {
         body : JSON.stringify({
             "listName": listName,
             "locationName": locationName,
-            "operation": operation //true for add, false for delete
         }),
     })
 }
@@ -100,4 +79,4 @@ const getQuery = (e,email) => {
     }) 
 }
 
-export {getProfile, changeLocation, getQuery, changeList, addDeleteLocationList, getList, addList}
+export {getProfile, changeLocation, getQuery, addDeleteLocationList, getList, addList}

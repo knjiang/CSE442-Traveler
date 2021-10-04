@@ -44,38 +44,6 @@ class ChangeLocationView(APIView):
         profile.save()
         return Response()
 
-#Delete once crud locations implemented    
-class ChangeListView(APIView):
-    """
-    View to change list
-
-    * Requires token authentication.
-    """
-    authentication_classes = [authentication.TokenAuthentication]
-
-    def post(self, request, format=None):
-        """
-        Change Profile Location
-        Parameters:
-        {
-            'name' : <list_name> (string)
-            'list' : [<location_name>] (array of strings)
-        }
-        """
-        profile = get_object_or_404(Profile,pk=request.user.id)
-        list_name = request.data['name']
-        if LocationList.objects.filter(profile=profile,name=list_name).exists():
-            my_location_list = LocationList.objects.get(profile=profile,name=list_name)
-        else:
-            my_location_list = LocationList.objects.create(profile=profile,name=list_name)
-        location_list = request.data['list'].split(",")
-        for location in location_list:
-            if Location.objects.filter(name=location).exists():
-                loc_obj = Location.objects.get(name=location)
-            else:
-                loc_obj = Location.objects.create(name=location)
-            SavedLocation.objects.create(name=loc_obj,list=my_location_list)
-        return Response()
 
 class AddDeleteLocationList(APIView):
     """
@@ -89,30 +57,38 @@ class AddDeleteLocationList(APIView):
         profile = get_object_or_404(Profile,pk=request.user.id)
         list_name = request.data['listName']
         location_name = request.data['locationName']
-        operation = request.data['operation']
 
+        querySet = SavedLocation.objects.filter(list__name = list_name)
+        savedListID = querySet.values_list('name', flat=True)
+        savedConvertList = []
+        for m in savedListID:
+            savedConvertList.append(m)
+
+        if location_name in savedConvertList:
+            print("Locaiton already In list.")
+            return HttpResponseNotFound()
+        else:
+            print("Not in list, inserting.")
+            locationInstance = Location.objects.get(name = location_name)
+            locationListInstance = LocationList.objects.get(name = list_name)
+            SavedLocation.objects.create(list = locationListInstance, name = location_name)
+            return HttpResponse()
+        '''
         querySet = SavedLocation.objects.filter(list__name = list_name)
         savedListID = querySet.values_list('pk', flat=True)
         savedConvertList = []
         for m in savedListID:
-            savedConvertList.append(Location.objects.get(id = m))
-        if operation:
-            if location_name not in savedConvertList:
-                print("NOT IN")
-                return HttpResponseNotFound()
-            else:
-                SavedLocation.objects.create(name=location_name,list=list_name)
-                print("ALREADY IN")
-                return HttpResponse()
-        #print(savedListID, "NEWAAAAAAAAAAAAAAAAAAAAAAAA")
-        '''
-
-                '''
-        '''
-        elif not operation:
-            SavedLocation.objects.delete(name=location_name,list=selected_list)
+            savedConvertList.append(Location.objects.filter(id = m).values('name'))
+        
+        if location_name in savedConvertList:
+            return HttpResponseNotFound()
+        else:
+            locationInstance = Location.objects.get(name = location_name)
+            locationListInstance = LocationList.objects.get(name = list_name)
+            SavedLocation.objects.create(list = locationListInstance, name = location_name)
             return HttpResponse()
         '''
+        return Response()
 
 class AddListView(APIView):
     """

@@ -4,7 +4,6 @@ import { getProfile } from '../apis/profiles';
 import { logoutBackend} from '../apis/auth';
 import Login from '../components/Login';
 import { Button } from 'react-bootstrap';
-import SaveListForm from '../components/SaveListForm';
 import './NavBar.css'
 import { Link } from 'react-router-dom'
 
