@@ -11,4 +11,6 @@ urlpatterns = [
     path('search_user/', SearchUserView.as_view()),
     path('add_list/', AddListView.as_view()),
     path('add_delete_location_list/', AddDeleteLocationList.as_view())
+    path('search_user/', SearchUserView.as_view()),
+    path('search_filter/', GetAllProfilesView.as_view())
 ]
