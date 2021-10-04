@@ -35,4 +35,11 @@ const getQuery = (e,email) => {
     }) 
 }
 
-export {getProfile, changeLocation, getQuery}
+const getUserList = () => {
+    // e.preventDefault()
+    return fetch(`${BASE_URL}/api/profiles/search_filter`, {
+        method: "GET",
+        }) 
+}
+
+export {getProfile, changeLocation, getQuery, getUserList}
