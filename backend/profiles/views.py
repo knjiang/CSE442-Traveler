@@ -4,6 +4,9 @@ from rest_framework.response import Response
 from rest_framework import authentication
 from django.contrib.auth.models import User
 from .models import Profile, LocationList, Location, SavedLocation
+from .serializers import ProfileSerializer
+from rest_framework.renderers import JSONRenderer
+import json
 
 class GetProfileView(APIView):
     """
@@ -91,3 +94,19 @@ class SearchUserView(APIView):
             "email" : user_query.user.email,
             "from_location" : user_query.from_location,
         })
+
+class GetAllProfilesView(APIView):
+    """
+    View to get all users
+    """
+    def get(self, request, format=None):
+        profiles = Profile.objects.all()
+        serializer = ProfileSerializer(profiles, many=True)
+        data = JSONRenderer().render(serializer.data)
+        data = json.loads(data)
+        user_list = []
+        for i in range(0,len(data)):
+            primary = data[i]['id']
+            profile = get_object_or_404(Profile,pk=primary)
+            user_list.append(profile.user.email)
+        return Response({"users" : user_list}) 
