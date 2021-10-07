@@ -1,0 +1,17 @@
+#locationBox {
+    border: 2px rgb(199, 199, 199) solid;
+    height: 100%;
+    margin-left: 10vw;
+    margin-right: 10vw;
+    display: inline-flex;
+}
+
+#dropdown-item {
+    border-radius: 1vh;
+    border: 2px grey solid;
+    width: 12vw;
+}
+
+#dropdown-basic-button {
+    width: 12vw;
+}

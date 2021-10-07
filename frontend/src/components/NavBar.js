@@ -1,4 +1,4 @@
-import {useState,useEffect} from "react"
+import {useEffect} from "react"
 import { useCookies } from 'react-cookie';
 import { getProfile } from '../apis/profiles';
 import { logoutBackend} from '../apis/auth';
@@ -6,6 +6,7 @@ import Login from '../components/Login';
 import { Button } from 'react-bootstrap';
 import './NavBar.css'
 import { Link } from 'react-router-dom'
+import LocationForm from "./LocationForm";
 
 function NavBar(props){
     const [cookies,setCookie, removeCookie] = useCookies(['token']);
@@ -30,6 +31,10 @@ function NavBar(props){
       }
     })
 
+    const location_set = () => {
+      return user.from_location != ""
+    }
+
     const logoutUser = () => {
       logoutBackend(cookies.token)
       .then(response => response.json())
@@ -50,11 +55,14 @@ function NavBar(props){
     return(
       <div>
           <div id = "NavBar">
-              <h1 style = {{"font-size": "3.5vh", "margin": "auto", "margin-left": "5vw"}}>Traveler</h1>
+              <div id = "leftNav"><a href = "/" id = "travelerIcon">Traveler</a></div>
               <div id = "rightNav">
-                <Button variant="outline-dark"><Link id = "linkButton" to = "/">Homepage</Link></Button>
-                {!user.logged_in && <Login/>}
-                {user.logged_in && <Button variant="outline-dark" onClick = {logoutUser}>Logout</Button>}
+                <Button variant="outline-dark" id = "navButton" title="forum button"><Link id = "linkButton" to = "/forum">Forum</Link></Button>
+                <Button variant="outline-dark" id = "navButton"><Link id = "linkButton" to = "/">Homepage</Link></Button>
+                {user.logged_in && <Button id = "navButton" variant="outline-dark"><Link id = "linkButton" to = "/my-profile">My Profile</Link></Button>}
+                {!user.logged_in && <Button id = "navButton" variant="outline-dark" style = {{padding: "0px"}}><Login/></Button>}
+                {user.logged_in && <Button id = "navButton" variant="outline-dark" onClick = {logoutUser}>Logout</Button>}
+                {user.logged_in && !location_set() && <LocationForm/>}
               </div>
           </div>
 

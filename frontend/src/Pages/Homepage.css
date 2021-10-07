@@ -2,11 +2,6 @@
     display: grid;
 }
 
-.Location_Boxes {
-    border: 2px solid black;
-    padding: 0px;
-}
-
 .Location_Click {
     height: 100%;
     width: 100%;
@@ -24,5 +19,18 @@
     border-radius: 5px;
     margin: 10px 0;
     cursor: pointer;
+}
 
+
+#dropdown-item-homepage {
+    width: 13.5vw;
+    border-radius: 1vw;
+    border: 1px grey solid;
+}
+
+#dropdown-item-homepage:hover {
+    color: black;
+    border-radius: 1vw;
+    border: 1px rgb(39, 39, 39) solid;
+    background-color: rgb(233, 233, 233);
 }

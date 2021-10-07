@@ -1,9 +1,9 @@
 
 import React, {useState, useEffect} from 'react';
 import { addList, getList, addDeleteLocationList } from '../apis/profiles';
-import { useCookies } from 'react-cookie';
 import { useTextInput} from '../hooks/text-input';
 import { DropdownButton, Dropdown, Button, Modal, Alert } from 'react-bootstrap'
+import '../Pages/Specific_Location.css'
 
 function SaveLocationToList(props){
 
@@ -15,7 +15,6 @@ function SaveLocationToList(props){
     const [showNewListE, setNLShowError] = useState(false); // For list add error alert
     const [showNewListS, setNLShowSuccess] = useState(false); // For list add success alert
 
-    const [showSaveLocation, setSLShow] = useState(false); //For modal
     const [showSaveLocationE, setSLShowError] = useState(false); // For error alert
     const [showSaveLocationS, setSLShowSuccess] = useState(false); // For success alert
 
@@ -23,27 +22,46 @@ function SaveLocationToList(props){
     const user = props.parentUser
     const currentLocation = props.parentCurrentLocation
 
-    const handleSubmit = () => {
-        addList(cookies.token, newList)
-        .then(res => {
-            if (res.ok){
-                setNLShowSuccess(true)
-            }
-            else{
-                setNLShowError(true)
-            }
-        })
-        
+    const handleSubmitList = () => {
+        //Adding new list name
+        if (newList.length > 0){
+            addList(cookies.token, newList)
+            .then(res => {
+                if (res.ok){
+                    setSLShowError(false)
+                    setNLShowSuccess(false)
+                    setNLShowSuccess(true)
+                    getList(cookies.token)
+                    .then(response => response.json())
+                    .then(data =>{
+                    if (!data.detail){
+                        setList({lists: (data.map(({id, name}) => name))})
+                        }
+                    })
+                }
+                else{
+                    setSLShowError(false)
+                    setNLShowSuccess(false)
+                    setNLShowError(true)
+                }
+            })
+        }
         resetNewList()
+        console.log(newList)
       }
 
     const handleADLocationList = (list) => {
+        //Adding location to a preexisting list
         addDeleteLocationList(cookies.token, list, currentLocation)
         .then(res => {
             if (res.ok){
+                setSLShowError(false)
+                setNLShowSuccess(false)
                 setSLShowSuccess(true)
             }
             else{
+                setSLShowError(false)
+                setNLShowSuccess(false)
                 setSLShowError(true)
             }
         })
@@ -54,12 +72,12 @@ function SaveLocationToList(props){
         return(
         <DropdownButton id="dropdown-basic-button" title="Add to list" onSelect={(eventKey) => handleADLocationList(eventKey)}>
             {list.lists.map((list, index) => (
-                <div className = "Location_Boxes">
-                    <Dropdown.Item eventKey={list} >{list}</Dropdown.Item>
+                <div>
+                    <Dropdown.Item id = "dropdown-item" eventKey={list} >{list}</Dropdown.Item>
                 </div>
             ))}
-            <div className = "Location_Boxes">
-                <Dropdown.Item onClick = {() => setNLShow(true)}>Add new list</Dropdown.Item>
+            <div>
+                <Dropdown.Item id = "dropdown-item" onClick = {() => setNLShow(true)}>Add new list</Dropdown.Item>
             </div>
             </DropdownButton>
         )
@@ -67,14 +85,14 @@ function SaveLocationToList(props){
     else {
         return (
         <DropdownButton id="dropdown-basic-button" title="Choose your location">
-            <Dropdown.Item onClick = {() => setNLShow(true)} >Add new list</Dropdown.Item>
+            <Dropdown.Item id = "dropdown-item" onClick = {() => setNLShow(true)} >Add new list</Dropdown.Item>
         </DropdownButton>
         )
     }
     }
 
     useEffect(() => {
-        if (cookies.token && !user.logged_in){
+        if (cookies.token && user.logged_in){
             getList(cookies.token)
             .then(response => response.json())
             .then(data =>{
@@ -89,7 +107,10 @@ function SaveLocationToList(props){
 
     return (
         <div>
-            {list_dropDown()}
+            <div style = {{"margin-left": "auto", "margin-right": "auto", "textAlign": "right", "margin-top": "-6vh"}}>
+                {list_dropDown()}
+            </div>
+
             <Alert show={showSaveLocationE} variant="danger" onClose={() => setSLShowError(false)} dismissible>
                     <Alert.Heading>Error!</Alert.Heading>
                     <p>
@@ -123,7 +144,7 @@ function SaveLocationToList(props){
                 </Modal.Header>
                 <Modal.Body>
                     <label>
-                    Enter the name of new list
+                    Enter new list name     :                     
                     <input type="text" {...newListBind} />
                     </label>
                 </Modal.Body>
@@ -131,7 +152,7 @@ function SaveLocationToList(props){
                 <Button variant="secondary" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="primary" onClick={handleSubmit}>
+                <Button variant="primary" onClick={handleSubmitList}>
                     Submit
                 </Button>
                 </Modal.Footer>

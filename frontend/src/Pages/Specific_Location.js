@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react"
 import { getLocation } from "../apis/locations";
-import { changeList, getList } from '../apis/profiles';
-import { Link } from 'react-router-dom'
 import { useCookies } from 'react-cookie';
 import { getProfile } from '../apis/profiles';
 import NavBar from '../components/NavBar'
 import SaveLocationtoList from "../components/SaveLocationToList";
-import LocationForm from "../components/LocationForm";
+import './Specific_Location.css'
 
 /*This is the page that shows the location the user clicked*/
 
@@ -16,13 +14,8 @@ function Specific_Location (props) {
 
   const [realLocation,setReal] = useState(false)
 
-  const [savedLists,setLists] = useState([])
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
-  const [cookies,setCookie, removeCookie] = useCookies(['token']);
-
-  const [location, setTempLocation] = useState({
-    location: []
-  })
 
   const [user,setUser] = useState({
     logged_in : false,
@@ -46,7 +39,7 @@ function Specific_Location (props) {
       .then(data => {
         if (data){
           let realLocations = (data.map(({id, name}) => name))
-          if (realLocations.includes(currentLocation)){
+          if (realLocations.some(x => x.toLowerCase() == currentLocation.toLowerCase())){
             setReal(true)
           }
         }
@@ -66,23 +59,28 @@ function Specific_Location (props) {
         }
       })
     }
-  })
+  }, [currentLocation, cookies.token, user.logged_in, props.location.pathname])
 
   const check_location = props.location.pathname.slice(0, 10);
   if (check_location == '/locations' && currentLocation && realLocation) {
     return(
       <div>
         <NavBar parentUser = {user} parentSetUser = {setUser}/>
-          <h1>Welcome to {currentLocation}</h1>
-          {user.logged_in && <button>Save to list</button>}
-          <Link to = '/'><button>Homepage</button></Link>
-          <SaveLocationtoList parentCurrentLocation = {currentLocation} parentCookies = {cookies} parentUser = {user}/>
-  
+          <div style = {{"display": "block", "textAlign": "center", "marginLeft": "10vw", "marginRight": "10vw", "marginTop": "3vh","marginBottom": "5vh"}}>
+            <h1>Welcome to {currentLocation.charAt(0).toUpperCase() + currentLocation.slice(1)}</h1>
+            {user.logged_in && <SaveLocationtoList parentCurrentLocation = {currentLocation} parentCookies = {cookies} parentUser = {user}/>}
+          </div>
+          
+          <div id = "locationBox">
+            <img src="https://picsum.photos/800/500" alt="Girl in a jacket"/>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean faucibus eros id vestibulum maximus. Nullam lectus ex, faucibus commodo metus a, auctor mattis felis. Nulla neque nulla, tincidunt a gravida a, placerat eu dolor. Aliquam ac metus bibendum, vehicula neque et, ullamcorper dui. Vestibulum tempor porttitor molestie. Ut eu elementum dolor, sed ornare nulla. Nullam dui magna, posuere id nisi consectetur, gravida mattis turpis. In a laoreet libero, at faucibus ligula. Donec nec ipsum urna. Ut lobortis ut odio nec lobortis. Aliquam vitae enim eu augue ultricies porttitor eu a justo. Nullam finibus dictum dolor, quis consectetur ante tempor id. Praesent in vestibulum neque. </p>
+                      
+          </div>
       </div>
       )
   }
   else{
-    return(<h1>The following page does not exist, please check your spelling</h1>)
+    return(<h1 style = {{"textAlign": "center"}}>The following page does not exist</h1>)
   }
 
 }
