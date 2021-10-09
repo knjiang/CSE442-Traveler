@@ -1,5 +1,6 @@
 import {useState,useEffect} from "react"
 import { getQuery, getUserList } from '../apis/profiles';
+import { Link , BrowserRouter as Router } from 'react-router-dom';
 
 function Search_Users(){
 
@@ -51,7 +52,25 @@ function Search_Users(){
           </form>
           <ul>
             {usernames.filter(u => u.includes(filter) || filter === '')
-              .map(u => <li> {u} </li>)}
+              .map((u) => 
+                <li>
+                  <Link to={{
+                    pathname: '/search/' + u.split("@")[0],
+                    state: {
+                    searched_email: u,
+                    },
+                    }}
+                  >
+                    {u}
+                  </Link>
+
+
+
+
+                  {/* <Link to={"/search/" + (index + 1)}> {u} </Link> */}
+                </li>
+              
+              )}
           </ul>
           <br/>
           <br/>

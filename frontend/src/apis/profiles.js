@@ -66,4 +66,11 @@ const getUserList = () => {
     return fetch(`${BASE_URL}/api/profiles/search_filter/`) 
 }
 
-export {getProfile, changeLocation, getQuery, changeList, getList, getUserList}
+const getUserInfo = (email) => {
+    const encoded_input = encodeURIComponent(email)
+    return fetch(`${BASE_URL}/api/profiles/search_user/?user_email=${encoded_input}`, {
+    method: "GET",
+    }) 
+}
+
+export {getProfile, changeLocation, getQuery, changeList, getList, getUserList, getUserInfo}
