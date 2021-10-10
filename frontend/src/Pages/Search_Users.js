@@ -1,5 +1,5 @@
 import {useState,useEffect} from "react"
-import { getQuery, getUserList } from '../apis/profiles';
+import { getUserList, getUserInfo } from '../apis/profiles';
 import { Link , BrowserRouter as Router } from 'react-router-dom';
 
 function Search_Users(){
@@ -31,16 +31,18 @@ function Search_Users(){
     return(
         <div>
           <form onSubmit={
-              (e) => getQuery(e,user.search_query)
+              (e) => 
+              {e.preventDefault();
+              getUserInfo(user.search_query)
               .then(response => response.json())
               .then(data => {
                   setUser({
                     username: data.first_name,
                     email: data.email,
                     from_location: data.from_location
-                  }); setFilter('')
+                  }); setFilter('');
               })
-            }>
+            }}>
             <input
               value={filter}
               method="get"
