@@ -1,9 +1,15 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom';
 import {Navbar, Nav, NavbarBrand, Container} from "react-bootstrap";
 import ForumContent from "./ForumContent";
 
 function Forum(){
+    const [resourceType, setResourceType] = useState('forum')
+
+    useEffect(() =>{
+    <ForumContent></ForumContent>
+    }, [])
+
     return(
         <div style={{maxWidth: "30rem", margin: "4rem auto"}}>
             <div id="Posts">
