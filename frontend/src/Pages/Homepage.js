@@ -81,6 +81,7 @@ function Homepage(){
         name: "None",
         email: "None",
       })
+      var profileName = user.name;
     })
     .catch((error) => {
       console.error('Error:', error);
@@ -146,4 +147,5 @@ function Homepage(){
   )
 }
 
-export default Homepage;
+
+export default Homepage

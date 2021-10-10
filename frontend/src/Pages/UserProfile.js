@@ -1,42 +1,58 @@
 import { Component } from "react"
 import './UserProfile.css'
-import traveler from './images/traveler.jpg';
+import { useState, useEffect } from "react"
+import { getQuery, getUserList } from '../apis/profiles';
 
-class UserProfile extends Component {
+function UserProfile() {
+  const [filter, setFilter] = useState('')
+  const [usernames, setUsernames] = useState([])
 
-  render(){
-    return (
-        <div>
-        <h1 >My Profile</h1>
-        <div>
-          <img src={traveler} alt="Traveler Pic"></img>
-        </div>
-        <div>
-          <h3>Background Information</h3>
-          <p>Hello, my name is John Doe and I have been traveling the world for a 
-            few years now and I absolutely love it. My goal is to vist 20 different 
-            countries in the upcoming few years of my life.
-          </p>
-        </div>
-        <div>
-          <h3>Interests and Hobbies</h3>
-          <p>I am a big outdoors person. I love hiking, camping, and fishing. I want to
-            be able to try different foods and learn new customs. I love learning new 
-            languages as well so I can communicate with more people along the way
-          </p>
-        </div>
-        <div>
-          <h3>About Me</h3>
-          <p>
-            Name: John Doe <br/>
-            Age: 24 <br/>
-            Email: jdoe@gamil.com <br/>
-            Languages: English, French, Spanish
-          </p>
-        </div>
-      </div>
-    );
+  // CREATE USER VARIABLE AND SET STATES
+  const [user, setUser] = useState({
+    search_query: '',
+    username: '',
+    email: '',
+    from_location: '',
+  })
+
+  // UTILIZE APIS
+  useEffect(() => {
+    getUserList()
+      .then(response => response.json())
+      .then(data => {
+        setUsernames(data.users)
+      })
+
+  }, [])
+
+  // FIND TARGET USER
+  const findUser = (e) => {
+    setUser({
+      search_query: e.target.value,
+    })
   }
+
+    // PROFILE PAGE WILL HAVE NAME, BACKGROUND/INTERESTS, AND ABOUT ME SECTIONS
+  return (
+
+    <div>
+      {/* GREET USER WHEN VIEWING PROFILE PAGE  */}
+      <h2>Hello,  <br /> {usernames.filter(u => u.includes(filter) || filter === '')}</h2>
+
+      {/* CREATE A BACKGROUND AND INTERESTS SECTION */}
+      <h4>My background and interests</h4>
+
+
+
+      {/* SHOW ABOUT ME IN PROFILE PAGE */}
+      <h4>About Me</h4>
+      <h5>Name: {user.first_} </h5>   {/* TODO: MAKE SURE NAME APPEARS HERE */}
+      <h5>From: {user.from_location}</h5> {/* TODO: MAKE SURE LOCATION APPEARS HERE*/}
+      <h5>Email: {user.email}</h5>  {/* TODO: MAKE SURE EMAIL IS DISPLAYED HERE */}
+
+
+    </div>
+  )
 }
 
 export default UserProfile
