@@ -1,11 +1,43 @@
 import './App.css';
 import Routes from './Routes'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useCookies } from 'react-cookie';
+import { getProfile } from './apis/profiles';
+import { useState, useEffect } from 'react'
+import NavBar from './components/NavBar';
 
 function App() {
+
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
+
+  const [user,setUser] = useState({
+    logged_in : false,
+    name: "None",
+    email: "None",
+    from_location: "",
+  })
+
+  useEffect(() => {
+    if (cookies.token && !user.logged_in){
+      getProfile(cookies.token)
+      .then(response => response.json())
+      .then(data => {
+        if (!data.detail){
+          setUser({
+            logged_in: true,
+            name: data.first_name,
+            email: data.email,
+            from_location: data.from_location
+          })
+        }
+      })
+    }
+  })
+
   return (
     <div className="App">
-      <Routes/>
+      <NavBar parentUser = {user} parentSetUser = {setUser}/>
+      <Routes parentUser = {user} parentSetUser = {setUser}/>
     </div>
   );
 }

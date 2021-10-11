@@ -1,16 +1,38 @@
 import {useState,useEffect} from "react"
 import { getUserList, getUserInfo } from '../apis/profiles';
 import { Link , BrowserRouter as Router } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+import { getProfile, getProfileLists } from '../apis/profiles';
 
 function Search_Users(){
 
   const [filter, setFilter] = useState('')
   const [usernames, setUsernames] = useState([])
+  
     const [user,setUser] = useState({
         search_query: '',
         username: '',
         email: '',
         from_location: '',
+    })
+
+    const [cookies, setCookie, removeCookie] = useCookies(['token']);
+  
+    useEffect(() => {
+      if (cookies.token && !user.logged_in){
+        getProfile(cookies.token)
+        .then(response => response.json())
+        .then(data => {
+          if (!data.detail){
+            setUser({
+              logged_in: true,
+              name: data.first_name,
+              email: data.email,
+              from_location: data.from_location
+            })
+          }
+        })
+      }
     })
 
     useEffect(() => {
@@ -23,12 +45,14 @@ function Search_Users(){
     }, [])
     
     const findUser = (e) => {
+      e.preventDefault()
         setUser({
           search_query: e.target.value,
         })
     }
     
     return(
+      <div>
         <div>
           <form onSubmit={
               (e) => 
@@ -79,6 +103,7 @@ function Search_Users(){
           <h1> Search result with: {user.email} </h1>
           <br/>
           <h1>Found: {user.username} - {user.from_location}</h1>
+        </div>
         </div>
     )
 }

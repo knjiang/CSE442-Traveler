@@ -1,6 +1,8 @@
+from os import name
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.http import HttpResponse, HttpResponseNotFound
 from rest_framework import authentication
 from django.contrib.auth.models import User
 from .models import Profile, LocationList, Location, SavedLocation
@@ -44,10 +46,47 @@ class ChangeLocationView(APIView):
         profile.from_location = new_location
         profile.save()
         return Response()
-    
-class ChangeListView(APIView):
+
+
+class AddDeleteLocationList(APIView):
     """
-    View to change list
+    Add or delete locations from view
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        list_name = request.data['listName']
+        location_name = request.data['locationName']
+        if list_name and location_name:
+            choseListID = LocationList.objects.get(name = list_name).id
+            savedListID = SavedLocation.objects.filter(list = choseListID)
+                    
+            if savedListID.values_list("name", flat = True):
+                locationsConverted = []
+                for m in list(savedListID.values_list("name", flat = True)):
+                    locationsConverted.append(Location.objects.get(id = m).name)
+
+                if location_name in locationsConverted:
+                    print("Location already In list.")
+                    return HttpResponseNotFound()
+                else:
+                    print("Not in list, inserting.")
+                    locationInstance = Location.objects.get(name = location_name)
+                    locationListInstance = LocationList.objects.get(name = list_name)
+                    SavedLocation.objects.create(list = locationListInstance, name = locationInstance)
+                    return HttpResponse()
+            else:
+                print("List empty, inserting.")
+                locationInstance = Location.objects.get(name = location_name)
+                locationListInstance = LocationList.objects.get(name = list_name)
+                SavedLocation.objects.create(list = locationListInstance, name = locationInstance)
+                return HttpResponse()
+
+class AddListView(APIView):
+    """
+    Add new list if not exists
 
     * Requires token authentication.
     """
@@ -63,19 +102,12 @@ class ChangeListView(APIView):
         }
         """
         profile = get_object_or_404(Profile,pk=request.user.id)
-        list_name = request.data['name']
+        list_name = request.data['listName']
         if LocationList.objects.filter(profile=profile,name=list_name).exists():
-            my_location_list = LocationList.objects.get(profile=profile,name=list_name)
+            return HttpResponseNotFound()
         else:
-            my_location_list = LocationList.objects.create(profile=profile,name=list_name)
-        location_list = request.data['list'].split(",")
-        for location in location_list:
-            if Location.objects.filter(name=location).exists():
-                loc_obj = Location.objects.get(name=location)
-            else:
-                loc_obj = Location.objects.create(name=location)
-            SavedLocation.objects.create(name=loc_obj,list=my_location_list)
-        return Response()
+            LocationList.objects.create(profile=profile,name=list_name)
+            return HttpResponse()
 
 class SearchUserView(APIView):
     """
