@@ -1,14 +1,14 @@
 #NavBar {
     width: 100%;
     height: 8vh;
-    background-color: rgb(223, 223, 223);
+    background-color: rgb(255, 255, 255);
     text-align: center;
     display: inline-flex;
 }
 
 #leftNav {
     margin-left: 10vw;
-    height: 70%;
+    height: 85%;
     margin-top: auto;
     margin-bottom: auto;
     text-align: left;
@@ -24,29 +24,43 @@
     margin-bottom: auto;
 }
 
-#linkButton {
-    text-decoration: none;
-    color: black;
-}
-
-#linkButton:hover {
-    color: white;
+#buttonText {
+    font-size: 2.5vh;
+    text-align: center;
+    margin-top: 0.5vh;
+    margin-bottom: auto;
+    transition: 0.25s;
 }
 
 #navButton {
-    margin-left: 1vw;
+    border: 0px;
     height: 6vh;
+    margin-top: auto;
+    transition: 0.5s;
+}
+
+#navButton:hover {
+    background-color: rgb(83, 83, 83);
+}
+
+#navButton:hover > #buttonText {
+    font-size: 2.5vh;
+    text-align: center;
+    margin-top: -0.5vh;
+    margin-bottom: auto;
 }
 
 #travelerIcon {
-    font-size: 4vh;
+    font-size: 4.5vh;
     margin-top: auto;
     margin-bottom: auto;
+    font-weight: 800;
     text-decoration: none;
-    font-weight: 600;
-    color: green;
+    color: blue;
+    transition: 0.5s;
 }
 
 #travelerIcon:hover {
-    color: purple;
+    color: rgb(180, 0, 0);
+    font-style: oblique 5deg;
 }
