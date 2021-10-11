@@ -4,9 +4,11 @@ import Homepage from './Pages/Homepage'
 import Browse_Locations from './Pages/Browse_Locations'
 import Specific_Location from './Pages/Specific_Location'
 import Search_Users from './Pages/Search_Users'
+import Searched_Profile from './Pages/Searched_Profile'
 import Forum from './Pages/Forum'
 import UserProfile from './Pages/UserProfile';
-
+import Post from './Pages/Post.js'
+import ForumContent from './Pages/ForumContent'
 
 const Routes = () => {
     return (
@@ -15,8 +17,11 @@ const Routes = () => {
         <Route exact path='/locations' component={Browse_Locations}></Route>
         <Route path='/locations/:id' component={Specific_Location}></Route>
         <Route exact path='/search' component={Search_Users}></Route>
+        <Route path='/search/:id' component={Searched_Profile}></Route>
         <Route path='/forum' component={Forum}></Route>
         <Route exact path='/my-profile' component={UserProfile}></Route>
+        <Route path = '/post' component={Post}></Route>
+        <Route path ='/ForumContent' component={ForumContent}></Route>
       </Switch>
     );
   }
