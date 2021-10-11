@@ -1,19 +1,18 @@
-
 import React, {useState} from 'react';
 import { useCookies } from 'react-cookie';
 import { useTextInput} from '../hooks/text-input';
 import { Modal, Button} from 'react-bootstrap';
-import { changeLocation } from '../apis/profiles';
+import { AddForum } from '../apis/forums';
 
-function LocationForm(){
+function ForumForm(){
 
-    const {value:fromLocation,bind:fromLocationBind,reset:resetFromLocation } = useTextInput('')
+    const {value:name,bind:nameBind,reset:resetName } = useTextInput('')
     const [cookies] = useCookies(['token'])
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        changeLocation(cookies.token,fromLocation)
-        resetFromLocation();
+        AddForum(cookies.token,name)
+        resetName();
         setShow(false);
     }
 
@@ -24,12 +23,12 @@ function LocationForm(){
     return (
         <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Location Form</Modal.Title>
+          <Modal.Title>Forum Form</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <label>
-            Where are you from?:
-            <input type="text" {...fromLocationBind} />
+            Name of Forum:
+            <input type="text" {...nameBind} />
             </label>
         </Modal.Body>
         <Modal.Footer>
@@ -44,4 +43,4 @@ function LocationForm(){
     )
 }
 
-export default LocationForm
+export default ForumForm

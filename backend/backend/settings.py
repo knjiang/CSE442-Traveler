@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'dj_rest_auth',
     'profiles.apps.ProfilesConfig',
+    'forums.apps.ForumsConfig',
     'corsheaders',
     'allauth',
     'allauth.account',

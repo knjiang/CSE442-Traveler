@@ -5,11 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
+import { ForumProvider } from './Pages/ForumState'
 
 ReactDOM.render((
   <BrowserRouter>
     <CookiesProvider>
+        <ForumProvider>
       <App />
+      </ForumProvider>
     </CookiesProvider>
   </BrowserRouter>
   ), document.getElementById('root')

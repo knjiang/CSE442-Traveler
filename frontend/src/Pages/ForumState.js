@@ -1,7 +1,6 @@
 import React,{createContext, useReducer} from "react";
 import AppReducer from './ForumAppReducer';
 
-
 const firstState = {
     users: [
         {id: 1, name: 'Post 1'},

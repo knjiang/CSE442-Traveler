@@ -8,7 +8,7 @@ export default (state, action) => {
             }
         case 'add_Post':
             return {
-                users: [action.payload, ...state.payload]
+                users: [action.payload, state.payload]
             }
         default:
             return state

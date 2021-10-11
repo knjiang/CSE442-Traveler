@@ -1,5 +1,5 @@
 from django.db import models
-from backend.profiles.models import Profile
+from profiles.models import Profile
 
 # Create your models here.
 class Forum(models.Model):
