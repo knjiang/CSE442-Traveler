@@ -66,4 +66,14 @@ const getUserInfo = (email) => {
     }) 
 }
 
-export {getProfile, changeLocation, changeList, getList, getUserList, getUserInfo}
+const getProfileLists = (token) => {
+    return fetch(`${BASE_URL}/api/profiles/get_lists/`,
+    {
+        headers: {
+            'Authorization' : 'Token ' + token
+        },
+        method: "GET",
+    })
+}
+
+export {getProfile, changeLocation, changeList, getList, getUserList, getUserInfo, getProfileLists}
