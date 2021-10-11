@@ -110,3 +110,22 @@ class GetAllProfilesView(APIView):
             profile = get_object_or_404(Profile,pk=primary)
             user_list.append(profile.user.email)
         return Response({"users" : user_list}) 
+
+class GetUserListsView(APIView):
+    """
+    View to get own lists
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def get(self, request, format=None):
+        """
+        Return your own lists in JSON format.
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        lists = [location.name for location in LocationList.objects.filter(profile=profile)]
+        return Response({
+            "lists" : lists
+        })
+    

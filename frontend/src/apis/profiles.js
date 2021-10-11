@@ -54,16 +54,26 @@ const changeList = async(token,name,list) => {
         }),
     })
 }
-const getQuery = (e,email) => {
-    e.preventDefault()
+
+const getUserList = () => {
+    return fetch(`${BASE_URL}/api/profiles/search_filter/`) 
+}
+
+const getUserInfo = (email) => {
     const encoded_input = encodeURIComponent(email)
     return fetch(`${BASE_URL}/api/profiles/search_user/?user_email=${encoded_input}`, {
     method: "GET",
     }) 
 }
 
-const getUserList = () => {
-    return fetch(`${BASE_URL}/api/profiles/search_filter/`) 
+const getProfileLists = (token) => {
+    return fetch(`${BASE_URL}/api/profiles/get_lists/`,
+    {
+        headers: {
+            'Authorization' : 'Token ' + token
+        },
+        method: "GET",
+    })
 }
 
-export {getProfile, changeLocation, getQuery, changeList, getList, getUserList}
+export {getProfile, changeLocation, changeList, getList, getUserList, getUserInfo, getProfileLists}

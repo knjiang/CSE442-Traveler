@@ -4,10 +4,9 @@ import { DropdownButton, Dropdown, Button } from 'react-bootstrap'
 import Login from '../components/Login';
 import { useCookies } from 'react-cookie';
 import { logoutBackend} from '../apis/auth';
-import { getProfile } from '../apis/profiles';
+import { getProfile, changeList } from '../apis/profiles';
 import LocationForm from "../components/LocationForm";
 import { getLocation } from "../apis/locations";
-import { changeList, getList } from '../apis/profiles';
 import { useTextInput} from '../hooks/text-input';
 
 function Homepage(){
@@ -18,7 +17,6 @@ function Homepage(){
     name: "None",
     email: "None",
     from_location: "",
-    search_query: '',
   })
 
   const {value:listName,bind:listNameBind,reset:resetListName } = useTextInput('')
@@ -55,13 +53,6 @@ function Homepage(){
             email: data.email,
             from_location: data.from_location
           })
-        }
-      })
-    getList(cookies.token)
-    .then(response => response.json())
-    .then(data =>{
-      if (!data.detail){
-        setList({lists: (data.map(({id, name}) => [name]))})
         }
       })
     }
@@ -120,7 +111,10 @@ function Homepage(){
     <div>
       <h1>Welcome to the Traveler Homepage</h1>
       {!user.logged_in && <Login/>}
-      <button id="forumButton" title="forum button"><a href = "/forum"> Forum Button </a></button>
+
+      <Button id="forumButton"><a href = "/forum"> Forum Button </a></Button>
+
+      <Button id="myListButton" variant="outline-dark"><a href = "/my-lists"> My Lists </a></Button>
       <br/>
       {user.logged_in && <Button variant="outline-dark" onClick = {logoutUser}>
       Logout
@@ -142,7 +136,6 @@ function Homepage(){
         </label>
         <input type="submit" value="Submit"/>
       </form>
-      <p>Your saved list[s]: {list.lists}</p>
     </div>
   )
 }
