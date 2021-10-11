@@ -22,7 +22,6 @@ function NavBar(props){
         .then(response => response.json())
         .then(data => {
           if (!data.detail){
-            let newUser = 
             setUser({
               logged_in: true,
               name: data.first_name,
@@ -61,7 +60,7 @@ function NavBar(props){
           <div id = "NavBar">
               <div id = "leftNav"><a href = "/" id = "travelerIcon">Traveler</a></div>
               <div id = "rightNav">
-                {user.logged_in && <a href = '/my-lists'><Button variant="outline-dark" id = "navButton"><h1 id = "buttonText">My lists</h1></Button></a>}
+                {user.logged_in && <a href = '/my-lists'><Button variant="outline-dark" id = "navButton"><h1 id = "buttonText">My Lists</h1></Button></a>}
                 {user.logged_in && <a href = '/my-profile'><Button id = "navButton" variant="outline-dark"><h1 id = "buttonText">My Profile</h1></Button></a>}
                 {!user.logged_in &&<Button id = "navButton" variant="outline-dark" style = {{padding: "0px"}}><Login/></Button>}
                 {user.logged_in && <Button id = "navButton" variant="outline-dark" onClick = {logoutUser}><h1 id = "buttonText">Logout</h1></Button>}
