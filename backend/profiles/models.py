@@ -5,7 +5,7 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    from_location = models.TextField(max_length=30)
+    from_location = models.TextField(max_length=30,default="")
 
     def __str__(self):
         return self.user.username
@@ -17,9 +17,22 @@ class Language(models.Model):
     def __str__(self):
         return self.name
 
-class Location(models.Model):
+class LocationList(models.Model):
     name = models.TextField(max_length=30)
     profile = models.ForeignKey(Profile,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+class Location(models.Model):
+    name = models.TextField(max_length=30)
+
+    def __str__(self):
+        return self.name
+
+class SavedLocation(models.Model):
+    name = models.ForeignKey(Location,on_delete=models.CASCADE)
+    list = models.ForeignKey(LocationList,on_delete=models.CASCADE, related_name= 'savedLocations')
 
     def __str__(self):
         return self.name

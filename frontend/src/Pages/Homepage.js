@@ -1,90 +1,62 @@
-import { Component } from "react"
+import {useState,useEffect} from "react"
 import './Homepage.css'
-import { Link , BrowserRouter as Router } from 'react-router-dom';
-import { DropdownButton, Dropdown, Button } from 'react-bootstrap'
+import { useCookies } from 'react-cookie';
+import { getProfile } from '../apis/profiles';
+import NavBar from '../components/NavBar'
+import LocationPicker from '../components/LocationPicker'
+import { Button } from 'react-bootstrap'
 
-class Homepage extends Component {
+function Homepage(){
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
-  constructor(props) {
+  const [user,setUser] = useState({
+    logged_in : false,
+    name: "None",
+    email: "None",
+    from_location: "",
+  })
 
-    /*The locations state is currently containing placeholders until database is set up*/
-    super(props);
-    this.state = {
-      local_locations: ['location_1', 'location_2'],
-      backend_locations: [],
-      typed_location: ''
-    }; 
+  const [useDropLocations, setDropLocation] = useState(true)
 
-    this.location_submit = this.location_submit.bind(this)
-  }
-  
-  componentDidMount() {
-    
-    fetch("http://localhost:8000/locations/")
-    .then(response => response.json())
-    .then(data => this.setState({backend_locations: JSON.stringify(data.map(value => value.name))}))
-    
-  } 
-
-  location_submit(e) {
-    e.preventDefault()
-    //alert(this.state.typed_location)
-    
-    fetch("http://localhost:8000/locations/",
-    {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify({
-          "name": this.state.typed_location,
-          "profile": 1
+  useEffect(() => {
+    if (cookies.token && !user.logged_in){
+      getProfile(cookies.token)
+      .then(response => response.json())
+      .then(data => {
+        if (!data.detail){
+          setUser({
+            logged_in: true,
+            name: data.first_name,
+            email: data.email,
+            from_location: data.from_location
+          })
+        }
       })
-    })
-    .then(alert('Successfully added new location, please refresh page to see changes'))
-    .catch(alert('Error, payload did not arrive'))
+    }
+  })
+
+  const location_set = () => {
+    return user.from_location != ""
   }
-  
-  render(){
-    return (
-      <div>
-          <h1>Welcome to the Traveler Homepage</h1>
-          <div>
-            <h1>Locations</h1>
-            {/* 
-              <div id = "For_All_Location">
-                {this.state.locations.map((locations, index) => (
-                    <div className = "Location_Boxes">
-                      <Link className = "Location_Click" to = {'/locations/' + locations}>{locations}</Link>
-                    </div>
-                ))}
-              </div>
-            */}
-              <div>
-              <DropdownButton id="dropdown-basic-button" title="Choose your location (Temp)">
-                {this.state.local_locations.map((locations, index) => (
-                    <div className = "Location_Boxes">
-                      <Dropdown.Item href = {'/locations/' + locations}>{locations}</Dropdown.Item>
-                    </div>
-                ))}
-              </DropdownButton>
-              </div>
-            <button id="forumButton" title="forum button">Forum Button
-            </button>
-          </div>
-          <h1>Locations from backend fetch: {(this.state.backend_locations)}</h1>
-          <h1>Add new location</h1>
-          <form>
-            <label>
-              Name:
-              <input type="text" name="name" onChange = {(e) => this.setState({typed_location: e.target.value})}/>
-            </label>
-            <input type="submit" value="Submit" onClick = {(e) => this.location_submit(e)}/>
-          </form>
+
+  return(
+    <div>
+            <NavBar parentUser = {user} parentSetUser = {setUser}/>
+      <div id = "masterDiv">
+        <h1>Welcome to the Traveler Homepage</h1>
+        <br/>
+        {user.logged_in && <h1>Hello {user.name}!</h1>}
+        <br/>
+        <br/>
+        {user.logged_in && location_set() && <p>You are from {user.from_location}</p>}
+        {useDropLocations && <Button onClick = {() => setDropLocation(false)}>Toggle for map</Button>}
+        {!useDropLocations && <Button onClick = {() => setDropLocation(true)}>Toggle for dropdown</Button>}
+        {useDropLocations && <LocationPicker/>}
+        {!useDropLocations && <h3>Map arriving soon</h3>}
+        <br/>
       </div>
-    );
-  }
+    </div>
+  )
 }
 
 export default Homepage;

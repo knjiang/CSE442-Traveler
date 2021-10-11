@@ -1,0 +1,66 @@
+#NavBar {
+    width: 100%;
+    height: 8vh;
+    background-color: rgb(255, 255, 255);
+    text-align: center;
+    display: inline-flex;
+}
+
+#leftNav {
+    margin-left: 10vw;
+    height: 85%;
+    margin-top: auto;
+    margin-bottom: auto;
+    text-align: left;
+}
+
+
+#rightNav {
+    text-align: right;
+    width: 100%;
+    height: 85%;
+    margin-right: 10vw;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#buttonText {
+    font-size: 2.5vh;
+    text-align: center;
+    margin-top: 0.5vh;
+    margin-bottom: auto;
+    transition: 0.25s;
+}
+
+#navButton {
+    border: 0px;
+    height: 6vh;
+    margin-top: auto;
+    transition: 0.5s;
+}
+
+#navButton:hover {
+    background-color: rgb(83, 83, 83);
+}
+
+#navButton:hover > #buttonText {
+    font-size: 2.5vh;
+    text-align: center;
+    margin-top: -0.5vh;
+    margin-bottom: auto;
+}
+
+#travelerIcon {
+    font-size: 4.5vh;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-weight: 800;
+    text-decoration: none;
+    color: blue;
+    transition: 0.5s;
+}
+
+#travelerIcon:hover {
+    color: rgb(180, 0, 0);
+    font-style: oblique 5deg;
+}

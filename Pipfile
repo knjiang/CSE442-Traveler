@@ -5,10 +5,15 @@ verify_ssl = true
 
 [packages]
 django = "*"
-authlib = "*"
+dj-rest-auth = "*"
 requests = "*"
 djangorestframework = "*"
+python-dotenv = "*"
 django-cors-headers = "*"
+django-allauth = "*"
+whitenoise = "*"
+dj-database-url = "*"
+psycopg2-binary = "*"
 
 [requires]
 python_version = "3.7"
