@@ -30,13 +30,11 @@
 
 #dropdown-item-homepage {
     width: 13.5vw;
-    border-radius: 1vw;
-    border: 1px grey solid;
+    border: 1px rgb(223, 223, 223) solid;
 }
 
 #dropdown-item-homepage:hover {
-    color: black;
-    border-radius: 1vw;
-    border: 1px rgb(39, 39, 39) solid;
+    color: rgb(0, 76, 190);
+    border: 1px rgb(216, 216, 216) solid;
     background-color: rgb(233, 233, 233);
 }

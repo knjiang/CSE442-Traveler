@@ -1,5 +1,5 @@
 #locationBox {
-    border: 2px rgb(199, 199, 199) solid;
+    border: 1px rgb(224, 224, 224) solid;
     height: 100%;
     margin-left: 10vw;
     margin-right: 10vw;
@@ -7,9 +7,16 @@
 }
 
 #dropdown-item {
-    border-radius: 1vh;
-    border: 2px grey solid;
+    color: black;
+    border-radius: 0.25vh;
+    border: 1px rgb(223, 223, 223) solid;
     width: 12vw;
+}
+
+#dropdown-item:hover {
+    color: rgb(0, 76, 190);
+    border: 1px rgb(216, 216, 216) solid;
+    background-color: rgb(233, 233, 233);
 }
 
 #dropdown-basic-button {
