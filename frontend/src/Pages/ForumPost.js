@@ -8,21 +8,21 @@ const ForumPost = () =>{
         const{ addPost } = useContext(ForumContext);
         const history = useHistory();
 
-        const SubmitPost = () =>{
-
+        const SubmitPost = event =>{
             history.push('/forum');
             const newPost = {
                 id : 4,
-                title
+                names: 'Post 4'
             }
-            //addPost();
+            //addPost(newPost);
         }
 
         const onChange = (e) => {
             setTitle(e.target.value)
         }
+
         return(
-        <Form onSubmit={SubmitPost}>
+        <Form onSubmit = {SubmitPost}>
             <FormGroup>
                 <h1 for="adding posts">Add Post</h1>
 
