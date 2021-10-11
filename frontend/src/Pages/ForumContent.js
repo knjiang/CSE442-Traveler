@@ -1,16 +1,20 @@
-import React from "react";
+import React, {useContext} from "react";
 import{ListGroup,ListGroupItem,Button} from "react-bootstrap";
+import{ForumContext} from "./ForumState";
 
 const ForumContent = () =>{
-
+    const{ users, removePost} = useContext(ForumContext);
+    console.log(users)
     return(
         <ListGroup className="mt-4">
-            <ListGroupItem className="d-flex" variant="primary">
-                <strong>Post Title</strong>
+            {users.map(user => (
+                <ListGroupItem className="d-flex" variant="primary">
+                <strong>{user.name}</strong>
                 <div className="m-lg-auto">
-                    <Button variant="danger">Delete</Button>
+                    <Button onClick={() => removePost(user.id)} variant="danger">Delete</Button>
                 </div>
             </ListGroupItem>
+            ))}
         </ListGroup>
     )
 

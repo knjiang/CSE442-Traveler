@@ -6,7 +6,7 @@ import Specific_Location from './Pages/Specific_Location'
 import Search_Users from './Pages/Search_Users'
 import Forum from './Pages/Forum'
 import UserProfile from './Pages/UserProfile';
-import Post from './Pages/Post.js'
+import ForumPost from './Pages/ForumPost.js'
 import ForumContent from './Pages/ForumContent'
 
 const Routes = () => {
@@ -18,7 +18,7 @@ const Routes = () => {
         <Route exact path='/search' component={Search_Users}></Route>
         <Route path='/forum' component={Forum}></Route>
         <Route exact path='/my-profile' component={UserProfile}></Route>
-        <Route path = '/post' component={Post}></Route>
+        <Route path = '/post' component={ForumPost}></Route>
         <Route path ='/ForumContent' component={ForumContent}></Route>
       </Switch>
     );

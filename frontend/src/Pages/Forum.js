@@ -2,9 +2,10 @@ import React, {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom';
 import {Navbar, Nav, NavbarBrand, Container} from "react-bootstrap";
 import ForumContent from "./ForumContent";
+import {ForumProvider} from "./ForumState";
 
 function Forum(){
-    const [resourceType, setResourceType] = useState('forum')
+    // const [resourceType, setResourceType] = useState('forum')
 
     useEffect(() =>{
     <ForumContent></ForumContent>
@@ -12,7 +13,8 @@ function Forum(){
 
     return(
         <div style={{maxWidth: "30rem", margin: "4rem auto"}}>
-            <div id="Posts">
+            <ForumProvider>
+                <div id="Posts">
             <Navbar bg="dark" variant="dark">
                 <Container>
                     <NavbarBrand id="title1" href="/forum">Traveler Forum</NavbarBrand>
@@ -25,6 +27,8 @@ function Forum(){
         </div>
             <button id="home" ><a href = "/"> Return to HomePage </a></button>
             <ForumContent></ForumContent>
+
+            </ForumProvider>
         </div>
 
     )
