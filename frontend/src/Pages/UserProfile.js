@@ -39,7 +39,6 @@ function UserProfile () {
 
   return (
       <div>
-        <NavBar parentUser = {user} parentSetUser = {setUser}/>
       <h1>My Profile</h1>
       <div>
         <img src={traveler} alt="Traveler Pic"></img>

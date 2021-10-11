@@ -31,8 +31,8 @@ class Location(models.Model):
         return self.name
 
 class SavedLocation(models.Model):
-    name = models.ForeignKey(Location,on_delete=models.CASCADE)
-    list = models.ForeignKey(LocationList,on_delete=models.CASCADE, related_name= 'savedLocations')
+    name = models.OneToOneField(Location, on_delete=models.CASCADE)
+    list = models.ForeignKey(LocationList,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

@@ -1,8 +1,7 @@
 import { useCookies } from 'react-cookie';
 import { getProfile, getProfileLists } from '../apis/profiles';
-import {useState,useEffect} from "react";
+import {useState,useEffect} from "react"
 import NotLoggedIn from '../components/NotLoggedIn';
-import NavBar from '../components/NavBar';
 
 function MyList(){
     const [cookies,setCookie] = useCookies(['token']);
@@ -50,23 +49,20 @@ function MyList(){
     function MyListRender(){
         if (existsCookie){
             return(
-                <div>
-                    <NavBar parentUser = {user} parentSetUser = {setUser}/>
-                    <div>
-                        Hi {user.name}, here are your lists! 
+            <div>
+                Hi {user.name}, here are your lists! 
 
-                        <br/>
-                        <br/>
+                <br/>
+                <br/>
 
-                        <div id = "Lists">
-                        {empty_list && dataList.lists.map((list, index) => (
-                            <div className = "Lists">
-                                List #{index + 1} : {list}
-                            </div>
-                        ))}
-                        </div>
+                <div id = "Lists">
+                {empty_list && dataList.lists.map((list, index) => (
+                    <div className = "Lists">
+                        List #{index + 1} : {list}
                     </div>
+                ))}
                 </div>
+            </div>
             )
         }
         return <NotLoggedIn/>

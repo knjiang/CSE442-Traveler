@@ -3,7 +3,6 @@ import { getUserList, getUserInfo } from '../apis/profiles';
 import { Link , BrowserRouter as Router } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { getProfile, getProfileLists } from '../apis/profiles';
-import NavBar from '../components/NavBar';
 
 function Search_Users(){
 
@@ -46,6 +45,7 @@ function Search_Users(){
     }, [])
     
     const findUser = (e) => {
+      e.preventDefault()
         setUser({
           search_query: e.target.value,
         })
@@ -53,7 +53,6 @@ function Search_Users(){
     
     return(
       <div>
-        <NavBar parentUser = {user} parentSetUser = {setUser}/>
         <div>
           <form onSubmit={
               (e) => 

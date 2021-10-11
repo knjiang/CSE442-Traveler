@@ -237,10 +237,14 @@
             ],
             "markers": "python_version >= '3.6'",
 <<<<<<< HEAD
+<<<<<<< HEAD
             "version": "==2.1.0"
 =======
             "version": "==2.2.0"
 >>>>>>> 2403b33686b75e679ade86f812a61b06bb6a3216
+=======
+            "version": "==2.2.0"
+>>>>>>> 9b20b3c8950eb11c3fa2d195afba3e2dc5e0156e
         },
         "python-dotenv": {
             "hashes": [

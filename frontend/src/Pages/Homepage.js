@@ -1,47 +1,25 @@
 import {useState,useEffect} from "react"
 import './Homepage.css'
-import { useCookies } from 'react-cookie';
-import { getProfile } from '../apis/profiles';
-import NavBar from '../components/NavBar'
 import LocationPicker from '../components/LocationPicker'
 import { Button } from 'react-bootstrap'
 
-function Homepage(){
-  const [cookies, setCookie, removeCookie] = useCookies(['token']);
+function Homepage(props){
 
-  const [user,setUser] = useState({
-    logged_in : false,
-    name: "None",
-    email: "None",
-    from_location: "",
-  })
+  const user = props.parentUser
+  const setUser = props.parentSetUser
 
   const [useDropLocations, setDropLocation] = useState(true)
-
-  useEffect(() => {
-    if (cookies.token && !user.logged_in){
-      getProfile(cookies.token)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.detail){
-          setUser({
-            logged_in: true,
-            name: data.first_name,
-            email: data.email,
-            from_location: data.from_location
-          })
-        }
-      })
-    }
-  })
 
   const location_set = () => {
     return user.from_location != ""
   }
 
+  useEffect (() => {
+    console.log("PROPS", user)
+  })
+
   return(
     <div>
-            <NavBar parentUser = {user} parentSetUser = {setUser}/>
       <div id = "masterDiv">
         <h1>Welcome to the Traveler Homepage</h1>
         <br/>
@@ -54,7 +32,7 @@ function Homepage(){
         {useDropLocations && <LocationPicker/>}
         {!useDropLocations && <h3>Map arriving soon</h3>}
         <br/>
-      </div>
+      </div> 
     </div>
   )
 }

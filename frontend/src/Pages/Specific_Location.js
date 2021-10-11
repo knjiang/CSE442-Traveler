@@ -27,11 +27,10 @@ function Specific_Location (props) {
 
   useEffect (() => {
     if (!currentLocation){
-      const pathname = props.location.pathname.substr(11)
+      const pathname = window.location.pathname.substr(11)
       if (pathname){
         setLocation(pathname)
       }
-      
     }
     else{
       getLocation()
@@ -59,15 +58,14 @@ function Specific_Location (props) {
         }
       })
     }
-  }, [currentLocation, cookies.token, user.logged_in, props.location.pathname])
+  }, [currentLocation, cookies.token, user.logged_in])
 
-  const check_location = props.location.pathname.slice(0, 10);
-  if (check_location == '/locations' && currentLocation && realLocation) {
+  const check_location = window.location.pathname.substr(0, 11);
+  if (check_location == '/locations/' && currentLocation && realLocation) {
     return(
       <div>
-        <NavBar parentUser = {user} parentSetUser = {setUser}/>
           <div style = {{"display": "block", "textAlign": "center", "marginLeft": "10vw", "marginRight": "10vw", "marginTop": "3vh","marginBottom": "5vh"}}>
-            <h1>Welcome to {currentLocation.charAt(0).toUpperCase() + currentLocation.slice(1)}</h1>
+            <h1>Welcome to {currentLocation.charAt(0).toUpperCase() + currentLocation.slice(1).toLowerCase()}</h1>
             {user.logged_in && <SaveLocationtoList parentCurrentLocation = {currentLocation} parentCookies = {cookies} parentUser = {user}/>}
           </div>
           
