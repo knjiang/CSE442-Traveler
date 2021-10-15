@@ -48,7 +48,7 @@ class ChangeLocationView(APIView):
         return Response()
 
 
-class AddDeleteLocationList(APIView):
+class AddLocationListView(APIView):
     """
     Add or delete locations from view
 
@@ -157,6 +157,33 @@ class GetUserListsView(APIView):
         """
         profile = get_object_or_404(Profile,pk=request.user.id)
         lists = [location.name for location in LocationList.objects.filter(profile=profile)]
+        return Response({
+            "lists" : lists
+        })
+    
+class GetListDataView(APIView):
+    """
+    View to get own lists
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def get(self, request, format=None):
+        """
+        Return your own lists in JSON format.
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        lists = [location.name for location in LocationList.objects.filter(profile=profile)]
+        listData = {}
+        for m in lists:
+            local = []
+            i = LocationList.objects.get(name = m).id
+            saved = SavedLocation.objects.filter(list=i)
+            for k in saved:
+                local.append(k.name)
+            listData[m] = local
+        print(listData)
         return Response({
             "lists" : lists
         })

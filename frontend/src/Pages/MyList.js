@@ -1,5 +1,5 @@
 import { useCookies } from 'react-cookie';
-import { getProfile, getProfileLists } from '../apis/profiles';
+import { getProfile, getListData } from '../apis/profiles';
 import {useState,useEffect} from "react"
 import NotLoggedIn from '../components/NotLoggedIn';
 
@@ -21,7 +21,7 @@ function MyList(){
     
     useEffect(() => {
         if (existsCookie){
-            getProfileLists(cookies.token)
+            getListData(cookies.token)
             .then(response => response.json())
             .then(data => {
                 setList({
@@ -51,9 +51,6 @@ function MyList(){
             return(
             <div>
                 Hi {user.name}, here are your lists! 
-
-                <br/>
-                <br/>
 
                 <div id = "Lists">
                 {empty_list && dataList.lists.map((list, index) => (

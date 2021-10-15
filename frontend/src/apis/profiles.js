@@ -13,7 +13,7 @@ const getProfile = (token) => {
 }
 
 const getList = (token) => {
-    return fetch(`${BASE_URL}/api/router/lists/`,
+    return fetch(`${BASE_URL}/api/profiles/get_lists/`,
     {
         headers: {
             'Authorization' : 'Token ' + token
@@ -39,7 +39,7 @@ const changeLocation = async(token,location) => {
 }
 
 const addDeleteLocationList = async(token,listName,locationName) => { 
-    return fetch(`${BASE_URL}/api/profiles/add_delete_location_list/`,
+    return fetch(`${BASE_URL}/api/profiles/add_location_list/`,
     {
         headers: {
             'Accept': 'application/json',
@@ -82,8 +82,8 @@ const getUserInfo = (email) => {
     }) 
 }
 
-const getProfileLists = (token) => {
-    return fetch(`${BASE_URL}/api/profiles/get_lists/`,
+const getListData = (token) => {
+    return fetch(`${BASE_URL}/api/profiles/get_list_data/`,
     {
         headers: {
             'Authorization' : 'Token ' + token
@@ -92,4 +92,4 @@ const getProfileLists = (token) => {
     })
 }
 
-export {getProfile, changeLocation, getList, getUserList, getUserInfo, getProfileLists, addDeleteLocationList, addList}
+export {getProfile, changeLocation, getList, getUserList, getUserInfo, getListData, addDeleteLocationList, addList}

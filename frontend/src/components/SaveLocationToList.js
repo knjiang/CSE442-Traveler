@@ -1,7 +1,7 @@
 
 import React, {useState, useEffect} from 'react';
 import { addList, getList, addDeleteLocationList } from '../apis/profiles';
-import { useTextInput} from '../hooks/text-input';
+import { useTextInput } from '../hooks/text-input';
 import { DropdownButton, Dropdown, Button, Modal, Alert } from 'react-bootstrap'
 import '../Pages/Specific_Location.css'
 
@@ -35,7 +35,8 @@ function SaveLocationToList(props){
                     .then(response => response.json())
                     .then(data =>{
                     if (!data.detail){
-                        setList({lists: (data.map(({id, name}) => name))})
+                        data = data["lists"]
+                        setList({lists: data})
                         }
                     })
                 }
@@ -73,7 +74,7 @@ function SaveLocationToList(props){
         <DropdownButton id="dropdown-basic-button" title="Add to list" onSelect={(eventKey) => handleADLocationList(eventKey)}>
             {list.lists.map((list, index) => (
                 <div>
-                    <Dropdown.Item id = "dropdown-item" eventKey={list} >{list}</Dropdown.Item>
+                    <Dropdown.Item id = "dropdown-item" eventKey={list}>{list}</Dropdown.Item>
                 </div>
             ))}
             <div>
@@ -97,7 +98,8 @@ function SaveLocationToList(props){
             .then(response => response.json())
             .then(data =>{
             if (!data.detail){
-                setList({lists: (data.map(({id, name}) => name))})
+                data = data["lists"]
+                setList({lists: data})
                 }
             })
         }

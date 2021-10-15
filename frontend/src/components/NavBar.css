@@ -7,7 +7,6 @@
 }
 
 #leftNav {
-    margin-left: 10vw;
     height: 85%;
     margin-top: auto;
     margin-bottom: auto;
@@ -19,7 +18,6 @@
     text-align: right;
     width: 100%;
     height: 85%;
-    margin-right: 10vw;
     margin-top: auto;
     margin-bottom: auto;
 }
@@ -32,18 +30,44 @@
     transition: 0.25s;
 }
 
-#navButton {
-    border: 0px;
+#navButtonOn {
+    border-top: 0px;
+    border-bottom: 0.25vh solid black;
+    border-radius: 1vh;
+    border-left: 0px;
+    border-right: 0px;
     height: 6vh;
     margin-top: auto;
     transition: 0.5s;
+    padding-left: 1vw;
+    padding-right: 1vw;
 }
 
-#navButton:hover {
-    background-color: rgb(83, 83, 83);
+#navButtonOff {
+    border-top: 0px;
+    border-bottom: 0.25vh solid gray;
+    border-radius: 1vh;
+    border-left: 0px;
+    border-right: 0px;
+    height: 6vh;
+    margin-top: auto;
+    transition: 0.5s;
+    color: gray;
+    cursor: not-allowed;
+    padding-left: 1vw;
+    padding-right: 1vw;
 }
 
-#navButton:hover > #buttonText {
+#navButtonOn:hover {
+    height: 5.5vh;
+    background-color: rgb(41,98,255);
+}
+
+#navButtonOff:hover {
+    background-color: rgb(255, 255, 255);
+}
+
+#navButtonOn:hover > #buttonText {
     font-size: 2.5vh;
     text-align: center;
     margin-top: -0.5vh;
@@ -56,7 +80,7 @@
     margin-bottom: auto;
     font-weight: 800;
     text-decoration: none;
-    color: blue;
+    color: rgb(41,98,255);
     transition: 0.5s;
 }
 
