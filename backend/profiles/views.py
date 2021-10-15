@@ -25,6 +25,7 @@ class GetProfileView(APIView):
             "first_name" : profile.user.first_name,
             "email" : profile.user.email,
             "from_location": profile.from_location,
+            "background": profile.background,
         })
 
 class ChangeLocationView(APIView):
@@ -93,6 +94,7 @@ class SearchUserView(APIView):
             "first_name" : user_query.user.first_name,
             "email" : user_query.user.email,
             "from_location" : user_query.from_location,
+            "background": user_query.background,
         })
 
 class GetAllProfilesView(APIView):

@@ -17,10 +17,13 @@ function Homepage(){
     name: "None",
     email: "None",
     from_location: "",
+    background:"None"
   })
 
   const {value:listName,bind:listNameBind,reset:resetListName } = useTextInput('')
   const {value:locationList,bind:locationListBind,reset:resetLocationList } = useTextInput('')
+  const {value:backgroundInfo,bind:backgroundInfoBind,reset:resetBackgroundInfo } = useTextInput('')
+
 
   const [list,setList] = useState({
     name: "",
@@ -29,6 +32,10 @@ function Homepage(){
 
   const [location, setLocation] = useState({
     location: []
+  })
+
+  const [background, setBackroung] = useState({
+    backgorund: []
   })
 
   useEffect(() => {
@@ -51,7 +58,8 @@ function Homepage(){
             logged_in: true,
             name: data.first_name,
             email: data.email,
-            from_location: data.from_location
+            from_location: data.from_location,
+            background: data.background,
           })
         }
       })
@@ -71,6 +79,7 @@ function Homepage(){
         logged_in : false,
         name: "None",
         email: "None",
+        bacgkround: "None"
       })
       var profileName = user.name;
     })
@@ -115,6 +124,8 @@ function Homepage(){
       <Button id="forumButton"><a href = "/forum"> Forum Button </a></Button>
 
       <Button id="myListButton" variant="outline-dark"><a href = "/my-lists"> My Lists </a></Button>
+
+
       <br/>
       {user.logged_in && <Button variant="outline-dark" onClick = {logoutUser}>
       Logout
@@ -126,6 +137,7 @@ function Homepage(){
       {user.logged_in && location_set() && <p>You are from {user.from_location}</p>}
       {locations_dropDown()}
       <br/>
+
       <form onSubmit = {(e) => handleSubmit(e)}>
         <label>
           Create new list:
@@ -133,6 +145,8 @@ function Homepage(){
           <p>List name:<input type="text" {...listNameBind} /> </p>
           <br/>
           <p>Locations:<input type="text" {...locationListBind}/></p>
+          <br/>
+          <p>Background and Interests: <input type="text" {...backgroundInfoBind}/></p>
         </label>
         <input type="submit" value="Submit"/>
       </form>

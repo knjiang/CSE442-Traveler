@@ -38,7 +38,7 @@ const changeLocation = async(token,location) => {
     })
 }
 
-const changeList = async(token,name,list) => {
+const changeList = async(token,name,list,background) => {
     return fetch(`${BASE_URL}/api/profiles/change_list`,
     {
         headers: {
@@ -50,9 +50,18 @@ const changeList = async(token,name,list) => {
         method: "POST",
         body : JSON.stringify({
             "name" : name,
-            "list" : list
+            "list" : list,
+            "background": background,
         }),
     })
+}
+
+const getBackground = (background) => {
+    const encoded_input = encodeURIComponent(background)
+    return fetch(`${BASE_URL}/api/profiles/getBacgkround/`, {
+        method: "GET",
+    })
+
 }
 
 const getUserList = () => {
@@ -76,4 +85,4 @@ const getProfileLists = (token) => {
     })
 }
 
-export {getProfile, changeLocation, changeList, getList, getUserList, getUserInfo, getProfileLists}
+export {getProfile, changeLocation, changeList, getList, getUserList, getUserInfo, getProfileLists, getBackground}

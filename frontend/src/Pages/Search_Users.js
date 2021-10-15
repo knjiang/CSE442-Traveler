@@ -11,6 +11,7 @@ function Search_Users(){
         username: '',
         email: '',
         from_location: '',
+        background: '',
     })
 
     useEffect(() => {
