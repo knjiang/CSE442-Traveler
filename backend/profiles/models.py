@@ -6,6 +6,7 @@ from django.dispatch import receiver
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     from_location = models.TextField(max_length=30,default="")
+    background = models.TextField(max_length=50,default="")
 
     def __str__(self):
         return self.user.username
