@@ -38,7 +38,7 @@ const changeLocation = async(token,location) => {
     })
 }
 
-const addDeleteLocationList = async(token,listName,locationName) => { 
+const addLocationList = async(token,listName,locationName) => { 
     return fetch(`${BASE_URL}/api/profiles/add_location_list/`,
     {
         headers: {
@@ -92,4 +92,4 @@ const getListData = (token) => {
     })
 }
 
-export {getProfile, changeLocation, getList, getUserList, getUserInfo, getListData, addDeleteLocationList, addList}
+export {getProfile, changeLocation, getList, getUserList, getUserInfo, getListData, addLocationList, addList}

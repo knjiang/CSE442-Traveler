@@ -1,6 +1,6 @@
 
 import React, {useState, useEffect} from 'react';
-import { addList, getList, addDeleteLocationList } from '../apis/profiles';
+import { addList, getList, addLocationList } from '../apis/profiles';
 import { useTextInput } from '../hooks/text-input';
 import { DropdownButton, Dropdown, Button, Modal, Alert } from 'react-bootstrap'
 import '../Pages/Specific_Location.css'
@@ -53,7 +53,7 @@ function SaveLocationToList(props){
 
     const handleADLocationList = (list) => {
         //Adding location to a preexisting list
-        addDeleteLocationList(cookies.token, list, currentLocation)
+        addLocationList(cookies.token, list, currentLocation)
         .then(res => {
             if (res.ok){
                 setSLShowError(false)
@@ -141,22 +141,23 @@ function SaveLocationToList(props){
                             List has been added to your profile.
                             </p>
                         </Alert>
+
                 <Modal.Header closeButton>
-                <Modal.Title>New list adder</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <label>
-                    Enter new list name     :                     
-                    <input type="text" {...newListBind} />
-                    </label>
-                </Modal.Body>
-                <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Close
-                </Button>
-                <Button variant="primary" onClick={handleSubmitList}>
-                    Submit
-                </Button>
+                    <Modal.Title>New list adder</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <label>
+                        Enter new list name     :                     
+                        <input type="text" {...newListBind} />
+                        </label>
+                    </Modal.Body>
+                    <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleSubmitList}>
+                        Submit
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </div>

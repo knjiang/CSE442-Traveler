@@ -62,26 +62,26 @@ class AddLocationListView(APIView):
         if list_name and location_name:
             choseListID = LocationList.objects.get(name = list_name).id
             savedListID = SavedLocation.objects.filter(list = choseListID)
-                    
             if savedListID.values_list("name", flat = True):
                 locationsConverted = []
                 for m in list(savedListID.values_list("name", flat = True)):
                     locationsConverted.append(Location.objects.get(id = m).name)
 
                 if location_name in locationsConverted:
-                    print("Location already In list.")
+                    print("Location already In list.",  "__________________________________________________________________________")
                     return HttpResponseNotFound()
                 else:
-                    print("Not in list, inserting.")
+                    print("Not in list, inserting.",  "__________________________________________________________________________")
                     locationInstance = Location.objects.get(name = location_name)
                     locationListInstance = LocationList.objects.get(name = list_name)
                     SavedLocation.objects.create(list = locationListInstance, name = locationInstance)
                     return HttpResponse()
             else:
-                print("List empty, inserting.")
+                print("List empty, inserting.",  "__________________________________________________________________________")
                 locationInstance = Location.objects.get(name = location_name)
                 locationListInstance = LocationList.objects.get(name = list_name)
-                SavedLocation.objects.create(list = locationListInstance, name = locationInstance)
+                print("BREAK", "__________________________________________________________________________")
+                SavedLocation.objects.create(name = locationInstance,list = locationListInstance)
                 return HttpResponse()
 
 class AddListView(APIView):
@@ -177,14 +177,16 @@ class GetListDataView(APIView):
         lists = [location.name for location in LocationList.objects.filter(profile=profile)]
         listData = {}
         for m in lists:
-            local = []
+            convertedLocal = []
             i = LocationList.objects.get(name = m).id
-            saved = SavedLocation.objects.filter(list=i)
-            for k in saved:
-                local.append(k.name)
-            listData[m] = local
+            local = [l for l in SavedLocation.objects.filter(list=i).values_list("name_id", flat="true")]
+            for k in local:
+                localName = Location.objects.filter(id = k).values_list("name", flat="true")
+                convertedLocal.append(localName[0])
+            listData[m] = convertedLocal
         print(listData)
+        #Array of objects
         return Response({
-            "lists" : lists
+            "lists" : listData
         })
     
