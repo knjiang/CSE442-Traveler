@@ -2,7 +2,10 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication
+
+from backend.profiles.models import Profile
 from .models import Forum,Post,Comment
+
 import json
 
 class AddForumView(APIView):
@@ -57,7 +60,7 @@ class AddCommentView(APIView):
         profile = get_object_or_404(Profile,pk=request.user.id)
         post = Post.objects.get(name=request.data['post_name'])
         body = request.data['body']
-        comment = comment(post=post,body=body,profile=profile)
+        comment = Comment(post=post,body=body,profile=profile)
         comment.save()
         return Response()
 
