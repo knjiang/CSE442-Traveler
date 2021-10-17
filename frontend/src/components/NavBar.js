@@ -60,7 +60,6 @@ function NavBar(props){
       getList(cookies.token)
       .then(response => response.json())
       .then(data =>{
-      console.log("NAVBAR", data["lists"])
       if (!data.detail){
           data = data["lists"]
           setList(data)

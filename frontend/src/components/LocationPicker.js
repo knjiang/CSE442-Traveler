@@ -24,7 +24,7 @@ function LocationPicker() {
           <DropdownButton id="dropdown-basic-button-homepage" title="Choose your location">
             <div id = "dropDiv">
             {location.location.map((locations, index) => (
-                    <Dropdown.Item id = "dropdown-item-homepage" style = {{"width": "13.5vw", "textAlign": "center"}} href = {'/locations/' + locations}>{locations}</Dropdown.Item>
+                    <Dropdown.Item id = "dropdown-item-homepage" style = {{"width": "13.5vw", "textAlign": "center"}} href = {'/locations/' + locations.replace(' ', '-')}>{locations}</Dropdown.Item>
               ))}
               </div>
 

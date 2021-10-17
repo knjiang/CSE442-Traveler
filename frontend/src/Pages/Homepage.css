@@ -1,5 +1,7 @@
-#For_All_Location {
-    display: grid;
+#masterDiv {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .Location_Click {

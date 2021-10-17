@@ -86,7 +86,7 @@ function Specific_Location (props) {
       )
   }
   else{
-    return(<h1 style = {{"textAlign": "center"}}>The following page does not exist</h1>)
+    return(<h1 style = {{"textAlign": "center"}}>The following location does not exist, either retype the path or insert it to the database</h1>)
   }
 
 }

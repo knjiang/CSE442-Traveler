@@ -69,16 +69,13 @@ class AddLocationListView(APIView):
                     locationsConverted.append(Location.objects.get(id = m).name)
 
                 if location_name in locationsConverted:
-                    print("Location already In list.",  "__________________________________________________________________________")
                     return HttpResponseNotFound()
                 else:
-                    print("Not in list, inserting.",  "__________________________________________________________________________")
                     locationInstance = Location.objects.get(name = location_name)
                     locationListInstance = LocationList.objects.get(name = list_name)
                     SavedLocation.objects.create(list = locationListInstance, name = locationInstance)
                     return HttpResponse()
             else:
-                print("List empty, inserting.",  "__________________________________________________________________________")
                 locationInstance = Location.objects.get(name = location_name)
                 locationListInstance = LocationList.objects.get(name = list_name)
                 SavedLocation.objects.create(name = locationInstance,list = locationListInstance)
@@ -182,7 +179,6 @@ class SearchUserView(APIView):
     """
     def get(self, request, format=None):
         searched_email = request.query_params.get('user_email')
-        print(searched_email)
         user_query = get_object_or_404(Profile,user__email=searched_email)
         
         # print(user_query.from_location)
