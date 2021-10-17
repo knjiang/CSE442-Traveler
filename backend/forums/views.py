@@ -42,7 +42,6 @@ class AddPostView(APIView):
         post.save()
         return Response()
 
-
 class AddCommentView(APIView):
     """
     View to add comment
@@ -64,11 +63,8 @@ class AddCommentView(APIView):
 
 class GetPostViews(APIView):
     """
-
     View to get all posts 
-
     """
-
     def get(self, request, format=None):
         """
         Get all posts 
