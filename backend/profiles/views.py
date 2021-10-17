@@ -252,4 +252,19 @@ class GetListDataView(APIView):
         return Response({
             "lists" : listData
         })
-    
+
+class ChangeBackgroundView(APIView):
+    """
+    View to change background 
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        """
+        View to change background.
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        profile.background = request.data['background']
+        profile.save()
+        return Response()

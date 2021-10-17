@@ -1,5 +1,5 @@
 import { useCookies } from 'react-cookie';
-import { changeBackground, getProfile, getProfileLists } from '../apis/profiles';
+import { changeBackground, getProfile } from '../apis/profiles';
 import { useState, useEffect } from "react"
 import NotLoggedIn from '../components/NotLoggedIn';
 import { useTextInput } from '../hooks/text-input';
@@ -25,13 +25,6 @@ function UserProfile() {
 
   useEffect(() => {
     if (existsCookie) {
-      getProfileLists(cookies.token)
-        .then(response => response.json())
-        .then(data => {
-          setList({
-            lists: data.lists
-          })
-        });
       getProfile(cookies.token)
         .then(response => response.json())
         .then(data => {
@@ -47,10 +40,6 @@ function UserProfile() {
         });
     }
   }, [])
-
-  const empty_list = () => {
-    return dataList.lists.length != 0
-  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
