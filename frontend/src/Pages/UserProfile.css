@@ -24,3 +24,7 @@ p {
   margin-right: auto;
   width: 50%;
 }
+
+form, label, input {
+  text-align: center;
+}

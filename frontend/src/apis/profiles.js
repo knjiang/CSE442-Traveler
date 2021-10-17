@@ -38,7 +38,7 @@ const changeLocation = async(token,location) => {
     })
 }
 
-const changeList = async(token,name,list,background) => {
+const changeList = async(token,name,list) => {
     return fetch(`${BASE_URL}/api/profiles/change_list`,
     {
         headers: {
@@ -51,7 +51,22 @@ const changeList = async(token,name,list,background) => {
         body : JSON.stringify({
             "name" : name,
             "list" : list,
-            "background": background,
+        }),
+    })
+}
+
+const changeBackground = async(token,background) => {
+    return fetch(`${BASE_URL}/api/profiles/change_background/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "background" : background,
         }),
     })
 }
@@ -85,4 +100,4 @@ const getProfileLists = (token) => {
     })
 }
 
-export {getProfile, changeLocation, changeList, getList, getUserList, getUserInfo, getProfileLists, getBackground}
+export {getProfile, changeLocation, changeList, changeBackground, getList, getUserList, getUserInfo, getProfileLists, getBackground}

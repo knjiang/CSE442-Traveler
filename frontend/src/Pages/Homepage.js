@@ -22,8 +22,6 @@ function Homepage(){
 
   const {value:listName,bind:listNameBind,reset:resetListName } = useTextInput('')
   const {value:locationList,bind:locationListBind,reset:resetLocationList } = useTextInput('')
-  const {value:backgroundInfo,bind:backgroundInfoBind,reset:resetBackgroundInfo } = useTextInput('')
-
 
   const [list,setList] = useState({
     name: "",
@@ -34,9 +32,6 @@ function Homepage(){
     location: []
   })
 
-  const [background, setBackroung] = useState({
-    backgorund: []
-  })
 
   useEffect(() => {
     getLocation()
@@ -79,7 +74,7 @@ function Homepage(){
         logged_in : false,
         name: "None",
         email: "None",
-        bacgkround: "None"
+        background: "test"
       })
       var profileName = user.name;
     })
@@ -91,7 +86,7 @@ function Homepage(){
   const handleSubmit = (e) => {
     e.preventDefault()
     //JSON.parse(list.name) is payload
-    changeList(cookies.token,listName,locationList)
+    changeList(cookies.token,listName,locationList,user.background)
     resetListName()
     resetLocationList()
   }
@@ -130,7 +125,7 @@ function Homepage(){
       {user.logged_in && <Button variant="outline-dark" onClick = {logoutUser}>
       Logout
       </Button>}
-      {user.logged_in && <h1>Hello {user.name}!</h1>}
+      {user.logged_in && <h1>Hello {user.background}!</h1>}
       <br/>
       <br/>
       {user.logged_in && !location_set() && <LocationForm/>}
@@ -146,7 +141,6 @@ function Homepage(){
           <br/>
           <p>Locations:<input type="text" {...locationListBind}/></p>
           <br/>
-          <p>Background and Interests: <input type="text" {...backgroundInfoBind}/></p>
         </label>
         <input type="submit" value="Submit"/>
       </form>

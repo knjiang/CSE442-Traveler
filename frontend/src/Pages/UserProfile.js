@@ -1,34 +1,24 @@
 import { useCookies } from 'react-cookie';
-import { getProfile, getProfileLists } from '../apis/profiles';
-import {useState,useEffect} from "react"
+import { changeBackground, getProfile, getProfileLists } from '../apis/profiles';
+import { useState, useEffect } from "react"
 import NotLoggedIn from '../components/NotLoggedIn';
-// import { Component } from "react"
-import './UserProfile.css'
-// import { getQuery, getUserList } from '../apis/profiles';
-function UserProfile() {
+import { useTextInput } from '../hooks/text-input';
 
-  //  NAV BAR FUNCTIONALITY
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function MyList() {
   const [cookies, setCookie] = useCookies(['token']);
+
+  const [dataList, setList] = useState({
+    lists: []
+  })
+
+  const { value: backgroundInfo, bind: backgroundInfoBind, reset: resetBackgroundInfo } = useTextInput('')
+
   const [user, setUser] = useState({
     logged_in: false,
     name: "None",
     email: "None",
     from_location: "",
-    background: "",
+    background: ""
   })
 
   const existsCookie = typeof cookies.token != "undefined"
@@ -38,6 +28,9 @@ function UserProfile() {
       getProfileLists(cookies.token)
         .then(response => response.json())
         .then(data => {
+          setList({
+            lists: data.lists
+          })
         });
       getProfile(cookies.token)
         .then(response => response.json())
@@ -47,31 +40,50 @@ function UserProfile() {
               logged_in: true,
               name: data.first_name,
               email: data.email,
-              from_location: data.from_location
+              from_location: data.from_location,
+              background: data.background
             });
           }
         });
     }
   }, [])
 
+  const empty_list = () => {
+    return dataList.lists.length != 0
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    changeBackground(cookies.token, backgroundInfo)
+    e.background = backgroundInfo // does not work
+    user.background = backgroundInfo // does not work
+  }
+
   if (existsCookie) {
     return (
-
       <div>
-        {/* GREET USER WHEN VIEWING PROFILE PAGE  */}
-        <h2>Hello,</h2>
+        <h1>Welcome {user.name} </h1>   <br />
 
-        {/* CREATE A BACKGROUND AND INTERESTS SECTION */}
-        <h4>My background and interests</h4>
-        {/* SHOW ABOUT ME IN PROFILE PAGE */}
-        <h4>About Me</h4>
-        <h5>Name: {user.name} </h5>   {/* TODO: MAKE SURE NAME APPEARS HERE */}
-        <h5>From: {user.from_location}</h5> {/* TODO: MAKE SURE LOCATION APPEARS HERE*/}
-        <h5>Email: {user.email}</h5>  {/* TODO: MAKE SURE EMAIL IS DISPLAYED HERE */}
+        <h2> About Me</h2>
+        Name: {user.name} <br />
+        Email: {user.email} <br />
+        Location: {user.from_location} <br />
+        Background: {user.background}
+        <br /> <br />
+
+        <form onSubmit={(e) => handleSubmit(e)}>
+          <label>
+            Enter your background Info
+            <br />
+            <p>Background/Interests: <input type="text" {...backgroundInfoBind} /></p>
+            <br />
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
+        Background: {backgroundInfo}
       </div>
     )
   }
   return <NotLoggedIn />
 }
-
-export default UserProfile
+export default MyList;
