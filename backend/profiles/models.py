@@ -32,7 +32,7 @@ class Location(models.Model):
         return self.name
 
 class SavedLocation(models.Model):
-    name = models.OneToOneField(Location, on_delete=models.CASCADE)
+    name = models.ForeignKey(Location, on_delete=models.CASCADE)
     list = models.ForeignKey(LocationList,on_delete=models.CASCADE)
 
     def __str__(self):

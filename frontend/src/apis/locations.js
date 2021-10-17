@@ -2,7 +2,7 @@
 
 import {BASE_URL} from './base';
 
-const getLocation = (token) => {
+const getLocation = () => {
     return fetch(`${BASE_URL}/api/router/locations/`)
 }
 
