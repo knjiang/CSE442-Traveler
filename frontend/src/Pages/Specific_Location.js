@@ -38,7 +38,7 @@ function Specific_Location (props) {
       .then(data => {
         if (data){
           let realLocations = (data.map(({id, name}) => name))
-          if (realLocations.some(x => x.toLowerCase() == currentLocation.toLowerCase())){
+          if (realLocations.some(x => x.toLowerCase().replace(' ', '') == currentLocation.replace('-', '').toLowerCase())){
             setReal(true)
           }
         }
@@ -60,12 +60,20 @@ function Specific_Location (props) {
     }
   }, [currentLocation, cookies.token, user.logged_in])
 
+  const returnLocationName = () => {
+    let cLArray = currentLocation.split('-')
+    for (let i = 0; i < cLArray.length; i++) {
+      cLArray[i] = cLArray[i][0].toUpperCase() + cLArray[i].substr(1);
+    }
+    return (cLArray.join(' '))
+  }
+
   const check_location = window.location.pathname.substr(0, 11);
   if (check_location == '/locations/' && currentLocation && realLocation) {
     return(
       <div>
           <div style = {{"display": "block", "textAlign": "center", "marginLeft": "10vw", "marginRight": "10vw", "marginTop": "3vh","marginBottom": "5vh"}}>
-            <h1>Welcome to {currentLocation.charAt(0).toUpperCase() + currentLocation.slice(1).toLowerCase()}</h1>
+            <h1>Welcome to {returnLocationName()}</h1>
             {user.logged_in && <SaveLocationtoList parentCurrentLocation = {currentLocation} parentCookies = {cookies} parentUser = {user}/>}
           </div>
           
@@ -78,7 +86,7 @@ function Specific_Location (props) {
       )
   }
   else{
-    return(<h1 style = {{"textAlign": "center"}}>The following page does not exist</h1>)
+    return(<h1 style = {{"textAlign": "center"}}>The following location does not exist, either retype the path or insert it to the database</h1>)
   }
 
 }

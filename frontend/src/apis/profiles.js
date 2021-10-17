@@ -13,7 +13,7 @@ const getProfile = (token) => {
 }
 
 const getList = (token) => {
-    return fetch(`${BASE_URL}/api/router/lists/`,
+    return fetch(`${BASE_URL}/api/profiles/get_lists/`,
     {
         headers: {
             'Authorization' : 'Token ' + token
@@ -38,8 +38,25 @@ const changeLocation = async(token,location) => {
     })
 }
 
-const addDeleteLocationList = async(token,listName,locationName) => { 
-    return fetch(`${BASE_URL}/api/profiles/add_delete_location_list/`,
+const addLocationList = async(token,listName,locationName) => { 
+    return fetch(`${BASE_URL}/api/profiles/add_location_list/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "listName": listName,
+            "locationName": locationName,
+        }),
+    })
+}
+
+const deleteLocationList = async(token,listName,locationName) => { 
+    return fetch(`${BASE_URL}/api/profiles/delete_location_list/`,
     {
         headers: {
             'Accept': 'application/json',
@@ -71,6 +88,21 @@ const addList = (token,listName) => {
     })
 }
 
+const deleteList = (token,listName) => {
+    return fetch(`${BASE_URL}/api/profiles/delete_list/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "listName" : listName
+        }),
+    })
+}
+
 const getUserList = () => {
     return fetch(`${BASE_URL}/api/profiles/search_filter/`) 
 }
@@ -82,8 +114,8 @@ const getUserInfo = (email) => {
     }) 
 }
 
-const getProfileLists = (token) => {
-    return fetch(`${BASE_URL}/api/profiles/get_lists/`,
+const getListData = (token) => {
+    return fetch(`${BASE_URL}/api/profiles/get_list_data/`,
     {
         headers: {
             'Authorization' : 'Token ' + token
@@ -92,4 +124,4 @@ const getProfileLists = (token) => {
     })
 }
 
-export {getProfile, changeLocation, getList, getUserList, getUserInfo, getProfileLists, addDeleteLocationList, addList}
+export {getProfile, changeLocation, getList, getUserList, getUserInfo, getListData, addLocationList, deleteLocationList, addList, deleteList}

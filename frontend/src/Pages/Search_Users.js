@@ -33,9 +33,6 @@ function Search_Users(){
           }
         })
       }
-    })
-
-    useEffect(() => {
       getUserList()
       .then(response => response.json())
       .then(data => {
@@ -43,7 +40,7 @@ function Search_Users(){
       })
 
     }, [])
-    
+
     const findUser = (e) => {
       e.preventDefault()
         setUser({
