@@ -71,11 +71,11 @@ function NavBar(props){
     const listDropDown = () => {
       if (listNames) {
         return (
-          <div id = "dropdown" onMouseEnter = {() => fetchLists(), console.log(listNames)}>
-            <a href = '/my-lists'><Button id = "dropbtn"><h1 id = "buttonText">My Lists</h1></Button></a>
+          <div id = "dropdown" onMouseEnter = {() => fetchLists()}>
+            <a href = '/my-lists'><Button id = "dropbtn" onMouseEnter = {() => fetchLists()}><h1 id = "buttonText">My Lists</h1></Button></a>
             <div id="dropdown-content">
               {listNames.map((item) => 
-              <Link
+              <Link style = {{"font-size": "2vh"}}
                 to={{
                   pathname: "/my-lists",
                   state: item

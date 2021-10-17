@@ -55,9 +55,41 @@ const addLocationList = async(token,listName,locationName) => {
     })
 }
 
+const deleteLocationList = async(token,listName,locationName) => { 
+    return fetch(`${BASE_URL}/api/profiles/delete_location_list/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "listName": listName,
+            "locationName": locationName,
+        }),
+    })
+}
+
 
 const addList = (token,listName) => {
     return fetch(`${BASE_URL}/api/profiles/add_list/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "listName" : listName
+        }),
+    })
+}
+
+const deleteList = (token,listName) => {
+    return fetch(`${BASE_URL}/api/profiles/delete_list/`,
     {
         headers: {
             'Accept': 'application/json',
@@ -92,4 +124,4 @@ const getListData = (token) => {
     })
 }
 
-export {getProfile, changeLocation, getList, getUserList, getUserInfo, getListData, addLocationList, addList}
+export {getProfile, changeLocation, getList, getUserList, getUserInfo, getListData, addLocationList, deleteLocationList, addList, deleteList}

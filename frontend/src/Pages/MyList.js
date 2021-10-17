@@ -1,5 +1,5 @@
 import { useCookies } from 'react-cookie';
-import { getProfile, getListData , addLocationList, addList } from '../apis/profiles';
+import { getProfile, getListData , addLocationList, addList, deleteList, deleteLocationList } from '../apis/profiles';
 import { getLocation } from '../apis/locations'
 import {useState,useEffect} from "react"
 import NotLoggedIn from '../components/NotLoggedIn';
@@ -89,10 +89,27 @@ function MyList(props){
         return(res)
     }
 
+    const deleteLocationFromList = (e) => {
+        deleteLocationList(cookies.token, selectedList, e)
+        .then(response => response.json())
+        .then(data => {
+            setList(data["lists"])
+        })
+    }
+
+    const deleteListSubmit = () => {
+        selectList()
+        deleteList(cookies.token, selectedList)
+        .then(response => response.json())
+        .then(data => {
+            setList(data["lists"])
+        })
+    }
+
     const returnListData = () => {
         let res = [<div style = {{"borderBottom": "2px solid gray", "display":"flex"}}><h1 style = {{"fontSize": "4vh", "paddingBottom": "1vh", "paddingTop": "1vh", "marginLeft": "auto", "marginRight": "auto"}}> Locations in the selected list </h1></div>]
         for (let n of dataList[selectedList]){
-            res.push(<a id = "dataText" href = {'/locations/' + n}><h1 id = "dataTextInside" href = {'/locations/' + n}>{n}</h1></a>)
+            res.push(<div id = "dataTextDiv"><a id = "dataText" href = {'/locations/' + n}><h1 id = "dataTextInside" href = {'/locations/' + n}>{n}</h1></a><Button id = "delLocationBTN" onClick = {() => deleteLocationFromList(n)}>Delete {n}</Button></div>)
         }
         return(res)
     }
@@ -219,7 +236,7 @@ function MyList(props){
                         <div id = "listScroller">
                         {selectedList && returnListData()}
                         </div>
-                        {selectedList && (<div id = "optButtonDiv"><Button id = "delListBTN" >Delete List</Button>  <DropdownButton drop = "up" id = "addLocalBTN" title = "Add Location">{addLocalDrop()}</DropdownButton> </div>)}
+                        {selectedList && (<div id = "optButtonDiv"><Button id = "delListBTN" onClick = {() => deleteListSubmit()}>Delete List</Button>  <DropdownButton drop = "up" id = "addLocalBTN" title = "Add Location">{addLocalDrop()}</DropdownButton> </div>)}
                     </div>
                 </div> 
 

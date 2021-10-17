@@ -1,4 +1,5 @@
 from os import name
+from typing import List
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -50,7 +51,7 @@ class ChangeLocationView(APIView):
 
 class AddLocationListView(APIView):
     """
-    Add or delete locations from view
+    Add locations to a list from view
 
     * Requires token authentication.
     """
@@ -80,9 +81,42 @@ class AddLocationListView(APIView):
                 print("List empty, inserting.",  "__________________________________________________________________________")
                 locationInstance = Location.objects.get(name = location_name)
                 locationListInstance = LocationList.objects.get(name = list_name)
-                print("BREAK", "__________________________________________________________________________")
                 SavedLocation.objects.create(name = locationInstance,list = locationListInstance)
                 return HttpResponse()
+
+class DeleteLocationListView(APIView): 
+    """
+    Delete locations to a list from view
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        list_name = request.data['listName']
+        location_name = request.data['locationName']
+        locationID = Location.objects.get(name = location_name)
+        listID = LocationList.objects.get(name = list_name)
+        savedLocationID = SavedLocation.objects.get(name = locationID,list = listID).id
+        SavedLocation.objects.get(id = savedLocationID).delete()
+        
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        lists = [location.name for location in LocationList.objects.filter(profile=profile)]
+        listData = {}
+        for m in lists:
+            convertedLocal = []
+            i = LocationList.objects.get(name = m).id
+            local = [l for l in SavedLocation.objects.filter(list=i).values_list("name_id", flat="true")]
+            for k in local:
+                localName = Location.objects.filter(id = k).values_list("name", flat="true")
+                convertedLocal.append(localName[0])
+            listData[m] = convertedLocal
+        #Array of objects
+        return Response({
+            "lists" : listData
+        })
+
+
 
 class AddListView(APIView):
     """
@@ -108,6 +142,38 @@ class AddListView(APIView):
         else:
             LocationList.objects.create(profile=profile,name=list_name)
             return HttpResponse()
+
+class DeleteListView(APIView): 
+    """
+    Delete locations to a list from view
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        list_name = request.data['listName']
+        listID = LocationList.objects.get(name = list_name)
+        allList = [list for list in SavedLocation.objects.filter(list = listID)]
+        for m in allList:
+            m.delete()
+        listID.delete()
+
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        lists = [location.name for location in LocationList.objects.filter(profile=profile)]
+        listData = {}
+        for m in lists:
+            convertedLocal = []
+            i = LocationList.objects.get(name = m).id
+            local = [l for l in SavedLocation.objects.filter(list=i).values_list("name_id", flat="true")]
+            for k in local:
+                localName = Location.objects.filter(id = k).values_list("name", flat="true")
+                convertedLocal.append(localName[0])
+            listData[m] = convertedLocal
+        #Array of objects
+        return Response({
+            "lists" : listData
+        })
 
 class SearchUserView(APIView):
     """
@@ -184,7 +250,6 @@ class GetListDataView(APIView):
                 localName = Location.objects.filter(id = k).values_list("name", flat="true")
                 convertedLocal.append(localName[0])
             listData[m] = convertedLocal
-        print(listData)
         #Array of objects
         return Response({
             "lists" : listData
