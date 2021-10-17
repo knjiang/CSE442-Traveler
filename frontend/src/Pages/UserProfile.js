@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import NotLoggedIn from '../components/NotLoggedIn';
 import { useTextInput } from '../hooks/text-input';
 
-function MyList() {
+function UserProfile() {
   const [cookies, setCookie] = useCookies(['token']);
 
   const [dataList, setList] = useState({
@@ -86,4 +86,4 @@ function MyList() {
   }
   return <NotLoggedIn />
 }
-export default MyList;
+export default UserProfile;
