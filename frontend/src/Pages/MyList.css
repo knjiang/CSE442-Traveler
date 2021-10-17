@@ -1,0 +1,206 @@
+#lists {
+    display: flex;
+    text-align: left;
+}
+
+#leftList {
+    border: 1px black solid;
+    width: 40%;
+    height: 70vh;
+    text-align: left;
+    margin-left: auto;
+    border-top-left-radius: 2vh;
+    border-bottom-left-radius: 2vh;
+}
+
+#listScroller {
+    height: 60vh;
+    width: 99%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+#rightList {
+    border: 1px black solid;
+    width: 40%;
+    height: 70vh;
+    margin-right: auto;
+    border-top-right-radius: 2vh;
+    border-bottom-right-radius: 2vh;
+}
+
+#listOptions {
+    position: static;
+    display: inline-flex;
+    text-align: right;
+    margin-left: 21vw;
+}
+
+#nameText {
+    text-align: left;
+    padding-left: 2vw;
+    border: 1px white solid;
+    font-size: 4vh;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    margin-bottom: -0.25vh;
+    cursor: pointer;
+    width: 100%;
+}
+
+#nameTextSelected {
+    text-align: left;
+    padding-left: 2vw;
+    border: 1px white solid;
+    font-size: 4vh;
+    background-color: rgb(41,98,255);
+    color: white;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    margin-bottom: -0.25vh;
+    cursor: pointer;
+}
+
+
+#dataText {
+    text-decoration: none;
+    font-size: 3vh;
+    display: block;
+    color: black;
+    font-weight: 600;
+    padding-bottom: 1vh;
+}
+
+#dataText:hover {
+    color: rgb(41,98,255);
+}
+
+#dataTextInside {
+    width: 30vw;
+    height: 4vh;
+    font-size: 3.5vh;
+    text-align: left;
+    margin-bottom: -1.5vh;
+    margin-top: 0.5vh;
+    padding-bottom: 6vh;
+    padding-top: 1vh;
+    padding-left: 2vw;
+}
+
+#dataTextInside:hover {
+    background-color: rgb(240, 240, 240);
+}
+
+#nameText:hover {
+    cursor: pointer;
+    color: white;
+    background-color: rgb(41,98,255);
+}
+
+
+#optButtonDiv {
+    margin-bottom: 3vh;
+    text-align: right;
+    width: 64%;
+    margin-left: auto;
+    display: flex;
+    margin-right: 1vw;
+}
+
+#delListBTN {
+    background-color: rgb(255, 198, 198);
+    color: black;
+    border-top: 0px;
+    border-bottom: 0.3vh solid black;
+    border-left: 0px;
+    border-right: 0px;
+    margin-top: 1vh;
+    height: 6vh;
+    width: 10vw;
+    margin-right: 1vw;
+    font-size: 2vh;
+}
+
+#delListBTN:hover {
+    background-color: red;
+    color: white;
+}
+
+#addLocalBTN {
+    background-color: rgb(255, 255, 255);
+    color: black;
+    border-top: 0px;
+    border-bottom: 0.3vh solid black;
+    border-left: 0px;
+    border-right: 0px;
+    margin-top: 1vh;
+    height: 6vh;
+    width: 10vw;
+    font-size: 2vh;
+}
+
+#dropLocationItem {
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    padding-left: 1vw;
+}
+
+#dropLocationItemText {
+    font-size: 2.5vh;
+}
+
+#dropLocationItem:hover {
+    background-color: rgb(41,98,255);
+    color: white;
+    width: 100%;
+}
+
+#dropLocationItem:focus {
+    background-color: black;
+}
+
+#plusBTN {
+    color: black;
+    border: black 0.2vh solid;
+    border-radius: 1vh;
+    background-color: white;
+    margin-left: 1vw;
+    margin-right: -6vw;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 7vw;
+    height: 6.5vh;
+}
+
+#plusBTN:hover {
+    border: rgb(41,98,255) 0.2vh solid;
+    background-color: rgb(41,98,255);
+    color: white;
+}
+
+#delLocationBTN {
+    background-color: rgb(255, 198, 198);
+    color: black;
+    height: 5vh;
+    width: 8vw;
+    font-size: 1.5vh;
+    margin-left: 22%;
+    position: absolute;
+    margin-top: 1vh;
+    overflow-y: hidden;
+}
+
+#delLocationBTN:hover {
+    background-color: red;
+    color: white;
+}
+
+#dataTextDiv {
+    width: 100%;
+    display: flex;
+}
