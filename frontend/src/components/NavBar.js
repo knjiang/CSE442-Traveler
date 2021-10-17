@@ -105,7 +105,7 @@ function NavBar(props){
                 <div id = "rightNav">
                   {listDropDown()}
                   <a href = '/my-profile'><Button id = "navButtonOn" variant="outline-dark"><h1 id = "buttonText">My Profile</h1></Button></a>
-                  <a href = '/search'><Button variant="outline-dark" id = "navButtonOn"><h1 id = "buttonText">Search Users</h1></Button></a>
+                  <a href = '/user'><Button variant="outline-dark" id = "navButtonOn"><h1 id = "buttonText">Search Users</h1></Button></a>
                   <a href = '/forum'><Button variant="outline-dark" id = "navButtonOn"><h1 id = "buttonText">Forum</h1></Button></a>
                   <Button id = "navButtonOn" variant="outline-dark" onClick = {logoutUser}><h1 id = "buttonText">Logout</h1></Button>
                 </div>
@@ -121,7 +121,7 @@ function NavBar(props){
                 <div id = "rightNav">
                   <a><Button variant="outline-dark" id = "navButtonOff"><h1 id = "buttonText">My Lists</h1></Button></a>
                   <a><Button id = "navButtonOff" variant="outline-dark"><h1 id = "buttonText">My Profile</h1></Button></a>
-                  <a href = '/search'><Button variant="outline-dark" id = "navButtonOn" title="forum button"><h1 id = "buttonText">Search Users</h1></Button></a>
+                  <a href = '/user'><Button variant="outline-dark" id = "navButtonOn" title="forum button"><h1 id = "buttonText">Search Users</h1></Button></a>
                   <a href = '/forum'><Button variant="outline-dark" id = "navButtonOn" title="forum button"><h1 id = "buttonText">Forum</h1></Button></a>
                   <a><Button id = "navButtonOn" variant="outline-dark" style = {{padding: "0px"}}><Login/></Button></a>
                 </div>

@@ -251,3 +251,41 @@ class GetListDataView(APIView):
             "lists" : listData
         })
     
+class AddLocationView(APIView):
+    """
+    View to get own lists
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        """
+        Adds a new location to db
+        """
+        name = request.data['name']
+        if (Location.objects.filter(name = name)):
+            return HttpResponseNotFound()
+        else:
+            Location.objects.create(name = name)
+            return HttpResponse()
+    
+class DelLocationView(APIView):
+    """
+    View to get own lists
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        """
+        Adds a new location to db
+        """
+        name = request.data['name']
+        if (Location.objects.filter(name = name)):
+            Location.objects.filter(name = name).delete()
+            return HttpResponse()
+        else:
+            return HttpResponseNotFound()
+    

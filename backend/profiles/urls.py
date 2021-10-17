@@ -1,7 +1,6 @@
 from django.urls import path
 
-from .views import GetProfileView, ChangeLocationView, SearchUserView, AddListView, DeleteListView, AddLocationListView, DeleteLocationListView, GetAllProfilesView, GetUserListsView, GetListDataView
-
+from .views import GetProfileView, ChangeLocationView, SearchUserView, AddListView, DeleteListView, AddLocationListView, DeleteLocationListView, GetAllProfilesView, GetUserListsView, GetListDataView, AddLocationView, DelLocationView
 app_name = "profiles"
 
 urlpatterns = [
@@ -14,5 +13,7 @@ urlpatterns = [
     path('delete_location_list/', DeleteLocationListView.as_view()),
     path('search_filter/', GetAllProfilesView.as_view()),
     path('get_lists/', GetUserListsView.as_view()),
-    path('get_list_data/', GetListDataView.as_view())
+    path('get_list_data/', GetListDataView.as_view()),
+    path('add_location/', AddLocationView.as_view()),
+    path('del_location/', DelLocationView.as_view())
 ]
