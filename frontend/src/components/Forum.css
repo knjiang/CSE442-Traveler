@@ -3,3 +3,9 @@
     color:green;
     cursor: pointer;
 }
+
+#commentdetails {
+    font-size: 15px;
+    text-align: center;
+    color:green;
+}

@@ -30,7 +30,6 @@ const ForumPosted = () =>{
       })
 
     useEffect (() => {
-        console.log(pathname.replace('-', ' '))
         if (cookies.token && !user.logged_in){
             getProfile(cookies.token)
             .then(response => response.json())
@@ -100,7 +99,7 @@ const ForumPosted = () =>{
             return (
                 <div>
                 {selectedComment.map((comments, index) => (
-                        <h3>{comments[0]}, by {comments[1]}</h3>
+                        <h3 id= "commentdetails">{comments[0]}, by {comments[1]}</h3>
                     ))}
                 </div>
             )
@@ -112,7 +111,7 @@ const ForumPosted = () =>{
             return(
             <Modal show={show} onHide={() => handleClose(false)}>
                 <Modal.Header closeButton>
-                <Modal.Title>Location Form</Modal.Title>
+                <Modal.Title>{selectedPost[2]}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div>Title: {selectedPost[0]}</div>
