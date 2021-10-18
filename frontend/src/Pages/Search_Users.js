@@ -14,6 +14,7 @@ function Search_Users(){
         username: '',
         email: '',
         from_location: '',
+        background: '',
     })
 
     const [cookies, setCookie, removeCookie] = useCookies(['token']);

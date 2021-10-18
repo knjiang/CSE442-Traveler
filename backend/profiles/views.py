@@ -29,6 +29,7 @@ class GetProfileView(APIView):
             "first_name" : profile.user.first_name,
             "email" : profile.user.email,
             "from_location": profile.from_location,
+            "background": profile.background,
         })
 
 class ChangeLocationView(APIView):
@@ -188,6 +189,7 @@ class SearchUserView(APIView):
             "first_name" : user_query.user.first_name,
             "email" : user_query.user.email,
             "from_location" : user_query.from_location,
+            "background": user_query.background,
         })
 
 class GetAllProfilesView(APIView):
@@ -251,6 +253,21 @@ class GetListDataView(APIView):
         return Response({
             "lists" : listData
         })
+
+class ChangeBackgroundView(APIView):
+    """
+    View to change background 
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        """
+        View to change background.
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        profile.background = request.data['background']
+        profile.save()
+        return Response()
 
 class GetSetShareableLink(APIView):
     """

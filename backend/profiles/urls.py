@@ -12,7 +12,8 @@ GetAllProfilesView,
 GetUserListsView, 
 GetListDataView, 
 GetSetShareableLink,
-GetShareableLinkList
+GetShareableLinkList,
+ChangeBackgroundView
 )
 
 app_name = "profiles"
@@ -28,6 +29,7 @@ urlpatterns = [
     path('search_filter/', GetAllProfilesView.as_view()),
     path('get_lists/', GetUserListsView.as_view()),
     path('get_list_data/', GetListDataView.as_view()),
+    path('change_background/', ChangeBackgroundView.as_view()),
     path('shareable_link/',GetSetShareableLink.as_view()),
     path('get_shareable_contents/', GetShareableLinkList.as_view()),
 ]
