@@ -106,6 +106,30 @@ const deleteList = async(token,listName) => {
     })
 }
 
+const changeBackground = async(token,background) => {
+    return fetch(`${BASE_URL}/api/profiles/change_background/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "background" : background,
+        }),
+    })
+}
+
+const getBackground = (background) => {
+    const encoded_input = encodeURIComponent(background)
+    return fetch(`${BASE_URL}/api/profiles/getBacgkround/`, {
+        method: "GET",
+    })
+
+}
+
 const getUserList = () => {
     return fetch(`${BASE_URL}/api/profiles/search_filter/`) 
 }
@@ -127,4 +151,20 @@ const getListData = (token) => {
     })
 }
 
-export {getProfile, changeLocation, getList, getUserList, getUserInfo, getListData, addLocationList, deleteLocationList, addList, deleteList}
+const getSetShareableLink = async(token, listName) => {
+    return fetch(`${BASE_URL}/api/profiles/shareable_link/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "listName": listName,
+        }),
+    })
+}
+
+export {getProfile, changeLocation, getList, getUserList, getUserInfo, getListData, addLocationList, deleteLocationList, addList, deleteList, getSetShareableLink, changeBackground}

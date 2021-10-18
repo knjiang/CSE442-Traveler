@@ -1,8 +1,9 @@
 import { useCookies } from 'react-cookie';
-import { getProfile, getListData , addLocationList, addList, deleteList, deleteLocationList } from '../apis/profiles';
+import { getProfile, getListData , addLocationList, addList, deleteList, deleteLocationList, getSetShareableLink } from '../apis/profiles';
 import { getLocation } from '../apis/locations'
 import {useState,useEffect} from "react"
 import NotLoggedIn from '../components/NotLoggedIn';
+import ShareList from '../components/ShareList';
 import './MyList.css'
 import { DropdownButton, Dropdown, Button, Alert } from 'react-bootstrap'
 import { useLocation } from 'react-router-dom'
@@ -23,6 +24,8 @@ function MyList(props){
     const [showSaveLocationError, setSaveLocationError] = useState(false)
     const [showSaveLocationSuccess, setSaveLocationSuccess] = useState(false)
     const [newListName, setNewListName] = useState()
+    const [showShareList, setShareListModal] = useState(false)
+    const [shareLink, setShareLink] = useState("")
 
     const existsCookie = typeof cookies.token != "undefined"
 
@@ -75,14 +78,27 @@ function MyList(props){
         });
     }
 
+    const callbackShareList = () => {
+        setShareListModal(false)
+    }
+
+    const shareList = (name) => {
+        getSetShareableLink(cookies.token,name)
+        .then(response => response.json())
+        .then(data => {
+            setShareLink(data.url)
+            setShareListModal(true)
+        });
+    }
+
     const returnListName = () => {
         let res = [<div style = {{"borderBottom": "2px solid gray", "display":"flex"}}><h1 style = {{"fontSize": "4vh", "paddingBottom": "1vh", "paddingTop": "1vh", "marginLeft": "auto", "marginRight": "auto"}}>Your Lists </h1></div>]
         for (let name of Object.keys(dataList)){
             if (name == selectedList){
-                res.push(<h1 id = "nameTextSelected" onClick = {() => (selectList(name), refreshList())}>{name}</h1>)
+                res.push(<h1 id = "nameTextSelected" onClick = {() => (selectList(name), refreshList())}>{name} <Button variant="secondary" style={{"float":"right", "margin-right" : "1rem"}} onClick = {(evt) => (evt.stopPropagation(),shareList(name))}> Share </Button> </h1>)
             }
             else {
-                res.push(<h1 id = "nameText" onClick = {() => (selectList(name), refreshList())}>{name}</h1>)
+                res.push(<h1 id = "nameText" onClick = {() => (selectList(name), refreshList())}>{name} <Button variant="secondary" style={{"float":"right", "margin-right" : "1rem"}} onClick = {(evt) => (evt.stopPropagation(),shareList(name))}> Share </Button></h1>)
             }
 
         }
@@ -238,6 +254,7 @@ function MyList(props){
                         {selectedList && (<div id = "optButtonDiv"><Button id = "delListBTN" onClick = {() => deleteListSubmit()}>Delete List</Button>  <DropdownButton drop = "up" id = "addLocalBTN" title = "Add Location">{addLocalDrop()}</DropdownButton> </div>)}
                     </div>
                 </div> 
+                <ShareList show = {showShareList} link = {shareLink} callback = {callbackShareList}/>
 
             </div>
             )

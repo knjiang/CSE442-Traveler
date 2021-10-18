@@ -8,6 +8,7 @@ function Searched_Profile(props){
         username: '',
         email: props.location.state.searched_email,
         from_location: '',
+        background: '',
     })
 
     useEffect(() => {

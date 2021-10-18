@@ -12,6 +12,7 @@ import ForumContent from './components/ForumContent'
 import MyList from './Pages/MyList'
 import ForumPosted from './Pages/ForumPosted'
 import MyForum from './Pages/MyForum'
+import SharedListPage from './Pages/SharedListPage'
 
 const Routes = (props) => {
     const user = props.parentUser
@@ -33,6 +34,7 @@ const Routes = (props) => {
           <Route path ='/forum/:id' render = {() => (<ForumPosted parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route exact path ='/my-lists' render = {() => (<MyList parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route exact path ='/my-forum' render = {() => (<MyForum parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route path = '/share/:id' render = {() => (<SharedListPage parentUser = {user} parentSetUser = {setUser} />)}></Route>
         </Switch>
       </div>
 

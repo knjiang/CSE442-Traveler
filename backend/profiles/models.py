@@ -6,6 +6,7 @@ from django.dispatch import receiver
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     from_location = models.TextField(max_length=30,default="")
+    background = models.TextField(max_length=50,default="")
 
     def __str__(self):
         return self.user.username
@@ -36,6 +37,13 @@ class SavedLocation(models.Model):
 
     def __str__(self):
         return self.name
+
+class ShareableLink(models.Model):
+    origin_list = models.OneToOneField(LocationList, on_delete=models.CASCADE)
+    url = models.TextField(max_length=100)
+
+    def __str__(self):
+        return self.url
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
