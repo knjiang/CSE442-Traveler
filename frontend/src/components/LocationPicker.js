@@ -1,6 +1,7 @@
 import {useState,useEffect} from "react"
 import { DropdownButton, Dropdown } from 'react-bootstrap'
 import { getLocation } from "../apis/locations"
+import { useCookies } from 'react-cookie';
 
 function LocationPicker() {
 
