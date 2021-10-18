@@ -6,10 +6,11 @@ from rest_framework.response import Response
 from django.http import HttpResponse, HttpResponseNotFound
 from rest_framework import authentication
 from django.contrib.auth.models import User
-from .models import Profile, LocationList, Location, SavedLocation
+from .models import Profile, LocationList, Location, SavedLocation, ShareableLink
 from .serializers import ProfileSerializer
 from rest_framework.renderers import JSONRenderer
 import json
+import uuid
 
 class GetProfileView(APIView):
     """
@@ -256,7 +257,6 @@ class GetListDataView(APIView):
 class ChangeBackgroundView(APIView):
     """
     View to change background 
-    * Requires token authentication.
     """
     authentication_classes = [authentication.TokenAuthentication]
 
@@ -268,3 +268,40 @@ class ChangeBackgroundView(APIView):
         profile.background = request.data['background']
         profile.save()
         return Response()
+
+class GetSetShareableLink(APIView):
+    """
+    View to get/set shareable link
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        location_list = get_object_or_404(LocationList, profile=profile,name=request.data['listName'])
+        if not ShareableLink.objects.filter(origin_list=location_list).exists():
+            random_url = uuid.uuid4()
+            ShareableLink.objects.create(origin_list=location_list,url=random_url)
+        shareable_link = get_object_or_404(ShareableLink,origin_list=location_list)
+        return Response({
+            "url" : shareable_link.url
+        })
+
+class GetShareableLinkList(APIView):
+    """
+    View to get shareable link contents
+
+    * Requires token authentication.
+    """
+
+    def get(self, request, format=None):
+        url = request.query_params.get('url')
+        shareable_link = get_object_or_404(ShareableLink,url=url)
+        location_list = shareable_link.origin_list
+        locations = location_list.savedlocation_set.all()
+        return Response({
+            "title" : location_list.name,
+            "locations" : [str(location.name) for location in locations],
+            "created_by" : str(location_list.profile),
+        })

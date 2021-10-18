@@ -32,5 +32,4 @@ function Homepage(props){
   )
 }
 
-
-export default Homepage
+export default Homepage;

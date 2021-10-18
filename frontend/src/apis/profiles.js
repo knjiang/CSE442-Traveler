@@ -148,4 +148,20 @@ const getListData = (token) => {
     })
 }
 
-export {getProfile, changeLocation, changeBackground, getList, getUserList, getUserInfo, getListData, addLocationList, deleteLocationList, addList, deleteList}
+const getSetShareableLink = async(token, listName) => {
+    return fetch(`${BASE_URL}/api/profiles/shareable_link/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "listName": listName,
+        }),
+    })
+}
+
+export {getProfile, changeLocation, getList, getUserList, getUserInfo, getListData, addLocationList, deleteLocationList, addList, deleteList, getSetShareableLink, changeBackground}

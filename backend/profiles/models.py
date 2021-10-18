@@ -38,6 +38,13 @@ class SavedLocation(models.Model):
     def __str__(self):
         return self.name
 
+class ShareableLink(models.Model):
+    origin_list = models.OneToOneField(LocationList, on_delete=models.CASCADE)
+    url = models.TextField(max_length=100)
+
+    def __str__(self):
+        return self.url
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
