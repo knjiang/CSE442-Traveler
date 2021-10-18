@@ -8,6 +8,7 @@ function Searched_Profile(props){
         username: '',
         email: window.location.pathname.substr(6),
         from_location: '',
+        background: '',
     })
 
     useEffect(() => {

@@ -1,6 +1,23 @@
 from django.urls import path
 
-from .views import GetProfileView, ChangeLocationView, SearchUserView, AddListView, DeleteListView, AddLocationListView, DeleteLocationListView, GetAllProfilesView, GetUserListsView, GetListDataView, AddLocationView, DelLocationView
+from .views import (
+GetProfileView, 
+ChangeLocationView, 
+SearchUserView, 
+AddListView, 
+DeleteListView, 
+AddLocationListView,
+AddLocationView,
+DelLocationView,
+DeleteLocationListView, 
+GetAllProfilesView, 
+GetUserListsView, 
+GetListDataView, 
+GetSetShareableLink,
+GetShareableLinkList,
+ChangeBackgroundView
+)
+
 app_name = "profiles"
 
 urlpatterns = [
@@ -15,5 +32,8 @@ urlpatterns = [
     path('get_lists/', GetUserListsView.as_view()),
     path('get_list_data/', GetListDataView.as_view()),
     path('add_location/', AddLocationView.as_view()),
-    path('del_location/', DelLocationView.as_view())
+    path('del_location/', DelLocationView.as_view()),
+    path('change_background/', ChangeBackgroundView.as_view()),
+    path('shareable_link/',GetSetShareableLink.as_view()),
+    path('get_shareable_contents/', GetShareableLinkList.as_view()),
 ]

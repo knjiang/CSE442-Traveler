@@ -2,7 +2,11 @@
   text-align: center;
 }
 
-h1 {
+h1, h2 {
+  text-align: center;
+}
+
+h3 {
   text-align: center;
 }
 
@@ -26,4 +30,8 @@ p {
   margin-left: auto;
   margin-right: auto;
   width: 50%;
+}
+
+form, label, input {
+  text-align: center;
 }

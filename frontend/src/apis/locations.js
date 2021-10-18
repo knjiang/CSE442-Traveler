@@ -34,4 +34,9 @@ const delLocation = (location) => {
     })
 }
 
-export {getLocation, addLocation, delLocation}
+const getShareableContents = (url) => {
+    const encoded_input = encodeURIComponent(url)
+    return fetch(`${BASE_URL}/api/profiles/get_shareable_contents/?url=${encoded_input}`)
+}
+
+export {getLocation,getShareableContents,addLocation, delLocation}

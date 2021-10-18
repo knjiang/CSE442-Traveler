@@ -14,6 +14,7 @@ function Search_Users(){
         username: '',
         email: '',
         from_location: '',
+        background: '',
     })
 
     const [cookies, setCookie, removeCookie] = useCookies(['token']);
@@ -99,7 +100,7 @@ function Search_Users(){
           <br/>
           <h1> Search result with: {user.email} </h1>
           <br/>
-          <h1>Found: {user.username} - {user.from_location}</h1>
+          <h1>Found: {user.name} from {user.from_location}</h1>
         </div>
         </div>
     )
