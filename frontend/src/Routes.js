@@ -10,6 +10,7 @@ import UserProfile from './Pages/UserProfile';
 import Post from './Pages/Post.js'
 import ForumContent from './Pages/ForumContent'
 import MyList from './Pages/MyList'
+import SharedListPage from './Pages/SharedListPage'
 
 const Routes = (props) => {
     const user = props.parentUser
@@ -29,6 +30,7 @@ const Routes = (props) => {
           <Route path = '/post' render = {() => (<Post parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route path ='/ForumContent' render = {() => (<ForumContent parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route exact path ='/my-lists' render = {() => (<MyList parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route path = '/share/:id' render = {() => (<SharedListPage parentUser = {user} parentSetUser = {setUser} />)}></Route>
         </Switch>
       </div>
 
