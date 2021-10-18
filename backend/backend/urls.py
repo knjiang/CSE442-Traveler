@@ -35,6 +35,7 @@ urlpatterns = [
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/google/', GoogleLogin.as_view(), name='google_login'),
     path('api/profiles/', include('profiles.urls')),
+    path('api/forums/',include('forums.urls')),
     path('api/get_csrf/', GetCSRFTokenView.as_view()),
     path('accounts/', include('allauth.urls'), name='socialaccount_signup'),
     re_path(".*", TemplateView.as_view(template_name="index.html")),

@@ -104,6 +104,7 @@ function NavBar(props){
                 <div id = "leftNav"><a href = "/" id = "travelerIcon">Traveler</a></div>
                 <div id = "rightNav">
                   {listDropDown()}
+                  <a href = '/my-forum'><Button id = "navButtonOn" variant="outline-dark"><h1 id = "buttonText">My Forums</h1></Button></a>
                   <a href = '/my-profile'><Button id = "navButtonOn" variant="outline-dark"><h1 id = "buttonText">My Profile</h1></Button></a>
                   <a href = '/user'><Button variant="outline-dark" id = "navButtonOn"><h1 id = "buttonText">Search Users</h1></Button></a>
                   <a href = '/forum'><Button variant="outline-dark" id = "navButtonOn"><h1 id = "buttonText">Forum</h1></Button></a>
