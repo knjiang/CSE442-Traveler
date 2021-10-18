@@ -1,10 +1,7 @@
-#For_All_Location {
-    display: grid;
-}
-
-.Location_Boxes {
-    border: 2px solid black;
-    padding: 0px;
+#masterDiv {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .Location_Click {
@@ -12,17 +9,36 @@
     width: 100%;
 }
 
-#forumButton a{
-    text-decoration: none;
+#dropDiv {
+    max-height: 38vh;
+    overflow-y: scroll;
 }
 
-#forumButton{
-    background-color: deepskyblue;
-    color: white;
-    font-size: 20px;
-    padding: 10px 60px;
-    border-radius: 5px;
-    margin: 10px 0;
-    cursor: pointer;
+#dropdown-item-homepage {
+    width: 13.5vw;
+    border: 1px rgb(223, 223, 223) solid;
+}
 
+#dropdown-item-homepage:hover {
+    color: rgb(0, 76, 190);
+    border: 1px rgb(216, 216, 216) solid;
+    background-color: rgb(233, 233, 233);
+}
+
+.map-selected {
+    fill: #88f7ff;
+}
+  
+.map-unselected {
+    fill: rgb(41,98,255);
+    border: 2px solid green;
+}
+  
+.map-unselected:hover {
+    fill: #2df1ff;;
+    border: 2px solid green;
+}
+  
+.map-selected:hover, .map-unselected:hover {
+    cursor: pointer;
 }

@@ -1,9 +1,17 @@
+
+from os import name
+from typing import List
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.http import HttpResponse, HttpResponseNotFound
 from rest_framework import authentication
 from django.contrib.auth.models import User
-from .models import Profile, LocationList, Location, SavedLocation
+from .models import Profile, LocationList, Location, SavedLocation, ShareableLink
+from .serializers import ProfileSerializer
+from rest_framework.renderers import JSONRenderer
+import json
+import uuid
 
 class GetProfileView(APIView):
     """
@@ -22,6 +30,7 @@ class GetProfileView(APIView):
             "first_name" : profile.user.first_name,
             "email" : profile.user.email,
             "from_location": profile.from_location,
+            "background": profile.background,
         })
 
 class ChangeLocationView(APIView):
@@ -41,10 +50,77 @@ class ChangeLocationView(APIView):
         profile.from_location = new_location
         profile.save()
         return Response()
-    
-class ChangeListView(APIView):
+
+
+class AddLocationListView(APIView):
     """
-    View to change list
+    Add locations to a list from view
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        list_name = request.data['listName']
+        location_name = request.data['locationName'].replace("-", " ")
+        if list_name and location_name:
+            choseListID = LocationList.objects.get(name = list_name).id
+            savedListID = SavedLocation.objects.filter(list = choseListID)
+            if savedListID.values_list("name", flat = True):
+                locationsConverted = []
+                for m in list(savedListID.values_list("name", flat = True)):
+                    locationsConverted.append(Location.objects.get(id = m).name)
+
+                if location_name in locationsConverted:
+                    return HttpResponseNotFound()
+                else:
+                    locationInstance = Location.objects.get(name = location_name)
+                    locationListInstance = LocationList.objects.get(name = list_name)
+                    SavedLocation.objects.create(list = locationListInstance, name = locationInstance)
+                    return HttpResponse()
+            else:
+                locationInstance = Location.objects.get(name = location_name)
+                locationListInstance = LocationList.objects.get(name = list_name)
+                SavedLocation.objects.create(name = locationInstance,list = locationListInstance)
+                return HttpResponse()
+
+class DeleteLocationListView(APIView): 
+    """
+    Delete locations to a list from view
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        list_name = request.data['listName']
+        location_name = request.data['locationName']
+        locationID = Location.objects.get(name = location_name)
+        listID = LocationList.objects.get(name = list_name)
+        savedLocationID = SavedLocation.objects.get(name = locationID,list = listID).id
+        SavedLocation.objects.get(id = savedLocationID).delete()
+        
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        lists = [location.name for location in LocationList.objects.filter(profile=profile)]
+        listData = {}
+        for m in lists:
+            convertedLocal = []
+            i = LocationList.objects.get(name = m).id
+            local = [l for l in SavedLocation.objects.filter(list=i).values_list("name_id", flat="true")]
+            for k in local:
+                localName = Location.objects.filter(id = k).values_list("name", flat="true")
+                convertedLocal.append(localName[0])
+            listData[m] = convertedLocal
+        #Array of objects
+        return Response({
+            "lists" : listData
+        })
+
+
+
+class AddListView(APIView):
+    """
+    Add new list if not exists
 
     * Requires token authentication.
     """
@@ -60,19 +136,44 @@ class ChangeListView(APIView):
         }
         """
         profile = get_object_or_404(Profile,pk=request.user.id)
-        list_name = request.data['name']
+        list_name = request.data['listName']
         if LocationList.objects.filter(profile=profile,name=list_name).exists():
-            my_location_list = LocationList.objects.get(profile=profile,name=list_name)
+            return HttpResponseNotFound()
         else:
-            my_location_list = LocationList.objects.create(profile=profile,name=list_name)
-        location_list = request.data['list'].split(",")
-        for location in location_list:
-            if Location.objects.filter(name=location).exists():
-                loc_obj = Location.objects.get(name=location)
-            else:
-                loc_obj = Location.objects.create(name=location)
-            SavedLocation.objects.create(name=loc_obj,list=my_location_list)
-        return Response()
+            LocationList.objects.create(profile=profile,name=list_name)
+            return HttpResponse()
+
+class DeleteListView(APIView): 
+    """
+    Delete locations to a list from view
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        list_name = request.data['listName']
+        listID = LocationList.objects.get(name = list_name)
+        allList = [list for list in SavedLocation.objects.filter(list = listID)]
+        for m in allList:
+            m.delete()
+        listID.delete()
+
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        lists = [location.name for location in LocationList.objects.filter(profile=profile)]
+        listData = {}
+        for m in lists:
+            convertedLocal = []
+            i = LocationList.objects.get(name = m).id
+            local = [l for l in SavedLocation.objects.filter(list=i).values_list("name_id", flat="true")]
+            for k in local:
+                localName = Location.objects.filter(id = k).values_list("name", flat="true")
+                convertedLocal.append(localName[0])
+            listData[m] = convertedLocal
+        #Array of objects
+        return Response({
+            "lists" : listData
+        })
 
 class SearchUserView(APIView):
     """
@@ -81,7 +182,6 @@ class SearchUserView(APIView):
     """
     def get(self, request, format=None):
         searched_email = request.query_params.get('user_email')
-        print(searched_email)
         user_query = get_object_or_404(Profile,user__email=searched_email)
         
         # print(user_query.from_location)
@@ -90,4 +190,142 @@ class SearchUserView(APIView):
             "first_name" : user_query.user.first_name,
             "email" : user_query.user.email,
             "from_location" : user_query.from_location,
+            "background": user_query.background,
+        })
+
+class GetAllProfilesView(APIView):
+    """
+    View to get all users
+    """
+    def get(self, request, format=None):
+        profiles = Profile.objects.all()
+        serializer = ProfileSerializer(profiles, many=True)
+        data = JSONRenderer().render(serializer.data)
+        data = json.loads(data)
+        user_list = []
+        for i in range(0,len(data)):
+            primary = data[i]['id']
+            profile = get_object_or_404(Profile,pk=primary)
+            user_list.append(profile.user.email)
+        return Response({"users" : user_list}) 
+
+class GetUserListsView(APIView):
+    """
+    View to get own lists
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def get(self, request, format=None):
+        """
+        Return your own lists in JSON format.
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        lists = [location.name for location in LocationList.objects.filter(profile=profile)]
+        return Response({
+            "lists" : lists
+        })
+    
+class GetListDataView(APIView):
+    """
+    View to get own lists
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def get(self, request, format=None):
+        """
+        Return your own lists in JSON format.
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        lists = [location.name for location in LocationList.objects.filter(profile=profile)]
+        listData = {}
+        for m in lists:
+            convertedLocal = []
+            i = LocationList.objects.get(name = m).id
+            local = [l for l in SavedLocation.objects.filter(list=i).values_list("name_id", flat="true")]
+            for k in local:
+                localName = Location.objects.filter(id = k).values_list("name", flat="true")
+                convertedLocal.append(localName[0])
+            listData[m] = convertedLocal
+        #Array of objects
+        return Response({
+            "lists" : listData
+        })
+    
+class AddLocationView(APIView):
+    def post(self, request, format=None):
+        """
+        Adds a new location to db
+        """
+        name = request.data['name']
+        if (Location.objects.filter(name = name)):
+            return HttpResponseNotFound()
+        else:
+            Location.objects.create(name = name)
+            return HttpResponse()
+
+class DelLocationView(APIView):
+
+    def post(self, request, format=None):
+        """
+        Adds a new location to db
+        """
+        name = request.data['name']
+        if (Location.objects.filter(name = name)):
+            Location.objects.filter(name = name).delete()
+            return HttpResponse()
+        else:
+            return HttpResponseNotFound()
+
+class ChangeBackgroundView(APIView):
+    """
+    View to change background 
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        """
+        View to change background.
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        profile.background = request.data['background']
+        profile.save()
+        return Response()
+
+class GetSetShareableLink(APIView):
+    """
+    View to get/set shareable link
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        location_list = get_object_or_404(LocationList, profile=profile,name=request.data['listName'])
+        if not ShareableLink.objects.filter(origin_list=location_list).exists():
+            random_url = uuid.uuid4()
+            ShareableLink.objects.create(origin_list=location_list,url=random_url)
+        shareable_link = get_object_or_404(ShareableLink,origin_list=location_list)
+        return Response({
+            "url" : shareable_link.url
+        })
+
+class GetShareableLinkList(APIView):
+    """
+    View to get shareable link contents
+    * Requires token authentication.
+    """
+
+    def get(self, request, format=None):
+        url = request.query_params.get('url')
+        shareable_link = get_object_or_404(ShareableLink,url=url)
+        location_list = shareable_link.origin_list
+        locations = location_list.savedlocation_set.all()
+        return Response({
+            "title" : location_list.name,
+            "locations" : [str(location.name) for location in locations],
+            "created_by" : str(location_list.profile),
         })

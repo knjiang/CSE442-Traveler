@@ -1,6 +1,6 @@
 // All profiles-related API calls
 
-import {BASE_URL} from './base';
+import {BASE_URL, getCsrfToken} from './base';
 
 const getProfile = (token) => {
     return fetch(`${BASE_URL}/api/profiles/get_profile/`,
@@ -13,7 +13,7 @@ const getProfile = (token) => {
 }
 
 const getList = (token) => {
-    return fetch(`${BASE_URL}/lists/`,
+    return fetch(`${BASE_URL}/api/profiles/get_lists/`,
     {
         headers: {
             'Authorization' : 'Token ' + token
@@ -22,13 +22,14 @@ const getList = (token) => {
     })
 }
 
-const changeLocation = (token,location) => {
+const changeLocation = async(token,location) => {
     return fetch(`${BASE_URL}/api/profiles/change_location/`,
     {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization' : 'Token ' + token
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
         },
         method: "POST",
         body : JSON.stringify({
@@ -37,8 +38,43 @@ const changeLocation = (token,location) => {
     })
 }
 
-const changeList = (token,name,list) => {
-    return fetch(`${BASE_URL}/api/profiles/change_list`,
+const addLocationList = async(token,listName,locationName) => { 
+    return fetch(`${BASE_URL}/api/profiles/add_location_list/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "listName": listName,
+            "locationName": locationName,
+        }),
+    })
+}
+
+const deleteLocationList = async(token,listName,locationName) => { 
+    return fetch(`${BASE_URL}/api/profiles/delete_location_list/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "listName": listName,
+            "locationName": locationName,
+        }),
+    })
+}
+
+
+const addList = (token,listName) => {
+    return fetch(`${BASE_URL}/api/profiles/add_list/`,
     {
         headers: {
             'Accept': 'application/json',
@@ -47,18 +83,85 @@ const changeList = (token,name,list) => {
         },
         method: "POST",
         body : JSON.stringify({
-            "name" : name,
-            "list" : list
+            "listName" : listName
         }),
     })
 }
 
-const getQuery = (e,email) => {
-    e.preventDefault()
+const deleteList = (token,listName) => {
+    return fetch(`${BASE_URL}/api/profiles/delete_list/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "listName" : listName
+        }),
+    })
+}
+
+const changeBackground = async(token,background) => {
+    return fetch(`${BASE_URL}/api/profiles/change_background/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "background" : background,
+        }),
+    })
+}
+
+const getBackground = (background) => {
+    const encoded_input = encodeURIComponent(background)
+    return fetch(`${BASE_URL}/api/profiles/getBacgkround/`, {
+        method: "GET",
+    })
+
+}
+
+const getUserList = () => {
+    return fetch(`${BASE_URL}/api/profiles/search_filter/`) 
+}
+
+const getUserInfo = (email) => {
     const encoded_input = encodeURIComponent(email)
     return fetch(`${BASE_URL}/api/profiles/search_user/?user_email=${encoded_input}`, {
     method: "GET",
     }) 
 }
 
-export {getProfile, changeLocation, getQuery, changeList, getList}
+const getListData = (token) => {
+    return fetch(`${BASE_URL}/api/profiles/get_list_data/`,
+    {
+        headers: {
+            'Authorization' : 'Token ' + token
+        },
+        method: "GET",
+    })
+}
+
+const getSetShareableLink = async(token, listName) => {
+    return fetch(`${BASE_URL}/api/profiles/shareable_link/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "listName": listName,
+        }),
+    })
+}
+
+export {getProfile, changeLocation, getList, getUserList, getUserInfo, getListData, addLocationList, deleteLocationList, addList, deleteList, getSetShareableLink, changeBackground}

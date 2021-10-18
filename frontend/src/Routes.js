@@ -1,23 +1,45 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Homepage from './Pages/Homepage'
-import Browse_Locations from './Pages/Browse_Locations'
 import Specific_Location from './Pages/Specific_Location'
 import Search_Users from './Pages/Search_Users'
+import Searched_Profile from './Pages/Searched_Profile'
 import Forum from './Pages/Forum'
 import UserProfile from './Pages/UserProfile';
+import ForumPost from './components/ForumPost.js'
+import ForumContent from './components/ForumContent'
+import MyList from './Pages/MyList'
+import AdminAddLocation from './Pages/AdminAddLocation'
+import ForumPosted from './Pages/ForumPosted'
+import MyForum from './Pages/MyForum'
+import SharedListPage from './Pages/SharedListPage'
 
+const Routes = (props) => {
+    const user = props.parentUser
+    const setUser = props.parentSetUser
 
-const Routes = () => {
     return (
-      <Switch> {/* The Switch decides which component to show based on the current URL.*/}
-        <Route exact path='/' component={Homepage}></Route>
-        <Route exact path='/locations' component={Browse_Locations}></Route>
-        <Route path='/locations/:id' component={Specific_Location}></Route>
-        <Route exact path='/search' component={Search_Users}></Route>
-        <Route path='/forum' component={Forum}></Route>
-        <Route exact path='/my-profile' component={UserProfile}></Route>
-      </Switch>
+      <div>
+
+        <Switch> {/* The Switch decides which component to show based on the current URL.*/}
+          <Route exact path='/' render = {() => (<Homepage parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route path='/locations/:id' render = {() => (<Specific_Location parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route exact path='/user' render = {() => (<Search_Users parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route path='/user/:id' render = {() => (<Searched_Profile parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route exact path='/search' render = {() => (<Search_Users parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route path='/search/:id' render = {() => (<Searched_Profile parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route exact path='/my-profile' render = {() => (<UserProfile parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route path = '/post' render = {() => (<ForumPost parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route exact path='/forum' render = {() => (<Forum parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route path ='/ForumContent' render = {() => (<ForumContent parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route path ='/forum/:id' render = {() => (<ForumPosted parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route exact path ='/my-lists' render = {() => (<MyList parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route exact path ='/admin/add-location' render = {() => (<AdminAddLocation />)}></Route>
+          <Route exact path ='/my-forum' render = {() => (<MyForum parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route path = '/share/:id' render = {() => (<SharedListPage parentUser = {user} parentSetUser = {setUser} />)}></Route>
+        </Switch>
+      </div>
+
     );
   }
 
