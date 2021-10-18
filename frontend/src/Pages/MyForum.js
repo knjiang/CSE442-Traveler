@@ -92,15 +92,17 @@ const MyForum = () =>{
     }
 
     const displayComments = () => {
+        let res = []
         if (allComments && allComments != []) {
+            for (let comment of allComments){
+                if (comment.length > 0) {
+                    res.push (<div style = {{"display":"flex"}}><h1>Comment: {comment[1]}</h1> <Button onClick ={() => deleteComment(comment)} >Delete</Button></div>)
+                }
+            }
             return (
                 <div>
                     <h1>Your Comments:</h1>
-                    {
-                    allComments.map((comment, id) => (
-                        <div style = {{"display":"flex"}}><h1>Comment: {comment[1]}</h1> <Button onClick ={() => deleteComment(comment)} >Delete</Button></div>
-                    ))
-                    }
+                    {res}
                 </div>
             )
         }   

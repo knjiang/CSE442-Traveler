@@ -79,7 +79,7 @@ function Search_Users(){
               .map((u) => 
                 <li>
                   <Link to={{
-                    pathname: '/search/' + u.split("@")[0],
+                    pathname: '/user/' + u,
                     state: {
                     searched_email: u,
                     },
@@ -100,7 +100,7 @@ function Search_Users(){
           <br/>
           <h1> Search result with: {user.email} </h1>
           <br/>
-          <h1>Found: {user.username} - {user.from_location}</h1>
+          <h1>Found: {user.name} from {user.from_location}</h1>
         </div>
         </div>
     )

@@ -1,3 +1,4 @@
+
 from os import name
 from typing import List
 from django.shortcuts import get_object_or_404
@@ -61,7 +62,7 @@ class AddLocationListView(APIView):
 
     def post(self, request, format=None):
         list_name = request.data['listName']
-        location_name = request.data['locationName']
+        location_name = request.data['locationName'].replace("-", " ")
         if list_name and location_name:
             choseListID = LocationList.objects.get(name = list_name).id
             savedListID = SavedLocation.objects.filter(list = choseListID)
@@ -253,6 +254,31 @@ class GetListDataView(APIView):
         return Response({
             "lists" : listData
         })
+    
+class AddLocationView(APIView):
+    def post(self, request, format=None):
+        """
+        Adds a new location to db
+        """
+        name = request.data['name']
+        if (Location.objects.filter(name = name)):
+            return HttpResponseNotFound()
+        else:
+            Location.objects.create(name = name)
+            return HttpResponse()
+
+class DelLocationView(APIView):
+
+    def post(self, request, format=None):
+        """
+        Adds a new location to db
+        """
+        name = request.data['name']
+        if (Location.objects.filter(name = name)):
+            Location.objects.filter(name = name).delete()
+            return HttpResponse()
+        else:
+            return HttpResponseNotFound()
 
 class ChangeBackgroundView(APIView):
     """
@@ -272,7 +298,6 @@ class ChangeBackgroundView(APIView):
 class GetSetShareableLink(APIView):
     """
     View to get/set shareable link
-
     * Requires token authentication.
     """
     authentication_classes = [authentication.TokenAuthentication]
@@ -291,7 +316,6 @@ class GetSetShareableLink(APIView):
 class GetShareableLinkList(APIView):
     """
     View to get shareable link contents
-
     * Requires token authentication.
     """
 

@@ -6,7 +6,7 @@ function Searched_Profile(props){
     const [user,setUser] = useState({
         search_query: '',
         username: '',
-        email: props.location.state.searched_email,
+        email: window.location.pathname.substr(6),
         from_location: '',
         background: '',
     })
@@ -23,7 +23,7 @@ function Searched_Profile(props){
       }, [])
 
     return(
-        <h1>Hi! This is {user.username} and I am from {user.from_location}!</h1>
+        <h1>Hi! This is {user.username}'s profile and I am from {user.from_location}!</h1>
     )
 }
 

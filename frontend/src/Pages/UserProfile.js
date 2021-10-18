@@ -7,8 +7,6 @@ import { StyleHTMLAttributes } from 'react';
 
 function UserProfile() {
 
-
-
   const [cookies, setCookie] = useCookies(['token']);
 
   const [dataList, setList] = useState({

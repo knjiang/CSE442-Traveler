@@ -22,10 +22,11 @@ function Homepage(props){
         <br/>
         {user.logged_in && <h3>You are signed in as {user.name} from {user.from_location}</h3>}
         <br/>
-        {useDropLocations && <Button style = {{"width": "10vw", "height": "10vh"}} onClick = {() => setDropLocation(false)}>Toggle for map</Button>}
-        {!useDropLocations && <Button style = {{"width": "10vw", "height": "10vh"}} onClick = {() => setDropLocation(true)}>Toggle for dropdown</Button>}
-        {useDropLocations && <LocationPicker/>}
-        {!useDropLocations && <MapPicker/>}
+        {!useDropLocations && <Button style = {{"width": "10vw", "height": "8vh", "marginBottom": "2vh"}} onClick = {() => setDropLocation(true)}>Toggle for map</Button>}
+        {useDropLocations && <Button style = {{"width": "10vw", "height": "8vh", "marginBottom": "2vh"}} onClick = {() => setDropLocation(false)}>Toggle for dropdown</Button>}
+        <br/>
+        {!useDropLocations && <LocationPicker/>}
+        {useDropLocations && <MapPicker/>}
         <br/>
       </div> 
     </div>
