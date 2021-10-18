@@ -12,7 +12,7 @@ class SavedLocationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ListSerializer(serializers.ModelSerializer):
-    SavedLocation = SavedLocationSerializer(many=True,read_only=True)
+    savedLocation = SavedLocationSerializer(many=True,read_only=True)
     class Meta:
         model = LocationList
         fields = '__all__'
