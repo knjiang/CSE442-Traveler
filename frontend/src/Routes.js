@@ -7,9 +7,11 @@ import Search_Users from './Pages/Search_Users'
 import Searched_Profile from './Pages/Searched_Profile'
 import Forum from './Pages/Forum'
 import UserProfile from './Pages/UserProfile';
-import Post from './Pages/Post.js'
-import ForumContent from './Pages/ForumContent'
+import Post from './components/ForumPost.js'
+import ForumContent from './components/ForumContent'
 import MyList from './Pages/MyList'
+import ForumPosted from './Pages/ForumPosted'
+import MyForum from './Pages/MyForum'
 
 const Routes = (props) => {
     const user = props.parentUser
@@ -24,11 +26,13 @@ const Routes = (props) => {
           <Route path='/locations/:id' render = {() => (<Specific_Location parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route exact path='/search' render = {() => (<Search_Users parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route path='/search/:id' render = {() => (<Searched_Profile parentUser = {user} parentSetUser = {setUser} />)}></Route>
-          <Route path='/forum' render = {() => (<Forum parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route exact path='/forum' render = {() => (<Forum parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route exact path='/my-profile' render = {() => (<UserProfile parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route path = '/post' render = {() => (<Post parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route path ='/ForumContent' render = {() => (<ForumContent parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route path ='/forum/:id' render = {() => (<ForumPosted parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route exact path ='/my-lists' render = {() => (<MyList parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route exact path ='/my-forum' render = {() => (<MyForum parentUser = {user} parentSetUser = {setUser} />)}></Route>
         </Switch>
       </div>
 

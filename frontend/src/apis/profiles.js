@@ -23,6 +23,7 @@ const getList = (token) => {
 }
 
 const changeLocation = async(token,location) => {
+    console.log(location)
     return fetch(`${BASE_URL}/api/profiles/change_location/`,
     {
         headers: {
@@ -73,13 +74,14 @@ const deleteLocationList = async(token,listName,locationName) => {
 }
 
 
-const addList = (token,listName) => {
+const addList = async(token,listName) => {
     return fetch(`${BASE_URL}/api/profiles/add_list/`,
     {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization' : 'Token ' + token
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken()
         },
         method: "POST",
         body : JSON.stringify({
@@ -88,13 +90,14 @@ const addList = (token,listName) => {
     })
 }
 
-const deleteList = (token,listName) => {
+const deleteList = async(token,listName) => {
     return fetch(`${BASE_URL}/api/profiles/delete_list/`,
     {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization' : 'Token ' + token
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken()
         },
         method: "POST",
         body : JSON.stringify({

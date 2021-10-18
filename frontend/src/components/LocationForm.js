@@ -15,7 +15,6 @@ function LocationForm(){
         changeLocation(cookies.token,fromLocation)
         resetFromLocation();
         setShow(false);
-        window.location.reload();
     }
 
     const [show, setShow] = useState(true);
