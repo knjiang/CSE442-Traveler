@@ -7,7 +7,7 @@ import { GetPostByLocation, AddComment, GetCommentFromPost } from '../apis/forum
 import { useCookies } from 'react-cookie';
 import { getProfile } from '../apis/profiles';
 
-const ForumPosted = () =>{
+const ForumPosted = (props) =>{
 
     const history = useHistory();
 
@@ -22,26 +22,22 @@ const ForumPosted = () =>{
     const [selectedPost, setSelectedPost] = useState()
     const [selectedComment, setSelectedComment] = useState()
 
-    const [user,setUser] = useState({
-        logged_in : false,
-        name: "None",
-        email: "None",
-        from_location: "",
-      })
+    const user = props.parentUser
+    const setUser = props.parentSetUser 
 
     useEffect (() => {
         if (cookies.token && !user.logged_in){
             getProfile(cookies.token)
             .then(response => response.json())
             .then(data => {
-                if (!data.detail){
+            if (!data.detail){
                 setUser({
-                    logged_in: true,
-                    name: data.first_name,
-                    email: data.email,
-                    from_location: data.from_location
+                logged_in: true,
+                name: data.first_name,
+                email: data.email,
+                from_location: data.from_location
                 })
-                }
+            }
             })
         }
         GetPostByLocation(cookies.token, pathname.replace('-', ' '))

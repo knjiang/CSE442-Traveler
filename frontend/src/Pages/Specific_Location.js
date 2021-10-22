@@ -16,14 +16,8 @@ function Specific_Location (props) {
 
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
-
-  const [user,setUser] = useState({
-    logged_in : false,
-    name: "None",
-    email: "None",
-    from_location: "",
-    search_query: '',
-  })
+  const user = props.parentUser
+  const setUser = props.parentSetUser 
 
   useEffect (() => {
     if (!currentLocation){
@@ -41,20 +35,6 @@ function Specific_Location (props) {
           if (realLocations.some(x => x.toLowerCase().replace(' ', '') == currentLocation.replace('-', '').toLowerCase())){
             setReal(true)
           }
-        }
-      })
-    }
-    if (cookies.token && !user.logged_in){
-      getProfile(cookies.token)
-      .then(response => response.json())
-      .then(data => {
-        if (!data.detail){
-          setUser({
-            logged_in: true,
-            name: data.first_name,
-            email: data.email,
-            from_location: data.from_location
-          })
         }
       })
     }

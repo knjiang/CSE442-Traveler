@@ -1,5 +1,6 @@
 import {useState,useEffect} from "react"
 import {getShareableContents} from "../apis/locations"
+
 function SharedListPage(){
     const [title, setTitle] = useState("")
     const [author, setAuthor] = useState("")

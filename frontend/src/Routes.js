@@ -13,6 +13,7 @@ import AdminAddLocation from './Pages/AdminAddLocation'
 import ForumPosted from './Pages/ForumPosted'
 import MyForum from './Pages/MyForum'
 import SharedListPage from './Pages/SharedListPage'
+import Messages from './Pages/Messages';
 
 const Routes = (props) => {
     const user = props.parentUser
@@ -22,21 +23,20 @@ const Routes = (props) => {
       <div>
 
         <Switch> {/* The Switch decides which component to show based on the current URL.*/}
+          <Route exact path ='/admin/add-location' render = {() => (<AdminAddLocation />)}></Route>
           <Route exact path='/' render = {() => (<Homepage parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route path='/locations/:id' render = {() => (<Specific_Location parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route exact path='/user' render = {() => (<Search_Users parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route path='/user/:id' render = {() => (<Searched_Profile parentUser = {user} parentSetUser = {setUser} />)}></Route>
-          <Route exact path='/search' render = {() => (<Search_Users parentUser = {user} parentSetUser = {setUser} />)}></Route>
-          <Route path='/search/:id' render = {() => (<Searched_Profile parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route exact path='/my-profile' render = {() => (<UserProfile parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route path = '/post' render = {() => (<ForumPost parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route exact path='/forum' render = {() => (<Forum parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route path ='/ForumContent' render = {() => (<ForumContent parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route path ='/forum/:id' render = {() => (<ForumPosted parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route exact path ='/my-lists' render = {() => (<MyList parentUser = {user} parentSetUser = {setUser} />)}></Route>
-          <Route exact path ='/admin/add-location' render = {() => (<AdminAddLocation />)}></Route>
           <Route exact path ='/my-forum' render = {() => (<MyForum parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route path = '/share/:id' render = {() => (<SharedListPage parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route exact path = '/messages' render = {() => (<Messages parentUser = {user} parentSetUser = {setUser} />)}></Route>
         </Switch>
       </div>
 

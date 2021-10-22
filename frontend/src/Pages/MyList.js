@@ -9,43 +9,21 @@ import { DropdownButton, Dropdown, Button, Alert } from 'react-bootstrap'
 import { useLocation } from 'react-router-dom'
 
 function MyList(props){
-    const [cookies,setCookie] = useCookies(['token']);
 
-    const [user,setUser] = useState({
-        logged_in : false,
-        name: "None",
-        email: "None",
-        from_location: "",
-      })
+    const user = props.parentUser
+    const setUser = props.parentSetUser 
+    const [cookies,setCookie] = useCookies(['token']);
     const [dataList,setList] = useState()
     const [selectedList, selectList] = useState()
     const [allLocation, setAllLocation] = useState()
-    const [locationAdder, setLocationAdder] = useState([])
-    const [showSaveLocationError, setSaveLocationError] = useState(false)
-    const [showSaveLocationSuccess, setSaveLocationSuccess] = useState(false)
-    const [newListName, setNewListName] = useState()
+    const [showSaveListError, setSaveListError] = useState(false)
+    const [showSaveListSuccess, setSaveListSuccess] = useState(false)
     const [showShareList, setShareListModal] = useState(false)
     const [shareLink, setShareLink] = useState("")
-
     const existsCookie = typeof cookies.token != "undefined"
-
     const parentData = useLocation()
     
     useEffect(() => {
-        if (cookies.token && !user.logged_in){
-            getProfile(cookies.token)
-            .then(response => response.json())
-            .then(data => {
-              if (!data.detail){
-                setUser({
-                  logged_in: true,
-                  name: data.first_name,
-                  email: data.email,
-                  from_location: data.from_location
-                })
-              }
-            })
-          }
         if (existsCookie){
             getListData(cookies.token)
             .then(response => response.json())
@@ -60,7 +38,6 @@ function MyList(props){
               }
             })
         }
-        
     }, [])
 
     useEffect(() => {
@@ -146,7 +123,7 @@ function MyList(props){
 
     const handleADLocationList = (local) => {
         //Adding location to a preexisting list
-        if (selectedList){
+        if (selectedList && selectedList.length > 0){
             addLocationList(cookies.token, selectedList, local) //listname, locationname
             .then(res => {
                 if (res.ok){
@@ -155,33 +132,27 @@ function MyList(props){
                     .then(data => {
                         setList(data["lists"])
                     });
-                    setSaveLocationSuccess(true)
+                    setSaveListSuccess(true)
                 }
                 else{
-                    setSaveLocationError(true)
+                    setSaveListError(true)
                 }
             })
         }
     }
 
     const showModal = () => {
-        if (showSaveLocationError) {
+        if (showSaveListError) {
             return (
-                <Alert style = {{"height": "12vh", "width": "80%", "textAlign":"center", "marginLeft": "auto", "marginRight": "auto"}} show={showSaveLocationError} variant="danger" onClose={() => setSaveLocationError(false)} dismissible>
-                                <Alert.Heading>Error!</Alert.Heading>
-                                <p>
-                                Error, Location already in list.
-                                </p>
+                <Alert style = {{"height": "8vh", "width": "80%", "textAlign":"center", "marginLeft": "auto", "marginRight": "auto"}} show={showSaveListError} variant="danger" onClose={() => setSaveListError(false)} dismissible>
+                                <Alert.Heading>Error adding list!</Alert.Heading>
                     </Alert>    
             )
         }
-        else if (showSaveLocationSuccess) {
+        else if (showSaveListSuccess) {
             return (
-                <Alert style = {{"height": "12vh", "width": "80%", "textAlign":"center", "marginLeft": "auto", "marginRight": "auto"}} show={showSaveLocationError} variant="success" onClose={() => setSaveLocationError(false)} dismissible>
-                                <Alert.Heading>Success!</Alert.Heading>
-                                <p>
-                                Successfully added location to list.
-                                </p>
+                <Alert style = {{"height": "8vh", "width": "80%", "textAlign":"center", "marginLeft": "auto", "marginRight": "auto"}} show={showSaveListError} variant="success" onClose={() => setSaveListError(false)} dismissible>
+                                <Alert.Heading>Successfully added list!</Alert.Heading>
                     </Alert>    
             )
         }
@@ -189,8 +160,9 @@ function MyList(props){
 
     const modalReplace = () => {
         return (
-            <Alert style = {{"height": "6vh", "width": "80%", "textAlign":"center", "marginLeft": "auto", "marginRight": "auto", "opacity":"0%"}} show={true} variant="danger" dismissible>
-                            <Alert.Heading>Error!</Alert.Heading>
+            <Alert style = {{"height": "8vh", "width": "80%", "textAlign":"center", "marginLeft": "auto", "marginRight": "auto", "opacity":"0%"}} show={true} variant="danger" dismissible>
+                            {// Fake modal for spacing}
+                            }
                 </Alert>    
         )
     }
@@ -209,7 +181,7 @@ function MyList(props){
                     });
                 }
                 else{
-                    alert("N")
+                    setSaveListError(true)
                 }
             })
         }
@@ -234,8 +206,8 @@ function MyList(props){
         if (existsCookie){
             return(
             <div>
-                {showSaveLocationError && showModal()}
-                {!showSaveLocationError && modalReplace()}
+                {showSaveListError && showModal()}
+                {!showSaveListError && modalReplace()}
                 <div id = "lists">
                     <div id = "leftList">
                         <div id = "listScroller">
