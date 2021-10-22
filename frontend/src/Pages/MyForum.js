@@ -1,45 +1,23 @@
 import React, { useEffect, useState } from "react";
 import{ListGroup,ListGroupItem,Button, Modal} from "react-bootstrap";
-import {getLocation} from "../apis/locations";
 import {useHistory} from "react-router";
 import '../components/Forum.css'
 import { getUserComment, getUserPost, delUserPost, delUserComment } from '../apis/forums'
 import { useCookies } from 'react-cookie';
 import { getProfile } from '../apis/profiles';
 
-const MyForum = () =>{
+function MyForum (props) {
 
     const history = useHistory();
-
     const pathname = window.location.pathname.substr(7)
-
     const [cookies,setCookie] = useCookies(['token']);
-
     const [allComments, setAllComment] = useState()
     const [allPosts, setAllPost] = useState()
-
-    const [user,setUser] = useState({
-        logged_in : false,
-        name: "None",
-        email: "None",
-        from_location: "",
-      })
+    const user = props.parentUser
+    const setUser = props.parentSetUser 
+    const existsCookie = typeof cookies.token != "undefined"
 
     useEffect (() => {
-        if (cookies.token && !user.logged_in){
-            getProfile(cookies.token)
-            .then(response => response.json())
-            .then(data => {
-                if (!data.detail){
-                setUser({
-                    logged_in: true,
-                    name: data.first_name,
-                    email: data.email,
-                    from_location: data.from_location
-                })
-                }
-            })
-        }
         getUserPost(cookies.token)
         .then(response => response.json())
         .then(data => {
@@ -52,6 +30,7 @@ const MyForum = () =>{
             //p.id, p.body, p.profile.user.username
             setAllComment(data)
         })
+        console.log(user)
     }, [])
 
     const deletePost = (post) => {
@@ -111,13 +90,19 @@ const MyForum = () =>{
         }
     }
 
-    return(
-        <div>
-            {displayPosts()}
-            {displayComments()}
-        </div>  
-    )
-
+    if (existsCookie){
+        return(
+            <div>
+                {displayPosts()}
+                {displayComments()}
+            </div>  
+        )
+    }
+    else {
+        return (<div>
+            You are not logged in
+        </div>)
+    }
 }
 
 export default MyForum;
