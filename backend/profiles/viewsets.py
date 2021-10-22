@@ -1,3 +1,4 @@
+from typing import List
 from .models import Profile,Language,LocationList,Location,SavedLocation
 from .serializers import ProfileSerializer,LanguageSerializer,ListSerializer,LocationSerializer,SavedLocationSerializer
 from rest_framework import viewsets

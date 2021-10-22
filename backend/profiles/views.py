@@ -54,17 +54,22 @@ class ChangeLocationView(APIView):
 
 class AddLocationListView(APIView):
     """
-    Add locations to a list from view
+    Adds a location to a the specified list
 
     * Requires token authentication.
     """
     authentication_classes = [authentication.TokenAuthentication]
 
     def post(self, request, format=None):
+        '''
+        Input is (name of list, name of location)
+        Output returns response if location is added succesfully, error is location is unable to be added
+        '''
+        profile = get_object_or_404(Profile,pk=request.user.id)
         list_name = request.data['listName']
         location_name = request.data['locationName'].replace("-", " ")
         if list_name and location_name:
-            choseListID = LocationList.objects.get(name = list_name).id
+            choseListID = LocationList.objects.filter(profile=profile,name=list_name).values_list('pk', flat=True)[0]
             savedListID = SavedLocation.objects.filter(list = choseListID)
             if savedListID.values_list("name", flat = True):
                 locationsConverted = []
@@ -75,37 +80,37 @@ class AddLocationListView(APIView):
                     return HttpResponseNotFound()
                 else:
                     locationInstance = Location.objects.get(name = location_name)
-                    locationListInstance = LocationList.objects.get(name = list_name)
+                    locationListInstance = LocationList.objects.filter(profile=profile,name=list_name)[0]
                     SavedLocation.objects.create(list = locationListInstance, name = locationInstance)
                     return HttpResponse()
             else:
                 locationInstance = Location.objects.get(name = location_name)
-                locationListInstance = LocationList.objects.get(name = list_name)
+                locationListInstance = LocationList.objects.filter(profile=profile,name=list_name)[0]
                 SavedLocation.objects.create(name = locationInstance,list = locationListInstance)
                 return HttpResponse()
 
 class DeleteLocationListView(APIView): 
     """
-    Delete locations to a list from view
+    Deletes a location from the specified list
 
     * Requires token authentication.
     """
     authentication_classes = [authentication.TokenAuthentication]
 
     def post(self, request, format=None):
+        profile = get_object_or_404(Profile,pk=request.user.id)
         list_name = request.data['listName']
         location_name = request.data['locationName']
         locationID = Location.objects.get(name = location_name)
-        listID = LocationList.objects.get(name = list_name)
+        listID = LocationList.objects.filter(profile=profile,name=list_name).values_list('pk', flat=True)[0]
         savedLocationID = SavedLocation.objects.get(name = locationID,list = listID).id
         SavedLocation.objects.get(id = savedLocationID).delete()
         
-        profile = get_object_or_404(Profile,pk=request.user.id)
         lists = [location.name for location in LocationList.objects.filter(profile=profile)]
         listData = {}
         for m in lists:
             convertedLocal = []
-            i = LocationList.objects.get(name = m).id
+            i = LocationList.objects.filter(profile=profile,name=m).values_list('pk', flat=True)[0]
             local = [l for l in SavedLocation.objects.filter(list=i).values_list("name_id", flat="true")]
             for k in local:
                 localName = Location.objects.filter(id = k).values_list("name", flat="true")
@@ -120,7 +125,7 @@ class DeleteLocationListView(APIView):
 
 class AddListView(APIView):
     """
-    Add new list if not exists
+    Adds a new list to profile if it does not exist
 
     * Requires token authentication.
     """
@@ -128,12 +133,7 @@ class AddListView(APIView):
 
     def post(self, request, format=None):
         """
-        Change Profile Location
-        Parameters:
-        {
-            'name' : <list_name> (string)
-            'list' : [<location_name>] (array of strings)
-        }
+        Input is ()
         """
         profile = get_object_or_404(Profile,pk=request.user.id)
         list_name = request.data['listName']
@@ -152,19 +152,19 @@ class DeleteListView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
 
     def post(self, request, format=None):
+        profile = get_object_or_404(Profile,pk=request.user.id)
         list_name = request.data['listName']
-        listID = LocationList.objects.get(name = list_name)
+        listID = LocationList.objects.get(profile = profile, name = list_name)
         allList = [list for list in SavedLocation.objects.filter(list = listID)]
         for m in allList:
             m.delete()
         listID.delete()
 
-        profile = get_object_or_404(Profile,pk=request.user.id)
         lists = [location.name for location in LocationList.objects.filter(profile=profile)]
         listData = {}
         for m in lists:
             convertedLocal = []
-            i = LocationList.objects.get(name = m).id
+            i = LocationList.objects.filter(profile=profile,name=m).values_list('pk', flat=True)[0]
             local = [l for l in SavedLocation.objects.filter(list=i).values_list("name_id", flat="true")]
             for k in local:
                 localName = Location.objects.filter(id = k).values_list("name", flat="true")
@@ -244,7 +244,7 @@ class GetListDataView(APIView):
         listData = {}
         for m in lists:
             convertedLocal = []
-            i = LocationList.objects.get(name = m).id
+            i = LocationList.objects.filter(profile=profile,name=m).values_list('pk', flat=True)[0]
             local = [l for l in SavedLocation.objects.filter(list=i).values_list("name_id", flat="true")]
             for k in local:
                 localName = Location.objects.filter(id = k).values_list("name", flat="true")
