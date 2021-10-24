@@ -5,7 +5,7 @@ import NotLoggedIn from '../components/NotLoggedIn';
 import { useTextInput } from '../hooks/text-input';
 import { StyleHTMLAttributes } from 'react';
 
-function UserProfile() {
+function UserProfile(props) {
 
   const [cookies, setCookie] = useCookies(['token']);
 
@@ -15,13 +15,8 @@ function UserProfile() {
 
   const { value: backgroundInfo, bind: backgroundInfoBind, reset: resetBackgroundInfo } = useTextInput('')
 
-  const [user, setUser] = useState({
-    logged_in: false,
-    name: "None",
-    email: "None",
-    from_location: "",
-    background: ""
-  })
+  const user = props.parentUser
+  const setUser = props.parentSetUser 
 
   const existsCookie = typeof cookies.token != "undefined"
 

@@ -25,6 +25,13 @@ class LocationList(models.Model):
     def __str__(self):
         return self.name
 
+class ListDescriptions(models.Model):
+    description = models.TextField(max_length=30)
+    list = models.OneToOneField(LocationList, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.list
+        
 class Location(models.Model):
     name = models.TextField(max_length=30)
 

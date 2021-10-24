@@ -53,19 +53,21 @@ function SaveLocationToList(props){
 
     const handleADLocationList = (list) => {
         //Adding location to a preexisting list
-        addLocationList(cookies.token, list, currentLocation)
-        .then(res => {
-            if (res.ok){
-                setSLShowError(false)
-                setNLShowSuccess(false)
-                setSLShowSuccess(true)
-            }
-            else{
-                setSLShowError(false)
-                setNLShowSuccess(false)
-                setSLShowError(true)
-            }
-        })
+        if (list){
+            addLocationList(cookies.token, list, currentLocation)
+            .then(res => {
+                if (res.ok){
+                    setSLShowError(false)
+                    setNLShowSuccess(false)
+                    setSLShowSuccess(true)
+                }
+                else{
+                    setSLShowError(false)
+                    setNLShowSuccess(false)
+                    setSLShowError(true)
+                }
+            })
+        }
     }
 
     const list_dropDown = () => {

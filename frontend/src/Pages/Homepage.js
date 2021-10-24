@@ -3,12 +3,14 @@ import './Homepage.css'
 import LocationPicker from '../components/LocationPicker'
 import MapPicker from '../components/MapPicker'
 import { Button } from 'react-bootstrap'
+import { useCookies } from 'react-cookie';
+import { getProfile } from '../apis/profiles';
 
 function Homepage(props){
 
   const user = props.parentUser
   const setUser = props.parentSetUser
-
+  const [cookies,setCookie] = useCookies(['token']);
   const [useDropLocations, setDropLocation] = useState(true)
 
   const location_set = () => {
