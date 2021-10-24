@@ -6,7 +6,6 @@ app_name = "forums"
 urlpatterns = [
     path('add_comment/', AddCommentView.as_view()),
     path('add_post/', AddPostView.as_view()),
-    #path('get_posts/', GetPostViews.as_view()),
     path('get_post_by_location/', GetPostFromLocationView.as_view()),
     path('get_comment_from_post/', GetCommentFromPostView.as_view()),
     path('get_post/', GetPostView.as_view()),

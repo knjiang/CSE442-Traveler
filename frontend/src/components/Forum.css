@@ -4,8 +4,12 @@
     cursor: pointer;
 }
 
-#commentdetails {
-    font-size: 15px;
-    text-align: center;
-    color:green;
+.commentdetails {
+    font-size:12px;
+    text-align:center;
+    border-bottom: 2px solid gray;
+    display: flexbox;
+    margin: 0 auto;
+    margin-bottom: 1.5rem;
+    width: 10rem
 }
