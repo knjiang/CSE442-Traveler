@@ -55,11 +55,11 @@ class AcceptRequestView(APIView):
             Friend.objects.create(user = my_profile, friend = friend_profile)
             FriendRequest.objects.filter(requester = my_profile, person = friend_profile).delete()
             return Response({
-                "Accepted request from " + friend_profile.user.email
+                "status":"Accepted request from " + friend_profile.user.email
             })
         else:
             return Response({
-                "Error for accepting request from " + friend_profile.user.email
+                "status":"Error for accepting request from " + friend_profile.user.email
             })
 
 class DeleteRequestView(APIView):
@@ -72,11 +72,11 @@ class DeleteRequestView(APIView):
         if request_exists:
             FriendRequest.objects.filter(requester = my_profile, person = friend_profile).delete()
             return Response({
-                "Deleted request from " + friend_profile.user.email
+                "status":"Deleted request from " + friend_profile.user.email
             })
         else:
             return Response({
-                "Error for deleting request from " + friend_profile.user.email
+                "status":"Error for deleting request from " + friend_profile.user.email
             })
 
 class DeleteFriendView(APIView):
@@ -89,11 +89,11 @@ class DeleteFriendView(APIView):
         if friend_relation_exists:
             Friend.objects.filter(user = my_profile, friend = friend_profile).delete()
             return Response({
-                "Deleted " + friend_profile.user.email + " from friends list"
+                "status":"Deleted " + friend_profile.user.email + " from friends list"
             })
         else:
             return Response({
-                "Error for deleting " + friend_profile.user.email + " from friend list"
+                "status":"Error for deleting " + friend_profile.user.email + " from friend"
             })
 
 
