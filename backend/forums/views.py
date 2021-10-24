@@ -50,7 +50,7 @@ class AddCommentView(APIView):
         profile = get_object_or_404(Profile,pk=request.user.id)
         post = Post.objects.get(id=request.data['postID'])
         body = request.data['body']
-        comment = Comment(post=post,body=body,profile=profile)
+        comment = Comment(post=post,body=body,profile=profile,comment_id=uuid.uuid4())
         comment.save()
         return Response()
 
