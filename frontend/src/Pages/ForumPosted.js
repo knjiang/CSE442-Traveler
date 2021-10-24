@@ -6,6 +6,7 @@ import '../components/Forum.css'
 import { GetPostByLocation, AddComment, GetCommentFromPost } from '../apis/forums'
 import { useCookies } from 'react-cookie';
 import { getProfile } from '../apis/profiles';
+import ForumComment from '../components/ForumComment';
 
 const ForumPosted = (props) =>{
 
@@ -20,7 +21,7 @@ const ForumPosted = (props) =>{
     const [show, handleClose] = useState(false)
 
     const [selectedPost, setSelectedPost] = useState()
-    const [selectedComment, setSelectedComment] = useState()
+    const [selectedComment, setSelectedComment] = useState([])
 
     const user = props.parentUser
     const setUser = props.parentSetUser 
@@ -94,8 +95,8 @@ const ForumPosted = (props) =>{
         if (selectedComment) {
             return (
                 <div>
-                {selectedComment.map((comments, index) => (
-                        <h3 id= "commentdetails">{comments[0]}, by {comments[1]}</h3>
+                {selectedComment.map((comment, index) => (
+                        <ForumComment body={comment.body} user={comment.user} emojis={comment.emoji_list} id={comment.comment_id} />
                     ))}
                 </div>
             )
