@@ -36,11 +36,11 @@ class SendRequestView(APIView):
         if  not (FriendRequest.objects.filter(requester = my_profile, person = friend_profile).exists()):
             FriendRequest.objects.create(requester = my_profile, person = friend_profile)
             return Response({
-                "Sent friend request successfully to " + friend_profile.user.email
+                "status":"Sent friend request successfully to " + friend_profile.user.email
             })
         else:
             return Response({
-                "Unsuccessfully sent friend request successfully to " + friend_profile.user.email
+               "status": "Unsuccessfully sent friend request successfully to " + friend_profile.user.email
             })
 
 class AcceptRequestView(APIView):
