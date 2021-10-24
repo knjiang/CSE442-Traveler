@@ -1,13 +1,14 @@
 
 from os import name
 from typing import List
+from django.core.exceptions import RequestAborted
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse, HttpResponseNotFound
 from rest_framework import authentication
 from django.contrib.auth.models import User
-from .models import Profile, LocationList, Location, SavedLocation, ShareableLink
+from .models import ListDescriptions, Profile, LocationList, Location, SavedLocation, ShareableLink
 from .serializers import ProfileSerializer
 from rest_framework.renderers import JSONRenderer
 import json
@@ -329,3 +330,51 @@ class GetShareableLinkList(APIView):
             "locations" : [str(location.name) for location in locations],
             "created_by" : str(location_list.profile),
         })
+
+class AddDescriptionView(APIView):
+    """
+    Add Descriptions for LocationList
+    * requires token authentication.
+    """
+    def post(self,request, format=None):
+        profile = get_object_or_404(Profile, pk=request.user.id)
+        description = request.data['description']
+        locationlist = request.data['locationlist']
+
+        listInstance = LocationList.objects.filter(description = locationlist, profile = profile)[0] #gets instance of model
+        
+        if(ListDescriptions.objects.filter(description = description, list=listInstance).exists()):
+            return HttpResponseNotFound()
+        else:
+            ListDescriptions.objects.create(description = description, list=listInstance)
+            return HttpResponse()
+
+class DelDescriptionView(APIView):
+    """
+    Deletes a ListDescription in LocationList
+    """
+    def post(self,request,format=None):
+        description = request.data['ListDescription']
+        list = request.data['LocationList']
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        ListInstance = LocationList.objects.filter(profile=profile, list=list)
+        if(ListDescriptions.objects.filter(description = description,list=ListInstance)):
+            ListDescriptions.objects.filter(description = description,list=ListInstance).delete()
+            return HttpResponse()
+        else:
+            return HttpResponseNotFound()
+
+class EditDescriptionView(APIView):
+    """
+    Edits a ListDescription in LocationList
+    """
+    def post(self,request,format=None):
+        description = request.data['ListDescription']
+        list = request.data['LocationList']
+        newDescription = request.data['NewDescription']
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        ListInstance = LocationList.objects.filter(profile=profile, list=list)
+        obj = ListDescriptions.objects.filter(description = description,list=ListInstance)
+        obj.description = newDescription
+        obj.save()
+        return HttpResponse()
