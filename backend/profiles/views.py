@@ -31,6 +31,7 @@ class GetProfileView(APIView):
             "email" : profile.user.email,
             "from_location": profile.from_location,
             "background": profile.background,
+            "visited": profile.visited,
         })
 
 class ChangeLocationView(APIView):
@@ -191,6 +192,7 @@ class SearchUserView(APIView):
             "email" : user_query.user.email,
             "from_location" : user_query.from_location,
             "background": user_query.background,
+            "visited": user_query.visited,
         })
 
 class GetAllProfilesView(APIView):
@@ -294,6 +296,23 @@ class ChangeBackgroundView(APIView):
         profile.background = request.data['background']
         profile.save()
         return Response()
+
+
+class ChangeVisitedView(APIView):
+    """
+    View to change displayed visited countries
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        """
+        View to change visited.
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        profile.visited = request.data['visited']
+        profile.save()
+        return Response()
+
 
 class GetSetShareableLink(APIView):
     """
