@@ -7,6 +7,7 @@ import ShareList from '../components/ShareList';
 import './MyList.css'
 import { DropdownButton, Dropdown, Button, Alert } from 'react-bootstrap'
 import { useLocation } from 'react-router-dom'
+import ListNameDescription from '../components/ListNameDescription';
 
 function MyList(props){
 
@@ -211,7 +212,9 @@ function MyList(props){
                 <div id = "lists">
                     <div id = "leftList">
                         <div id = "listScroller">
-                            {dataList && returnListName()}
+                            {dataList && <ListNameDescription selectedList={selectedList} dataList={dataList} 
+                            selectList={selectList} cookies={cookies}
+                            refreshList={refreshList} shareList={shareList}/>}
                         </div>
                     <div style = {{"textAlign":"center"}}>
                         <h1 style = {{"fontSize": "3vh"}}>Add new list</h1>
