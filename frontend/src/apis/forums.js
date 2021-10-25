@@ -39,32 +39,26 @@ const AddComment = async(token,body,postID) => {
 }
 
 const GetPostByLocation = (token,locationName) => { 
-    return fetch(`${BASE_URL}/api/forums/get_post_by_location/`,
+    return fetch(`${BASE_URL}/api/forums/get_post_by_location/?location=${locationName}`,
     {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization' : 'Token ' + token,
         },
-        method: "POST",
-        body : JSON.stringify({
-            "location": locationName,
-        }),
+        method: "GET",
     })
 }
 
 const GetCommentFromPost = (token, id) => {
-    return fetch(`${BASE_URL}/api/forums/get_comment_from_post/`,
+    return fetch(`${BASE_URL}/api/forums/get_comment_from_post/?post_id=${id}`,
     {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization' : 'Token ' + token,
         },
-        method: "POST",
-        body : JSON.stringify({
-            "postID": id
-        }),
+        method: "GET",
     })
 }
 
