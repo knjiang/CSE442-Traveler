@@ -58,15 +58,26 @@ function UserProfile() {
   const handleSubmit2 = (b) => {
     b.preventDefault()
     changeVisited(cookies.token, visitedInfo)
+    {countryList.map((visitedInfo) => (
+      <li key={visitedInfo}>{visitedInfo}</li>
+    ))}
     // window.location.reload()
   }
 
-  const visitedList = [
+  const [countryList, setCountryList] = useState([
     {
-      id: 'a',
-      name: user.from_location,
+      id: 1,
+      country: user.from_location
+    },
+    {
+      id:2,
+      country: 'france'
+    },
+    {
+      id:3,
+      country: 'Spain'
     }
-  ];
+  ])
 
 
   if (existsCookie) {
@@ -97,19 +108,16 @@ function UserProfile() {
 
         <h2 style={{textAlign:'center'}}>Countries Visited</h2>
         <p style={{textAlign:'center'}}>{user.visited}</p>
+
         <form onSubmit={(b) => handleSubmit2(b)} style={{textAlign:'center'}}>
           <label>
-            <h5 style={{textAlign:'center'}}>Names of countries visited</h5>
-            <br />
+            <h5 style={{textAlign:'center'}}>Write countries visited in format:(US, France, etc) </h5>
             <p>Countries: <input type="text" {...visitedInfoBind} /></p>
           </label>
           <input type="submit" value="Submit" />
         </form>
+
         <p style={{textAlign:'center'}}>{visitedInfo}</p>
-
-        {visitedList[0]}
-
-
 
       </div>
     )
