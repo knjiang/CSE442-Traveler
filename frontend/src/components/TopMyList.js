@@ -14,10 +14,12 @@ function TopMyList(props){
     const allLocation = props.allLocation
 
     const handleSubmitList = (e) => {
+        let inputList = document.getElementById('nameInput').value
+        document.getElementById('nameInput').value = ""
         //Adding new list name
         e.preventDefault()
-        if (document.getElementById('nameInput').value){
-            addList(cookies.token, document.getElementById('nameInput').value)
+        if (inputList.length > 0){
+            addList(cookies.token, inputList)
             .then(res => {
                 if (res.ok){
                     getListData(cookies.token)
@@ -27,9 +29,18 @@ function TopMyList(props){
                     });
                 }
                 else{
-                    console.log(true)
+                    document.getElementById('nameInput').classList.replace("normal", "red");
+                    setTimeout(function() {
+                        document.getElementById('nameInput').classList.replace("red", "normal");
+                    }, 1000);
                 }
             })
+        }
+        else {
+            document.getElementById('nameInput').classList.replace("normal", "red");
+            setTimeout(function() {
+                document.getElementById('nameInput').classList.replace("red", "normal");
+            }, 1000);
         }
       }
 
@@ -38,7 +49,7 @@ function TopMyList(props){
             <div>
             <form onSubmit = {(e) => handleSubmitList(e)} key = "nameForm" style = {{"fontSize": "3vh", "marginTop":"auto", "marginBottom": "auto"}}>
                 Add a new list:                     
-                <input placeholder="Type the new list name here" type="text" id = "nameInput" style = {{"height":"5vh", "width":"20vw"}}/>
+                <input placeholder="Type the new list name here" type="text" id = "nameInput" className = "normal" style = {{"height":"5vh", "width":"20vw", "marginLeft": "0.5vw"}}/>
                 <Button style = {{"height":"5vh", "marginTop": "-0.0vh"}} onClick = {(e) => handleSubmitList(e)}>
                 <h1 style = {{"fontSize": "2vh"}}>Submit</h1>
                 </Button>
@@ -88,7 +99,8 @@ function TopMyList(props){
                 <div style = {{"textAlign":"center"}}>
                         {inputname()}
                     </div>
-                <DropdownButton drop = "up" id = "addLocalBTN" title = "Add Location">{selectedList && addLocalDrop()}</DropdownButton>
+                {selectedList && <DropdownButton drop = "down" id = "addLocalBTN" title = "Add Location">{addLocalDrop()}</DropdownButton>}
+                {!selectedList && <DropdownButton drop = "down" id = "addLocalBTN" title = "Select a list"></DropdownButton>}
             </div>
         )
     }

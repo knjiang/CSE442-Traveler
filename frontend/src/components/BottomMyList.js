@@ -36,7 +36,7 @@ function BottomMyList(props){
                 }
             })
         }
-    })
+    }, [descriptions, showDescriptions])
 
     const refreshList = () => {
         getListData(cookies.token)
@@ -89,15 +89,14 @@ function BottomMyList(props){
 
     const descriptionAdder = () => {
         let input = document.getElementById("textArea").value.trim()
-        console.log(cookies.token, input, selectedList)
+        document.getElementById("textArea").value = ""
         if (input.length > 0){
             addDescription(cookies.token, input, selectedList)
-            .then (res => res.json())
             .then (data => {
-                console.log(data)
+                setShowDescriptions(true)
+                setDescriptions(input)
             })
         }
-        document.getElementById("textArea").value = ""
     }
 
     const showDescriptionFalse = () => {

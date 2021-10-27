@@ -338,7 +338,6 @@ class AddDescriptionView(APIView):
     """
     def post(self,request, format=None):
         profile = get_object_or_404(Profile, pk=request.user.id)
-        print(request.data)
         description = request.data['ListDescription']
         locationlist = request.data['LocationList']
 
@@ -388,14 +387,11 @@ class GetDescriptionView(APIView):
         list = request.query_params.get('list')
         profile = get_object_or_404(Profile,pk=request.user.id)
         ListInstance = LocationList.objects.filter(profile=profile, name = list)
-        print(ListInstance.values())
         if ListDescriptions.objects.filter(list = ListInstance[0]).exists():
-            print("OK")
             return Response({
                 "listDescriptions": ListDescriptions.objects.filter(list = ListInstance[0]).values_list("description", flat = True)
             })
         else:
-            print("NO")
             return Response({
                 "listDescriptions": ""
             })

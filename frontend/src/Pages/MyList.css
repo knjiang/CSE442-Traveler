@@ -242,3 +242,12 @@
 #nameInput {
     font-size: 2vh;
 }
+
+.red {
+    border: 0.25vh solid red;
+}
+
+.normal {
+    transition-duration: 1s;
+    border: 0.25vh solid black;
+}

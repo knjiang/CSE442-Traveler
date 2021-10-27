@@ -12,7 +12,6 @@ function SharedListPage(){
         getShareableContents(pathname)
         .then(response => response.json())
         .then(data => {
-            console.log(data)
             setTitle(data.title)
             setAuthor(data.created_by)
             setDataList(data.locations)

@@ -104,36 +104,6 @@ function MyList(props){
                     </div>
                 )
             }
-/*         if (existsCookie){
-            return(
-            <div>
-                {showSaveListError && showModal()}
-                {!showSaveListError && modalReplace()}
-                <div id = "lists">
-                    <div id = "leftList">
-                        <div id = "listScroller">
-                            {dataList && <ListNameDescription selectedList={selectedList} dataList={dataList} 
-                            selectList={selectList} cookies={cookies}
-                            refreshList={refreshList} shareList={shareList}/>}
-                        </div>
-                    <div style = {{"textAlign":"center"}}>
-                        <h1 style = {{"fontSize": "3vh"}}>Add new list</h1>
-                        {inputname()}
-                    </div>
-
-                    </div>
-                    <div id = "rightList">
-                        <div id = "listScroller">
-                        {selectedList && returnListData()}
-                        </div>
-                        {selectedList && (<div id = "optButtonDiv"><Button id = "delListBTN" onClick = {() => deleteListSubmit()}>Delete List</Button>  <DropdownButton drop = "up" id = "addLocalBTN" title = "Add Location">{addLocalDrop()}</DropdownButton> </div>)}
-                    </div>
-                </div> 
-                <ShareList show = {showShareList} link = {shareLink} callback = {callbackShareList}/>
-
-            </div>
-            )
-        } */
         return <NotLoggedIn/>
     }
  
