@@ -338,10 +338,11 @@ class AddDescriptionView(APIView):
     """
     def post(self,request, format=None):
         profile = get_object_or_404(Profile, pk=request.user.id)
+        print(request.data)
         description = request.data['ListDescription']
-        list = request.data['LocationList']
+        locationlist = request.data['LocationList']
 
-        listInstance = LocationList.objects.filter(description = Location, profile = profile)[0] #gets instance of model
+        listInstance = LocationList.objects.filter(name = locationlist, profile = profile)[0] #gets instance of model
         
         if(ListDescriptions.objects.filter(description = description, list=listInstance).exists()):
             return HttpResponseNotFound()
@@ -357,7 +358,7 @@ class DelDescriptionView(APIView):
         description = request.data['ListDescription']
         list = request.data['LocationList']
         profile = get_object_or_404(Profile,pk=request.user.id)
-        ListInstance = LocationList.objects.filter(profile=profile, list=list)
+        ListInstance = LocationList.objects.filter(profile=profile, name=list)
         if(ListDescriptions.objects.filter(description = description,list=ListInstance)):
             ListDescriptions.objects.filter(description = description,list=ListInstance).delete()
             return HttpResponse()
@@ -373,7 +374,7 @@ class EditDescriptionView(APIView):
         list = request.data['LocationList']
         newDescription = request.data['NewDescription']
         profile = get_object_or_404(Profile,pk=request.user.id)
-        ListInstance = LocationList.objects.filter(profile=profile, list=list)
+        ListInstance = LocationList.objects.filter(profile=profile, name=list)
         obj = ListDescriptions.objects.filter(description = description,list=ListInstance)
         obj.description = newDescription
         obj.save()
@@ -381,19 +382,20 @@ class EditDescriptionView(APIView):
 
 class GetDescriptionView(APIView):
     """
-    Gets a Description from LocationList
+    Gets a ListDescription for specified LocationList
     """
-    def get(self, request, format=None):
-        print("AAAAAAAAA")
-        LocationList = request.query_params.get('LocationList')
+    def get(self,request,format=None):
+        list = request.query_params.get('list')
         profile = get_object_or_404(Profile,pk=request.user.id)
-        ListInstance = LocationList.objects.filter(profile=profile, list=list)
-        if(ListDescriptions.objects.filter(list=ListInstance).exists()):
-            ListDescription = ListDescriptions.objects.filter(list=ListInstance).values_list('description',flat = True)
-            return Response(
-                {"listDescription": ListDescription}
-            )
+        ListInstance = LocationList.objects.filter(profile=profile, name = list)
+        print(ListInstance.values())
+        if ListDescriptions.objects.filter(list = ListInstance[0]).exists():
+            print("OK")
+            return Response({
+                "listDescriptions": ListDescriptions.objects.filter(list = ListInstance[0]).values_list("description", flat = True)
+            })
         else:
-            return Response(
-                {"listDescription": ""}
-            )
+            print("NO")
+            return Response({
+                "listDescriptions": ""
+            })

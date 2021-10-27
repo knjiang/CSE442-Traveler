@@ -216,8 +216,8 @@ const delDescription = async(token, ListDescription,LocationList) => {
     })
 }
 
-const getDescription = (token, description) =>{
-    return fetch(`{BASE_URL}/api/profiles/get_description/$ListDescriptions=${description}`,
+const getDescription = (token, list) =>{
+    return fetch(`${BASE_URL}/api/profiles/get_description/?list=${list}`,
     {
         headers: {
             'Authorization' : 'Token ' + token,

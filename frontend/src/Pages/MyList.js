@@ -7,7 +7,8 @@ import ShareList from '../components/ShareList';
 import './MyList.css'
 import { DropdownButton, Dropdown, Button, Alert } from 'react-bootstrap'
 import { useLocation } from 'react-router-dom'
-import ListNameDescription from '../components/ListNameDescription';
+import TopMyList from '../components/TopMyList';
+import BottomMyList from '../components/BottomMyList';
 
 function MyList(props){
 
@@ -19,10 +20,10 @@ function MyList(props){
     const [allLocation, setAllLocation] = useState()
     const [showSaveListError, setSaveListError] = useState(false)
     const [showSaveListSuccess, setSaveListSuccess] = useState(false)
-    const [showShareList, setShareListModal] = useState(false)
-    const [shareLink, setShareLink] = useState("")
     const existsCookie = typeof cookies.token != "undefined"
     const parentData = useLocation()
+    const [showShareList, setShareListModal] = useState(false)
+    const [shareLink, setShareLink] = useState("")
     
     useEffect(() => {
         if (existsCookie){
@@ -48,14 +49,6 @@ function MyList(props){
         }
     }, [dataList])
 
-    const refreshList = () => {
-        getListData(cookies.token)
-        .then(response => response.json())
-        .then(data => {
-            setList(data["lists"])
-        });
-    }
-
     const callbackShareList = () => {
         setShareListModal(false)
     }
@@ -69,78 +62,6 @@ function MyList(props){
         });
     }
 
-    const returnListName = () => {
-        let res = [<div style = {{"borderBottom": "2px solid gray", "display":"flex"}}><h1 style = {{"fontSize": "4vh", "paddingBottom": "1vh", "paddingTop": "1vh", "marginLeft": "auto", "marginRight": "auto"}}>Your Lists </h1></div>]
-        for (let name of Object.keys(dataList)){
-            if (name == selectedList){
-                res.push(<h1 id = "nameTextSelected" onClick = {() => (selectList(name), refreshList())}>{name} <Button variant="secondary" style={{"float":"right", "margin-right" : "1rem"}} onClick = {(evt) => (evt.stopPropagation(),shareList(name))}> Share </Button> </h1>)
-            }
-            else {
-                res.push(<h1 id = "nameText" onClick = {() => (selectList(name), refreshList())}>{name} <Button variant="secondary" style={{"float":"right", "margin-right" : "1rem"}} onClick = {(evt) => (evt.stopPropagation(),shareList(name))}> Share </Button></h1>)
-            }
-
-        }
-        return(res)
-    }
-
-    const deleteLocationFromList = (e) => {
-        deleteLocationList(cookies.token, selectedList, e)
-        .then(response => response.json())
-        .then(data => {
-            setList(data["lists"])
-        })
-    }
-
-    const deleteListSubmit = () => {
-        selectList()
-        deleteList(cookies.token, selectedList)
-        .then(response => response.json())
-        .then(data => {
-            setList(data["lists"])
-        })
-    }
-
-    const returnListData = () => {
-        let res = [<div style = {{"borderBottom": "2px solid gray", "display":"flex"}}><h1 style = {{"fontSize": "4vh", "paddingBottom": "1vh", "paddingTop": "1vh", "marginLeft": "auto", "marginRight": "auto"}}> Locations in the selected list </h1></div>]
-        for (let n of dataList[selectedList]){
-            res.push(<div id = "dataTextDiv"><a id = "dataText" href = {'/locations/' + n}><h1 id = "dataTextInside" href = {'/locations/' + n}>{n}</h1></a><Button id = "delLocationBTN" onClick = {() => deleteLocationFromList(n)}>Delete {n}</Button></div>)
-        }
-        return(res)
-    }
-
-    const addLocalDrop = () => {
-        let res = []
-        for (let i of allLocation){
-            if (!dataList[selectedList].includes(i))
-            res.push(<Dropdown.Item id = "dropLocationItem" onClick={() => handleADLocationList(i)}><h1 id = "dropLocationItemText">{i}</h1></Dropdown.Item>)
-        }
-        if (res.length) {
-            return (res)
-        }
-        else {
-            return (<Dropdown.Item><h1 style = {{"color": "red"}} id = "dropLocationItemText">All locations added</h1></Dropdown.Item>)
-        }
-    }
-
-    const handleADLocationList = (local) => {
-        //Adding location to a preexisting list
-        if (selectedList && selectedList.length > 0){
-            addLocationList(cookies.token, selectedList, local) //listname, locationname
-            .then(res => {
-                if (res.ok){
-                    getListData(cookies.token)
-                    .then(response => response.json())
-                    .then(data => {
-                        setList(data["lists"])
-                    });
-                    setSaveListSuccess(true)
-                }
-                else{
-                    setSaveListError(true)
-                }
-            })
-        }
-    }
 
     const showModal = () => {
         if (showSaveListError) {
@@ -167,44 +88,23 @@ function MyList(props){
                 </Alert>    
         )
     }
-
-    const handleSubmitList = (e) => {
-        //Adding new list name
-        e.preventDefault()
-        if (document.getElementById('nameInput').value){
-            addList(cookies.token, document.getElementById('nameInput').value)
-            .then(res => {
-                if (res.ok){
-                    getListData(cookies.token)
-                    .then(response => response.json())
-                    .then(data => {
-                        setList(data["lists"])
-                    });
-                }
-                else{
-                    setSaveListError(true)
-                }
-            })
-        }
-      }
-
-    const inputname = () => {
-        return (
-            <div>
-            <form onSubmit = {(e) => handleSubmitList(e)} key = "nameForm">
-                New list name:                     
-                <input type="text" id = "nameInput" style = {{"height":"4vh", "width":"15vw"}}/>
-                <Button style = {{"height":"4vh", "marginTop": "-0.5vh"}} onClick = {(e) => handleSubmitList(e)}>
-                <h1 style = {{"fontSize": "2vh"}}>Submit</h1>
-                </Button>
-            </form>
-            </div>
-
-        )
-    }
     
     function MyListRender(){
-        if (existsCookie){
+            if (existsCookie) {
+                return (
+                    <div id = "myListWrapper">
+
+                        <div>
+                            <TopMyList cookies = {cookies} setList = {setList} dataList = {dataList} allLocation = {allLocation} selectList = {selectList} selectedList = {selectedList} shareLink = {shareLink} setShareLink = {setShareLink} showShareList = {showShareList} setShareListModal = {setShareListModal} shareList = {shareList}/>
+                        </div>
+                        <div>
+                            <BottomMyList cookies = {cookies} setList = {setList} dataList = {dataList} allLocation = {allLocation} selectList = {selectList} selectedList = {selectedList} shareLink = {shareLink} setShareLink = {setShareLink} showShareList = {showShareList} setShareListModal = {setShareListModal} shareList = {shareList}/>
+                        </div>
+                        <ShareList show = {showShareList} link = {shareLink} callback = {callbackShareList}/>
+                    </div>
+                )
+            }
+/*         if (existsCookie){
             return(
             <div>
                 {showSaveListError && showModal()}
@@ -233,9 +133,10 @@ function MyList(props){
 
             </div>
             )
-        }
+        } */
         return <NotLoggedIn/>
     }
+ 
 
     return(<MyListRender/>)
 }
