@@ -1,8 +1,9 @@
 import { useEffect,useState, useRef } from "react";
 import { useCookies } from "react-cookie";
-import { getListData, deleteList, deleteLocationList, getDescription, addDescription } from '../apis/profiles'
+import { getListData, deleteList, deleteLocationList, getDescription, addDescription, editDescription, delDescription} from '../apis/profiles'
 import { Button, Dropdown, DropdownButton } from 'react-bootstrap'
 import ShareList from '../components/ShareList';
+
 
 function BottomMyList(props){
     const user = props.parentUser
@@ -33,6 +34,7 @@ function BottomMyList(props){
                 else {
                     setShowDescriptions(true)
                     setDescriptions(data["listDescriptions"])
+                    
                 }
             })
         }
@@ -60,6 +62,26 @@ function BottomMyList(props){
             }
             return(res)
         }
+    }
+
+    const deleteDescription = () => {
+        delDescription(cookies.token, descriptions, selectedList)
+        .then(response => response)
+        .then(data => {
+            setDescriptions(false)
+            setShowDescriptions(false)
+        })
+    }
+    
+    const changedDescription = () => {
+        
+        let newDescription = document.getElementById("textArea").value
+        editDescription(cookies.token, descriptions, selectedList, newDescription)
+        .then(response => response)
+        .then(data => { // use as confirmation
+            setDescriptions(newDescription)
+            setShowDescriptions(true)
+        })
     }
 
     const deleteListSubmit = () => {
@@ -122,7 +144,7 @@ function BottomMyList(props){
                 <div style = {{"display": "flex"}}>
                     <h3>Description for {selectedList}:</h3>
                     <Button style = {{"marginBottom":"auto", "marginTop":"auto", "height": "4vh", "marginRight": "0.5vw", "marginLeft": "0.5vw"}} onClick = {() => setShowDescriptions("edit")}><h3 style = {{"fontSize":"2vh", "marginBottom": "auto"}}>Edit</h3></Button>
-                    <Button style = {{"marginBottom":"auto", "marginTop":"auto", "height": "4vh", "backgroundColor": "rgb(255, 198, 198)", "color":"black"}} ><h3 style = {{"fontSize":"2vh", "marginBottom": "auto"}}>Delete</h3></Button>
+                    <Button onClick = {() => deleteDescription()}style = {{"marginBottom":"auto", "marginTop":"auto", "height": "4vh", "backgroundColor": "rgb(255, 198, 198)", "color":"black"}} ><h3 style = {{"fontSize":"2vh", "marginBottom": "auto"}}>Delete</h3></Button>
                 </div>
 
                 <h3>{descriptions}</h3>
@@ -135,10 +157,10 @@ function BottomMyList(props){
         return (
             <div id = "descriptionDiv">
                 <h3>Editing the description for the {selectedList}:</h3>
-                <textarea value = {descriptions} placeholder="Enter a new description for the selected list" id = "textArea" type="text">
+                <textarea defaultValue = {descriptions} placeholder="Enter a new description for the selected list" id = "textArea" type="text">
                         </textarea>
                 <div style = {{"display": "flex"}}>
-                <Button style = {{"marginRight": "1vw"}}>Submit</Button>
+                <Button onClick = {() => changedDescription()} style = {{"marginRight": "1vw"}}>Submit</Button>
                 <Button onClick = {() => setShowDescriptions(true)}>Cancel</Button>
                 </div>
 

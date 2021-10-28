@@ -181,7 +181,7 @@ const addDescription = async(token, ListDescription, LocationList) => {
     })
 }
 
-const editDescription = async(token, ListDescription,ListLocation,NewDescription) => {
+const editDescription = async(token, ListDescription,LocationList,NewDescription) => {
     return fetch(`${BASE_URL}/api/profiles/edit_description/`,
     {
         headers: {
@@ -193,7 +193,7 @@ const editDescription = async(token, ListDescription,ListLocation,NewDescription
         method: "POST",
         body : JSON.stringify({
             "ListDescription": ListDescription,
-            "ListLocation": ListLocation,
+            "LocationList": LocationList,
             "NewDescription": NewDescription
         }),
     })
@@ -228,4 +228,5 @@ const getDescription = (token, list) =>{
 
 export {getProfile, changeLocation, getList, getUserList, getUserInfo, 
     getListData, addLocationList, deleteLocationList, addList, deleteList, 
-    getSetShareableLink, changeBackground, addDescription, editDescription, getDescription}
+    getSetShareableLink, changeBackground, 
+    addDescription, editDescription, getDescription, delDescription}
