@@ -8,11 +8,10 @@ function SharedListPage(){
 
     useEffect(() => {
         const pathname = window.location.pathname.substr(7)
-        console.log(pathname)
+        
         getShareableContents(pathname)
         .then(response => response.json())
         .then(data => {
-            console.log(data)
             setTitle(data.title)
             setAuthor(data.created_by)
             setDataList(data.locations)

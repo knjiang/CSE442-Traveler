@@ -164,4 +164,69 @@ const getSetShareableLink = async(token, listName) => {
     })
 }
 
-export {getProfile, changeLocation, getList, getUserList, getUserInfo, getListData, addLocationList, deleteLocationList, addList, deleteList, getSetShareableLink, changeBackground}
+const addDescription = async(token, ListDescription, LocationList) => {
+    return fetch(`${BASE_URL}/api/profiles/add_description/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "ListDescription": ListDescription,
+            "LocationList": LocationList
+        }),
+    })
+}
+
+const editDescription = async(token, ListDescription,LocationList,NewDescription) => {
+    return fetch(`${BASE_URL}/api/profiles/edit_description/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "ListDescription": ListDescription,
+            "LocationList": LocationList,
+            "NewDescription": NewDescription
+        }),
+    })
+}
+
+const delDescription = async(token, ListDescription,LocationList) => {
+    return fetch(`${BASE_URL}/api/profiles/del_description/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "ListDescription": ListDescription,
+            "LocationList": LocationList
+        }),
+    })
+}
+
+const getDescription = (token, list) =>{
+    return fetch(`${BASE_URL}/api/profiles/get_description/?list=${list}`,
+    {
+        headers: {
+            'Authorization' : 'Token ' + token,
+        },
+        method: "GET",     
+    })
+}
+
+export {getProfile, changeLocation, getList, getUserList, getUserInfo, 
+    getListData, addLocationList, deleteLocationList, addList, deleteList, 
+    getSetShareableLink, changeBackground, 
+    addDescription, editDescription, getDescription, delDescription}

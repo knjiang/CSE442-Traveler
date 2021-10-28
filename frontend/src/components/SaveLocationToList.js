@@ -48,7 +48,7 @@ function SaveLocationToList(props){
             })
         }
         resetNewList()
-        console.log(newList)
+        
       }
 
     const handleADLocationList = (list) => {
