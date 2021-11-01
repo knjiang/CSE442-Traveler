@@ -29,7 +29,7 @@ function Messages(props) {
               <input></input>
               <div id="dropdown-content">
                 {allUsers.map((item) => 
-                    <h1>{item}</h1>)}
+                    <h1 onClick = {() => setSelectedUser(item)}>{item}</h1>)}
               </div>
             </div>
           )
@@ -42,32 +42,16 @@ function Messages(props) {
           )
         }
       }
+
+      
     if (existsCookie){
         return(
             <div>
-            <Alert style = {{"height": "8vh", "width": "80%", "textAlign":"center", "marginLeft": "auto", "marginRight": "auto", "opacity":"0%"}} show={true} variant="danger" dismissible>
-                {// Fake modal for spacing}
-                }
-            </Alert>    
-            <div id = "lists">
-                <div id = "leftList">
-                    <div style = {{"borderBottom": "2px solid gray", "display":"flex"}}><h1 style = {{"fontSize": "4vh", "paddingBottom": "1vh", "paddingTop": "1vh", "marginLeft": "auto", "marginRight": "auto"}}> Users </h1></div>
-                        <div id = "listScroller">
-
-                        </div>
-
-                        <div style = {{"textAlign":"center"}}>
-                            
-                        </div>
-
-                    </div>
-                <div id = "rightList">
-                <div style = {{"borderBottom": "2px solid gray", "display":"flex"}}><h1 style = {{"fontSize": "4vh", "paddingBottom": "1vh", "paddingTop": "1vh", "marginLeft": "auto", "marginRight": "auto"}}> </h1></div>
-                    <div id = "listScroller">
-                    </div>
-                </div>
+              <h1>Users</h1>
+              {searchUsers()}
+              <h1>You've selected {selectedUser} to message</h1>
             </div> 
-        </div>
+
         )
    }
     else {
