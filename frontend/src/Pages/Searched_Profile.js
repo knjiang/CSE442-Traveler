@@ -22,8 +22,19 @@ function Searched_Profile(props){
         })
       }, [])
 
+    const addFriend = () => {
+        return
+    }
+
     return(
+        <div>
         <h1>Hi! This is {user.username}'s profile and I am from {user.from_location}!</h1>
+
+        {/* On searched profile users can accept a request, send friend request, cancel the request.. Not sure if delete should be included*/}
+        <button onClick={() => addFriend()}>
+            Add Friend
+        </button>
+        </div>
     )
 }
 
