@@ -3,6 +3,7 @@ import { changeBackground, getProfile, changeVisited  } from '../apis/profiles';
 import { useState, useEffect } from "react"
 import NotLoggedIn from '../components/NotLoggedIn';
 import { useTextInput } from '../hooks/text-input';
+import {getShareableContents} from "../apis/locations"
 import { StyleHTMLAttributes } from 'react';
 
 function UserProfile() {
@@ -12,6 +13,8 @@ function UserProfile() {
   const [dataList, setList] = useState({
     lists: []
   })
+  const [countryList, setCountryList] = useState("")
+  const [visitedCounttries, setVisitedCountries] = useState("")
 
   const { value: backgroundInfo, bind: backgroundInfoBind, reset: resetBackgroundInfo } = useTextInput('')
   const { value: visitedInfo, bind: visitedInfoBind, reset: resetVisitedInfo } = useTextInput('')
@@ -64,20 +67,25 @@ function UserProfile() {
     // window.location.reload()
   }
 
-  const [countryList, setCountryList] = useState([
-    {
-      id: 1,
-      country: user.from_location
-    },
-    {
-      id:2,
-      country: 'france'
-    },
-    {
-      id:3,
-      country: 'Spain'
+  useEffect(() => {
+    const pathname = window.location.pathname.substr(7)
+    console.log(pathname)
+    getShareableContents(pathname)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        // setDataList(data.locations)
+        setVisitedCountries(data.visitedCounttries)
+    })
+  }, [])
+
+  const returnLocations = () => {
+    let res = [<div style = {{"borderBottom": "2px solid gray", "display":"flex"}}><h2 style = {{"fontSize": "4vh", "paddingBottom": "1vh", "paddingTop": "1vh", "marginLeft": "auto", "marginRight": "auto"}}>Your Locations </h2></div>]
+    for (let name of Object.values(dataList)){
+        res.push(<p>{name}</p>)
     }
-  ])
+    return(res)
+}
 
 
   if (existsCookie) {
@@ -118,6 +126,10 @@ function UserProfile() {
         </form>
 
         <p style={{textAlign:'center'}}>{visitedInfo}</p>
+
+        
+
+        {returnLocations()}
 
       </div>
     )
