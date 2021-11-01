@@ -4,6 +4,7 @@ from .views import (
 AddDescriptionView,
 DelDescriptionView,
 EditDescriptionView,
+ChangeVisitedView,
 GetProfileView, 
 ChangeLocationView, 
 SearchUserView, 
@@ -19,10 +20,7 @@ GetListDataView,
 GetSetShareableLink,
 GetShareableLinkList,
 ChangeBackgroundView,
-AddDescriptionView,
-DelDescriptionView,
-EditDescriptionView,
-GetDescriptionView
+ChangeVisitedView,
 )
 
 app_name = "profiles"
@@ -41,6 +39,7 @@ urlpatterns = [
     path('add_location/', AddLocationView.as_view()),
     path('del_location/', DelLocationView.as_view()),
     path('change_background/', ChangeBackgroundView.as_view()),
+    path('change_visited/', ChangeVisitedView.as_view()),
     path('shareable_link/',GetSetShareableLink.as_view()),
     path('get_shareable_contents/', GetShareableLinkList.as_view()),
     path('add_description/', AddDescriptionView.as_view()),

@@ -121,11 +121,35 @@ const changeBackground = async(token,background) => {
 
 const getBackground = (background) => {
     const encoded_input = encodeURIComponent(background)
-    return fetch(`${BASE_URL}/api/profiles/getBacgkround/`, {
+    return fetch(`${BASE_URL}/api/profiles/getBackground/`, {
         method: "GET",
     })
 
 }
+
+const changeVisited = async(token,visited) => {
+    return fetch(`${BASE_URL}/api/profiles/change_visited/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "visited" : visited,
+        }),
+    })
+}
+
+const getVisited = (visited) => {
+    const encoded_input = encodeURIComponent(visited)
+    return fetch(`${BASE_URL}/api/profiles/getVisited/`, {
+        method: "GET",
+    })
+}
+
 
 const getUserList = () => {
     return fetch(`${BASE_URL}/api/profiles/search_filter/`) 
@@ -230,3 +254,4 @@ export {getProfile, changeLocation, getList, getUserList, getUserInfo,
     getListData, addLocationList, deleteLocationList, addList, deleteList, 
     getSetShareableLink, changeBackground, 
     addDescription, editDescription, getDescription, delDescription}
+export {getProfile, changeLocation, getList, getUserList, getUserInfo, getListData, addLocationList, deleteLocationList, addList, deleteList, getSetShareableLink, changeBackground, changeVisited}
