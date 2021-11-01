@@ -25,7 +25,7 @@ function ForumComment(props){
     return (
         <div className= "commentdetails" id={props.id}>
             <p> 
-                {props.body} - {props.user} {props.emojis}
+                {props.body} - {props.user}
             </p>  
             <div className="emojis">
                 {emojis.map((emoji,index) => (
