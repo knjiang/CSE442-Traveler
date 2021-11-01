@@ -13,7 +13,7 @@ function UserProfile(props) {
   const [dataList, setList] = useState({
     lists: []
   })
-  const [countryList, setCountryList] = useState("")
+  // const [countryList, setCountryList] = useState("")
   const [visitedCounttries, setVisitedCountries] = useState("")
 
   const { value: backgroundInfo, bind: backgroundInfoBind, reset: resetBackgroundInfo } = useTextInput('')
@@ -109,7 +109,7 @@ function UserProfile(props) {
         <p style={{ textAlign: 'center' }}>{backgroundInfo}</p>
 
         {/* This is for Recommendations for favorite countries */}
-        <h3 style={{ textAlign: 'center' }}>Recommendations based on locations visited</h3>
+        <h3 style={{ textAlign: 'center' }}>Recommendations based on Favorites</h3>
         <p style={{ textAlign: 'center' }}>{user.visited}</p>
 
         <form onSubmit={(b) => handleSubmit2(b)} style={{ textAlign: 'center' }}>

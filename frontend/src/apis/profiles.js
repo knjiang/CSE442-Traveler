@@ -253,5 +253,5 @@ const getDescription = (token, list) =>{
 export {getProfile, changeLocation, getList, getUserList, getUserInfo, 
     getListData, addLocationList, deleteLocationList, addList, deleteList, 
     getSetShareableLink, changeBackground, 
-    addDescription, editDescription, getDescription, delDescription}
-export {getProfile, changeLocation, getList, getUserList, getUserInfo, getListData, addLocationList, deleteLocationList, addList, deleteList, getSetShareableLink, changeBackground, changeVisited}
+    addDescription, editDescription, getDescription, delDescription, changeVisited}
+// export {getProfile, changeLocation, getList, getUserList, getUserInfo, getListData, addLocationList, deleteLocationList, addList, deleteList, getSetShareableLink, changeBackground, changeVisited}
