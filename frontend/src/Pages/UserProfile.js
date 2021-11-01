@@ -1,9 +1,9 @@
 import { useCookies } from 'react-cookie';
-import { changeBackground, getProfile, changeVisited  } from '../apis/profiles';
+import { changeBackground, getProfile, changeVisited } from '../apis/profiles';
 import { useState, useEffect } from "react"
 import NotLoggedIn from '../components/NotLoggedIn';
 import { useTextInput } from '../hooks/text-input';
-import {getShareableContents} from "../apis/locations"
+import { getShareableContents } from "../apis/locations"
 import { StyleHTMLAttributes } from 'react';
 
 function UserProfile() {
@@ -61,9 +61,6 @@ function UserProfile() {
   const handleSubmit2 = (b) => {
     b.preventDefault()
     changeVisited(cookies.token, visitedInfo)
-    {countryList.map((visitedInfo) => (
-      <li key={visitedInfo}>{visitedInfo}</li>
-    ))}
     // window.location.reload()
   }
 
@@ -71,65 +68,68 @@ function UserProfile() {
     const pathname = window.location.pathname.substr(7)
     console.log(pathname)
     getShareableContents(pathname)
-    .then(response => response.json())
-    .then(data => {
+      .then(response => response.json())
+      .then(data => {
         console.log(data)
         // setDataList(data.locations)
         setVisitedCountries(data.visitedCounttries)
-    })
+      })
   }, [])
 
-  const returnLocations = () => {
-    let res = [<div style = {{"borderBottom": "2px solid gray", "display":"flex"}}><h2 style = {{"fontSize": "4vh", "paddingBottom": "1vh", "paddingTop": "1vh", "marginLeft": "auto", "marginRight": "auto"}}>Your Locations </h2></div>]
-    for (let name of Object.values(dataList)){
-        res.push(<p>{name}</p>)
+  const returnVisitedLocations = () => {
+    let res = [<div style={{ "borderBottom": "2px solid gray", "display": "flex" }}><h2 style={{ "fontSize": "4vh", "paddingBottom": "1vh", "paddingTop": "1vh", "marginLeft": "auto", "marginRight": "auto" }}>Favorite Locations</h2></div>]
+    for (let name of Object.values(dataList)) {
+      res.push(<p>{name}</p>)
     }
-    return(res)
-}
+    return (res)
+  }
 
 
   if (existsCookie) {
     return (
       <div>
-        <h1 style={{textAlign:'center', color:(214, 122, 127)}}>Welcome {user.name} </h1>
+        <h1 style={{ textAlign: 'center', color: (214, 122, 127) }}>Welcome {user.name} </h1>
 
-        <h2 style={{textAlign:'center'}}> About Me</h2>
-        <ul style={{textAlign:'center',listStyle: 'none'}}>
-        <li>Name: {user.name}</li>
-        <li>Email: {user.email} </li>
-        <li>Location: {user.from_location}</li>
+        <h2 style={{ textAlign: 'center' }}> About Me</h2>
+        <ul style={{ textAlign: 'center', listStyle: 'none' }}>
+          <li>Name: {user.name}</li>
+          <li>Email: {user.email} </li>
+          <li>Location: {user.from_location}</li>
         </ul>
 
+        <p style={{textAlign: 'center' }}>For the following text fields, please enter the information you want to display and press Sumbit <br />
+        "Refresh Browser to see changes applied"</p>
 
+      
         {/* This is for background */}
-        <h2 style={{textAlign:'center'}}>Background and Interests</h2>
-        <p style={{textAlign:'center'}}>{user.background}</p>
-        <form onSubmit={(e) => handleSubmit(e)} style={{textAlign:'center'}}>
+        <h2 style={{ textAlign: 'center' }}>Background and Interests</h2>
+        <p style={{ textAlign: 'center' }}>{user.background}</p>
+        <form onSubmit={(e) => handleSubmit(e)} style={{ textAlign: 'center' }}>
           <label>
             <h5>Change Background</h5>
-              <br />
+            <br />
             <p>Background/Interests: <input type="text" {...backgroundInfoBind} /></p>
           </label>
           <input type="submit" value="Submit" />
         </form>
-        <p style={{textAlign:'center'}}>{backgroundInfo}</p>
+        <p style={{ textAlign: 'center' }}>{backgroundInfo}</p>
 
-        <h2 style={{textAlign:'center'}}>Countries Visited</h2>
-        <p style={{textAlign:'center'}}>{user.visited}</p>
+        {/* This is for Recommendations for favorite countries */}
+        <h3 style={{ textAlign: 'center' }}>Recommendations based on locations visited</h3>
+        <p style={{ textAlign: 'center' }}>{user.visited}</p>
 
-        <form onSubmit={(b) => handleSubmit2(b)} style={{textAlign:'center'}}>
+        <form onSubmit={(b) => handleSubmit2(b)} style={{ textAlign: 'center' }}>
           <label>
-            <h5 style={{textAlign:'center'}}>Write countries visited in format:(US, France, etc) </h5>
-            <p>Countries: <input type="text" {...visitedInfoBind} /></p>
+            {/*<h5 style={{ textAlign: 'center' }}>My Recommendations for Favorite Locations</h5>*/}
+            <p>Recommendations: <input type="text" {...visitedInfoBind} /></p>
           </label>
           <input type="submit" value="Submit" />
         </form>
 
-        <p style={{textAlign:'center'}}>{visitedInfo}</p>
+        <p style={{ textAlign: 'center' }}>{visitedInfo}</p>
 
-        
-
-        {returnLocations()}
+        {/* Display the visited countries*/}
+        {returnVisitedLocations()}
 
       </div>
     )
