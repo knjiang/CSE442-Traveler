@@ -20,7 +20,10 @@ GetListDataView,
 GetSetShareableLink,
 GetShareableLinkList,
 ChangeBackgroundView,
-ChangeVisitedView,
+AddDescriptionView,
+DelDescriptionView,
+EditDescriptionView,
+GetDescriptionView,
 )
 
 app_name = "profiles"
@@ -45,4 +48,5 @@ urlpatterns = [
     path('add_description/', AddDescriptionView.as_view()),
     path('del_description/', DelDescriptionView.as_view()),
     path('edit_description/', EditDescriptionView.as_view()),
+    path('get_description/', GetDescriptionView.as_view()),
 ]
