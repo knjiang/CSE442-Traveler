@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import authentication
 
 from profiles.models import Profile, Location
-from .models import Post,Comment, Emoji, OriginEmoji
+from .models import Post,Comment, Emoji
 from django.contrib.auth.models import User
 
 import json
@@ -78,7 +78,7 @@ class GetCommentFromPostView(APIView):
                 "comment_id": comment.comment_id,
                 "body": comment.body,
                 "user":  comment.profile.user.username,
-                "emoji_list" : list(comment.emoji_set.all())
+                "emoji_list" : [emoji.name for emoji in comment.emoji_set.all()]
             })
         return Response(res)
 
@@ -173,18 +173,6 @@ class DeleteCommentView(APIView):
             res.append([p.id, p.body, p.profile.user.username])
         return Response(res)
 
-class AddAdminEmojiView(APIView):
-    """
-        View to add global emojis to the website
-    """
-    authentication_classes = [authentication.TokenAuthentication]
-    
-    def post(self, request, format=None):
-        emoji_name = request.data["emoji_name"]
-        if not OriginEmoji.objects.filter(name=emoji_name).exists():
-            OriginEmoji.objects.create(name=emoji_name)
-        return Response()
-
 class AddEmojiToComment(APIView):
     """
         View to add an emoji to a commment
@@ -195,7 +183,6 @@ class AddEmojiToComment(APIView):
         comment_id = request.data['comment_id']
         comment = get_object_or_404(Comment,comment_id=comment_id)
         emoji_name = request.data['emoji_name']
-        origin_emoji = get_object_or_404(OriginEmoji,name=emoji_name)
-        if not Emoji.objects.filter(comment=comment,name=origin_emoji).exist():
-            Emoji.objects.create(comment=comment,name=origin_emoji)
+        if not Emoji.objects.filter(comment=comment,name=emoji_name).exists():
+            Emoji.objects.create(comment=comment,name=emoji_name)
         return Response()
