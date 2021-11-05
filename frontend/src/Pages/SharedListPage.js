@@ -26,7 +26,6 @@ function SharedListPage(){
 
       useEffect(() => {
         if(title){
-            console.log(title)
             getDescription(cookies.token,title)
         
         .then(res => res.json())

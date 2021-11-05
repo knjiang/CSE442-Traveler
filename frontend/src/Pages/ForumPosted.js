@@ -89,6 +89,11 @@ const ForumPosted = (props) =>{
         let comment = document.getElementById("commentText").value
         let postID = selectedPost[4]
         AddComment(cookies.token, comment, postID)
+        .then(res => res)
+        .then(data => {
+            showComments(postID)
+        })
+        document.getElementById("commentText").value = ''
     }
 
     const postComments = () => {

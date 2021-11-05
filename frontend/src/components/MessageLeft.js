@@ -84,7 +84,6 @@ function MessageLeft(props) {
             }
             setFilteredUsers(res)
         }
-        console.log(value, filteredUsers)
     }
 
     useEffect (() => {

@@ -35,7 +35,6 @@ function Messages(props) {
         }
         ws.current = new WebSocket(wsURL.current, subprotocol) //imma change this to {baseURL} later
         ws.current.onopen = function() {
-          console.log("Websocket Connected Successfully")
           if (typeof(locationProps.state) !== 'undefined'){
             if (typeof(locationProps.state.userInfo) !== 'undefined'){
               let linkedUser = locationProps.state.userInfo.email

@@ -13,7 +13,6 @@ class ChatConsumer(WebsocketConsumer):
         protocol = self.scope['subprotocols']
         if protocol:
             self.accept()
-            print("Connected to websocket")
             token = protocol[0]
             self.user_id = Token.objects.get(key=token).user.id
             self.user_email = Token.objects.get(key=token).user.email
@@ -22,7 +21,6 @@ class ChatConsumer(WebsocketConsumer):
                 self.room_group_name,
                 self.channel_name
             )
-            print("User {} has joined {}".format(Token.objects.get(key=token).user.email, self.room_group_name))
             userInstance = Profile.objects.get(pk = self.user_id)
             logs = Messages.objects.filter(Q(profile = userInstance)|
                                             Q(sender = userInstance)).values_list("sender", "profile").distinct().order_by('creationDate').distinct()
@@ -52,7 +50,6 @@ class ChatConsumer(WebsocketConsumer):
                     lastSent[m.user_1.user.email] = m.messages
                 if m.user_2 != userInstance:
                     lastSent[m.user_2.user.email] = m.messages
-            print(lastSent)
 
             self.send(text_data=json.dumps({
                 'status': 'updateConnected',
@@ -60,7 +57,7 @@ class ChatConsumer(WebsocketConsumer):
                 'lastSent': lastSent
             }))
         else:
-            print("Unauthorized User")
+            pass
 
 
     def disconnect(self, close_code):
@@ -99,7 +96,6 @@ class ChatConsumer(WebsocketConsumer):
                 LastSent.objects.create(user_2 = senderInstance, user_1 = receiverInstance, messages = message)
             else:
                 LastSent.objects.create(user_2 = senderInstance, user_1 = receiverInstance, messages = message)
-            print("Sending message of {} to user {} from user {}".format(message, self.receiver_id, self.user_id))
             self.send(text_data=json.dumps({
                 'status': 'updateChat',
                 'message': message,
@@ -107,7 +103,6 @@ class ChatConsumer(WebsocketConsumer):
                 'to': User.objects.get(email__exact=receiver).email
             }))
         elif data["status"] == "get":
-            print("Getting messages from specified user", data["user"])
             friend = data["user"]
             self.friend_id = User.objects.get(email__exact=friend).id
             friendInstance = Profile.objects.get(pk = self.friend_id)
@@ -134,7 +129,6 @@ class ChatConsumer(WebsocketConsumer):
         senderInstance = Profile.objects.get(pk = self.user_id)
         logs = Messages.objects.filter(profile = senderInstance) #latest(bottom) to oldest
         latest = logs[len(logs) - 1]
-        print("Received message of {} to user {} from user {}".format(latest.messages, latest.profile.user.email, latest.sender.user.email))
         # Send message to WebSocket
         self.send(text_data=json.dumps({
             'status': 'updateChat',
