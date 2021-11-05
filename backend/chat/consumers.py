@@ -10,10 +10,10 @@ from django.db.models import Q
 class ChatConsumer(WebsocketConsumer):
 
     def connect(self):
-        protocol = self.scope['subprotocols']
-        if protocol:
-            self.accept()
-            token = protocol[0]
+        token = ''
+        if 'token' in self.scope['cookies'].keys():
+            token = self.scope['cookies']['token']
+        if token:
             self.user_id = Token.objects.get(key=token).user.id
             self.user_email = Token.objects.get(key=token).user.email
             self.room_group_name = 'room-{}'.format(self.user_id)
@@ -50,7 +50,7 @@ class ChatConsumer(WebsocketConsumer):
                     lastSent[m.user_1.user.email] = m.messages
                 if m.user_2 != userInstance:
                     lastSent[m.user_2.user.email] = m.messages
-
+            self.accept()
             self.send(text_data=json.dumps({
                 'status': 'updateConnected',
                 'users': res,
@@ -58,7 +58,6 @@ class ChatConsumer(WebsocketConsumer):
             }))
         else:
             pass
-
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(

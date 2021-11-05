@@ -92,7 +92,7 @@ function NavBar(props){
                   <a href = '/my-profile'><Button id = "navButtonOn" variant="outline-dark"><h1 id = "buttonText">My Profile</h1></Button></a>
                   <a href = '/user'><Button variant="outline-dark" id = "navButtonOn"><h1 id = "buttonText">Search Users</h1></Button></a>
                   <a href = '/forum'><Button variant="outline-dark" id = "navButtonOn"><h1 id = "buttonText">Forum</h1></Button></a>
-                  <Button id = "navButtonOn" variant="outline-dark" onClick = {logoutUser}><h1 id = "buttonText">Logout</h1></Button>
+                  <Button id = "navButtonOn" variant="outline-dark" onClick = {logoutUser} style = {{"paddingLeft": "1.25vw"}}><h1 id = "buttonText">Logout</h1></Button>
                 </div>
             </div>
         </div>

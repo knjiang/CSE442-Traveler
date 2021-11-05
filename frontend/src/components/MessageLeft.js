@@ -25,7 +25,27 @@ function MessageLeft(props) {
 
     const userList = () => {
         let res = []
-        if (filteredUsers){
+        if (typeof(allUsers) == "undefined" && newUser) {
+            if (selectedUser == newUser){
+                res.push(<div id = "userListWrapper" style = {{"display": "block", "backgroundColor": "lightgray"}} onClick = {() => onClickUser(newUser)}><div style = {{"display": "flex"}}><h1 id = "userLogoFrom" style = {{"marginLeft": "0.25vw"}}>{newUser.substring(0, 3)}</h1><h1 id = "userText" style = {{"fontSize": "2.5vh"}} >{newUser}</h1></div>
+                <h1 id = "peek" style = {{"fontSize":"2vh"}}>{userPeek[newUser]}</h1></div>)
+            }
+            else {
+                res.push(<div id = "userListWrapper" style = {{"display": "block"}} onClick = {() => onClickUser(newUser)}><div style = {{"display": "flex"}}><h1 id = "userLogoFrom" style = {{"marginLeft": "0.25vw"}}>{newUser.substring(0, 3)}</h1><h1 id = "userText" style = {{"fontSize": "2.5vh"}} onClick = {() => onClickUser(newUser)}>{newUser}</h1></div>
+                <h1 id = "peek" style = {{"fontSize":"2vh"}}>{userPeek[newUser]}</h1></div>)
+            }
+        }
+        else if (allUsers.length == 0 && newUser) {
+            if (selectedUser == newUser){
+                res.push(<div id = "userListWrapper" style = {{"display": "block", "backgroundColor": "lightgray"}} onClick = {() => onClickUser(newUser)}><div style = {{"display": "flex"}}><h1 id = "userLogoFrom" style = {{"marginLeft": "0.25vw"}}>{newUser.substring(0, 3)}</h1><h1 id = "userText" style = {{"fontSize": "2.5vh"}} >{newUser}</h1></div>
+                <h1 id = "peek" style = {{"fontSize":"2vh"}}>{userPeek[newUser]}</h1></div>)
+            }
+            else {
+                res.push(<div id = "userListWrapper" style = {{"display": "block"}} onClick = {() => onClickUser(newUser)}><div style = {{"display": "flex"}}><h1 id = "userLogoFrom" style = {{"marginLeft": "0.25vw"}}>{newUser.substring(0, 3)}</h1><h1 id = "userText" style = {{"fontSize": "2.5vh"}} onClick = {() => onClickUser(newUser)}>{newUser}</h1></div>
+                <h1 id = "peek" style = {{"fontSize":"2vh"}}>{userPeek[newUser]}</h1></div>)
+            }
+        }
+       else if (filteredUsers){
             if (newUser && !filteredUsers.includes(newUser)) {
                 if (selectedUser == newUser){
                     res.push(<div id = "userListWrapper" style = {{"display": "block", "backgroundColor": "lightgray"}} onClick = {() => onClickUser(newUser)}><div style = {{"display": "flex"}}><h1 id = "userLogoFrom" style = {{"marginLeft": "0.25vw"}}>{newUser.substring(0, 3)}</h1><h1 id = "userText" style = {{"fontSize": "2.5vh"}} >{newUser}</h1></div>
@@ -35,7 +55,7 @@ function MessageLeft(props) {
                     res.push(<div id = "userListWrapper" style = {{"display": "block"}} onClick = {() => onClickUser(newUser)}><div style = {{"display": "flex"}}><h1 id = "userLogoFrom" style = {{"marginLeft": "0.25vw"}}>{newUser.substring(0, 3)}</h1><h1 id = "userText" style = {{"fontSize": "2.5vh"}} onClick = {() => onClickUser(newUser)}>{newUser}</h1></div>
                     <h1 id = "peek" style = {{"fontSize":"2vh"}}>{userPeek[newUser]}</h1></div>)
                 }
-            }
+        }
         else {
             if (newUser && !allUsers.includes(newUser)) {
                 if (selectedUser == newUser){

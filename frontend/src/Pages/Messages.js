@@ -34,7 +34,7 @@ function Messages(props) {
         else {
           wsURL.current = ws_scheme + '://' + window.location.hostname + '/api/chat/'
         }
-        ws.current = new WebSocket(wsURL.current, subprotocol) //imma change this to {baseURL} later
+        ws.current = new WebSocket(wsURL.current) 
         ws.current.onopen = function() {
           if (typeof(locationProps.state) !== 'undefined'){
             if (typeof(locationProps.state.userInfo) !== 'undefined'){
