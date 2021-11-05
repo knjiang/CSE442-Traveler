@@ -30,7 +30,6 @@ function MyForum (props) {
             //p.id, p.body, p.profile.user.username
             setAllComment(data)
         })
-        console.log(user)
     }, [])
 
     const deletePost = (post) => {

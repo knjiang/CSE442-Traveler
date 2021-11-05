@@ -22,7 +22,7 @@ const Routes = (props) => {
       <div>
 
         <Switch> {/* The Switch decides which component to show based on the current URL.*/}
-          <Route exact path ='/admin/add-location' render = {() => (<AdminAddLocation />)}></Route>
+          <Route exact path ='/admin-page/' render = {() => (<AdminAddLocation />)}></Route>
           <Route exact path='/' render = {() => (<Homepage parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route path='/locations/:id' render = {() => (<Specific_Location parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route exact path='/user' render = {() => (<Search_Users parentUser = {user} parentSetUser = {setUser} />)}></Route>

@@ -18,23 +18,6 @@ function NavBar(props){
   
     const history = useHistory()
 
-    useEffect(() => {
-      if (cookies.token && !user.logged_in){
-        getProfile(cookies.token)
-        .then(response => response.json())
-        .then(data => {
-          if (!data.detail){
-            setUser({
-              logged_in: true,
-              name: data.first_name,
-              email: data.email,
-              from_location: data.from_location
-            })
-          }
-        })
-      }
-    },[])
-
     const location_set = () => {
       return user.from_location != ""
     }
@@ -109,7 +92,7 @@ function NavBar(props){
                   <a href = '/my-profile'><Button id = "navButtonOn" variant="outline-dark"><h1 id = "buttonText">My Profile</h1></Button></a>
                   <a href = '/user'><Button variant="outline-dark" id = "navButtonOn"><h1 id = "buttonText">Search Users</h1></Button></a>
                   <a href = '/forum'><Button variant="outline-dark" id = "navButtonOn"><h1 id = "buttonText">Forum</h1></Button></a>
-                  <Button id = "navButtonOn" variant="outline-dark" onClick = {logoutUser}><h1 id = "buttonText">Logout</h1></Button>
+                  <Button id = "navButtonOn" variant="outline-dark" onClick = {logoutUser} style = {{"paddingLeft": "1.25vw"}}><h1 id = "buttonText">Logout</h1></Button>
                 </div>
             </div>
         </div>
