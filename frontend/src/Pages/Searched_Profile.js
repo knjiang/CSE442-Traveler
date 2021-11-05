@@ -1,5 +1,6 @@
 import {useState,useEffect} from "react"
 import { getUserInfo } from '../apis/profiles';
+import { Link } from 'react-router-dom'
 
 function Searched_Profile(props){
 
@@ -17,13 +18,19 @@ function Searched_Profile(props){
         .then(data => {
             setUser({
                 username: data.first_name,
-                from_location: data.from_location
+                from_location: data.from_location,
+                email: window.location.pathname.substr(6)
               });
         })
       }, [])
 
     return(
-        <h1>Hi! This is {user.username}'s profile and I am from {user.from_location}!</h1>
+        <div>
+            <h1>Hi! This is {user.username}'s profile and I am from {user.from_location}!</h1>
+            <Link to = {{pathname: '/messages', state: {'userInfo': user}}}>Message {user.username}</Link>
+        </div>
+
+        
     )
 }
 
