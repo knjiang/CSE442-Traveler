@@ -27,11 +27,12 @@ function Messages(props) {
     const history = useHistory()
 
     useEffect(() => {
+        var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
         if (window.location.hostname == 'localhost') {
-          wsURL.current = 'ws://' + window.location.hostname + ':8000/api/chat/'
+          wsURL.current = ws_scheme + '://' + window.location.hostname + ':8000/api/chat/'
         }
         else {
-          wsURL.current = 'ws://' + window.location.hostname + '/api/chat/'
+          wsURL.current = ws_scheme + '://' + window.location.hostname + '/api/chat/'
         }
         ws.current = new WebSocket(wsURL.current, subprotocol) //imma change this to {baseURL} later
         ws.current.onopen = function() {

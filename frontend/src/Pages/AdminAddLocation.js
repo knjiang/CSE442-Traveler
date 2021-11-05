@@ -18,20 +18,21 @@ function AdminAddLocation () {
     let subprotocol = cookies.token
     
     useEffect(() => {
-    getLocation()
-    .then(response => response.json())
-    .then(data => {
-        if (data){
-        setLocation({location: (data.map(({id, name}) => name))})
+        getLocation()
+        .then(response => response.json())
+        .then(data => {
+            if (data){
+            setLocation({location: (data.map(({id, name}) => name))})
+            }
+        })
+        var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+        if (window.location.hostname == 'localhost') {
+            wsURL.current = ws_scheme + '://' + window.location.hostname + ':8000/api/chat/'
         }
-    })
-    if (window.location.hostname == 'localhost') {
-        wsURL.current = 'ws://' + window.location.hostname + ':8000/api/chat/'
-    }
-    else {
-        wsURL.current = 'ws://' + window.location.hostname + '/api/chat/'
-    }
-    ws.current = new WebSocket(wsURL.current, subprotocol)
+        else {
+            wsURL.current = ws_scheme + '://' + window.location.hostname + '/api/chat/'
+        }
+        ws.current = new WebSocket(wsURL.current, subprotocol)
     }, [])
 
     const setName = (e) => {
