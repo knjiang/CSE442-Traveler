@@ -20,24 +20,6 @@ function UserProfile(props) {
 
   const existsCookie = typeof cookies.token != "undefined"
 
-  useEffect(() => {
-    if (existsCookie) {
-      getProfile(cookies.token)
-        .then(response => response.json())
-        .then(data => {
-          if (!data.detail) {
-            setUser({
-              logged_in: true,
-              name: data.first_name,
-              email: data.email,
-              from_location: data.from_location,
-              background: data.background
-            });
-          }
-        });
-    }
-  }, [])
-
   const handleSubmit = (e) => {
     e.preventDefault()
     changeBackground(cookies.token, backgroundInfo)

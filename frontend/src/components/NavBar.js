@@ -18,23 +18,6 @@ function NavBar(props){
   
     const history = useHistory()
 
-    useEffect(() => {
-      if (cookies.token && !user.logged_in){
-        getProfile(cookies.token)
-        .then(response => response.json())
-        .then(data => {
-          if (!data.detail){
-            setUser({
-              logged_in: true,
-              name: data.first_name,
-              email: data.email,
-              from_location: data.from_location
-            })
-          }
-        })
-      }
-    },[])
-
     const location_set = () => {
       return user.from_location != ""
     }

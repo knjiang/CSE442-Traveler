@@ -6,5 +6,4 @@ release:
   command:
     - python3 backend/manage.py migrate
 run:
-    web: python3 backend/manage.py runserver 0.0.0.0:$PORT
-      
+    web: daphne -b 0.0.0.0 -p $PORT backend.asgi:application
