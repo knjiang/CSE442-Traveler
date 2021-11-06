@@ -1,7 +1,11 @@
 #locationBox {
-    border: 1px rgb(224, 224, 224) solid;
     height: 100%;
     display: inline-flex;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+    margin-top: 4vh;
 }
 
 #dropdown-item {
@@ -19,4 +23,9 @@
 
 #dropdown-basic-button {
     width: 12vw;
+    height: 5vh;
+    font-size: 2vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

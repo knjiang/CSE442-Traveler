@@ -22,7 +22,7 @@ const ForumPosted = (props) =>{
 
     const [selectedPost, setSelectedPost] = useState()
     const [selectedComment, setSelectedComment] = useState([])
-
+    const [showPicker, setShowPicker] = useState(false)
     const user = props.parentUser
     const setUser = props.parentSetUser 
 
@@ -65,8 +65,8 @@ const ForumPosted = (props) =>{
             return (
                 <div>
                 {Object.values(allThreads).map((threads, index) => (
-                        <ListGroupItem id ="threadTitle" className="d-flex" variant="primary" onClick = {() => (setSelectedPost(threads), showComments(threads[4]), handleClose(true))}>
-                        <h1>{threads[0]}</h1>
+                        <ListGroupItem style = {{height: "9vh"}} id ="threadTitle" className="d-flex" variant="primary" onClick = {() => (setSelectedPost(threads), showComments(threads[4]), handleClose(true))}>
+                        <h1 >{threads[0]}</h1>
                         <br/>
                         <strong id = "threadTitleText">{threads[3]}</strong>
                         <div className="m-lg-auto">
@@ -81,6 +81,12 @@ const ForumPosted = (props) =>{
             return (
                 <h1>No locations</h1>
             )
+        }
+    }
+
+    const handlePicker = () => {
+        if (showPicker) {
+            setShowPicker(false)
         }
     }
 
@@ -99,9 +105,9 @@ const ForumPosted = (props) =>{
     const postComments = () => {
         if (selectedComment) {
             return (
-                <div>
+                <div >
                 {selectedComment.map((comment, index) => (
-                        <ForumComment body={comment.body} user={comment.user} emojis={comment.emoji_list} id={comment.comment_id} />
+                        <ForumComment handlePicker = {handlePicker} showPicker = {showPicker} setShowPicker = {setShowPicker} body={comment.body} user={comment.user} emojis={comment.emoji_list} id={comment.comment_id} />
                     ))}
                 </div>
             )
@@ -122,7 +128,7 @@ const ForumPosted = (props) =>{
                 </Modal.Body>
                 {postComments()}
                 <Modal.Footer>
-                    <form>
+                    <form onSubmit = {(e) => (e.preventDefault(), submitComment(e))}>
                     Post comment: <input style = {{"width": "10vw;"}} id = "commentText"></input>
                     </form>
                 <Button variant="secondary" onClick = {(e) => submitComment(e)}>
@@ -142,7 +148,7 @@ const ForumPosted = (props) =>{
 
 
     return(
-        <ListGroup className="mt-4">
+        <ListGroup className="mt-4" onClick={() => handlePicker()} >
             <h1>{pathname.replace('-', ' ')}</h1>
             {LocationThreads()}
             {showModal()}

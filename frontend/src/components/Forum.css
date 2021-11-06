@@ -7,9 +7,27 @@
 .commentdetails {
     font-size:12px;
     text-align:center;
-    border-bottom: 2px solid gray;
+    border-bottom: 0.2vh solid gray;
     display: flexbox;
     margin: 0 auto;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.5vh;
     width: 10rem
+}
+
+#threadTitleText {
+    font-size: 2vh;
+}
+
+#threadTitle {
+    height: 5vh;
+}
+
+#threadTitle:hover {
+    color:green;
+    cursor: pointer;
+}
+
+#emojiBTN:hover {
+    background-color: rgb(223, 116, 255);
+    border: 0.15rem solid rgb(84, 84, 255);
 }

@@ -6,34 +6,48 @@ import { useCookies } from 'react-cookie';
 
 function ForumComment(props){
     const [cookies,setCookie] = useCookies(['token']);
-    const [showPicker, setShowPicker] = useState(false)
     const [emojis, setEmojis] = useState(props.emojis)
+    const showPicker = props.showPicker
+    const setShowPicker = props.setShowPicker
+    const handlePicker = props.handlePicker
+    const [childPicker, setChildPicker] = useState(false)
+
+    useEffect(() => {
+        if (!showPicker){
+            setChildPicker(false)
+        }
+    })
 
     const onEmojiClick = (event, emojiObject) => {
         addEmojiToComment(cookies.token,emojiObject.unified,props.id)
-        setEmojis(emojis.concat([emojiObject.unified]))
-    }
-
-    const handlePicker = () => {
-        setShowPicker(!showPicker)
+        if (!emojis.includes(emojiObject.unified)){
+            setEmojis(emojis.concat([emojiObject.unified]))
+        }
     }
 
     const convertEmoji = (unicode) => {
         return String.fromCodePoint(parseInt(unicode, 16))
     }
-    
+
     return (
-        <div className= "commentdetails" id={props.id}>
-            <p> 
-                {props.body} - {props.user}
-            </p>  
-            <div className="emojis">
+        <div onClick={() => handlePicker()} className= "commentdetails" id={props.id} style = {{display: "flex", width: "80%", justifyContent: "space-between", overflowWrap: "anywhere"}}>
+            <h1 style = {{fontSize: "2vh", textAlign: "left", maxWidth: "20rem"}}> 
+                {props.body} 
+                <h1 style = {{fontSize: "1.5vh"}}>
+                    Commented by: {props.user}
+                </h1>
+                <div className="emojis" style = {{textAlign: "left", maxWidth: "25rem"}}>
                 {emojis.map((emoji,index) => (
+                    console.log(emoji),
                     convertEmoji(emoji)
                 ))}
+                </div>
+            </h1>  
+
+            <button id = "emojiBTN" onClick={() => (setShowPicker(true), setChildPicker(true))} style = {{marginTop: "0rem", width: "1.25rem", height: "1.25rem", display: "flex", justifyContent: "center", alignContent: "center", borderRadius: "2vh"}}><h1 style = {{fontSize: "1rem", marginTop: "-0.16rem", marginBottom: "auto"}}>{convertEmoji('1f609')}</h1></button>
+            <div style = {{position: "absolute", right: "-20vw"}}>
+                {showPicker && childPicker && <Picker onEmojiClick={onEmojiClick} />}
             </div>
-            <Button onClick={handlePicker}>Pick Emoji</Button>
-            {showPicker && <Picker onEmojiClick={onEmojiClick} />}
         </div>  
     );
 }

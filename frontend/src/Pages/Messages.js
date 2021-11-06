@@ -117,8 +117,6 @@ function Messages(props) {
         return(
             <div id = "messageWrapper">
               <MessageLeft {...passProps}/>
-{/*               <h1>You've selected {selectedUser} to message</h1>
-              <h1 onClick = {() => console.log(selectedMessages)}>Check selectedMessages</h1> */}
               <MessageRight {...passProps}/>
              
             </div> 
