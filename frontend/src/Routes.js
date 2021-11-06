@@ -7,7 +7,6 @@ import Searched_Profile from './Pages/Searched_Profile'
 import Forum from './Pages/Forum'
 import UserProfile from './Pages/UserProfile';
 import ForumPost from './components/ForumPost.js'
-import ForumContent from './components/ForumContent'
 import MyList from './Pages/MyList'
 import AdminAddLocation from './Pages/AdminAddLocation'
 import ForumPosted from './Pages/ForumPosted'
@@ -23,7 +22,7 @@ const Routes = (props) => {
       <div>
 
         <Switch> {/* The Switch decides which component to show based on the current URL.*/}
-          <Route exact path ='/admin/add-location' render = {() => (<AdminAddLocation />)}></Route>
+          <Route exact path ='/admin-page/' render = {() => (<AdminAddLocation />)}></Route>
           <Route exact path='/' render = {() => (<Homepage parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route path='/locations/:id' render = {() => (<Specific_Location parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route exact path='/user' render = {() => (<Search_Users parentUser = {user} parentSetUser = {setUser} />)}></Route>
@@ -31,7 +30,6 @@ const Routes = (props) => {
           <Route exact path='/my-profile' render = {() => (<UserProfile parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route path = '/post' render = {() => (<ForumPost parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route exact path='/forum' render = {() => (<Forum parentUser = {user} parentSetUser = {setUser} />)}></Route>
-          <Route path ='/ForumContent' render = {() => (<ForumContent parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route path ='/forum/:id' render = {() => (<ForumPosted parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route exact path ='/my-lists' render = {() => (<MyList parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route exact path ='/my-forum' render = {() => (<MyForum parentUser = {user} parentSetUser = {setUser} />)}></Route>

@@ -1,0 +1,159 @@
+*{
+    scrollbar-width: thin;
+}
+
+#messageWrapper {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin-top: 4vh;
+}
+
+#leftMessageWrapper {
+    width: 35%;
+    height: 80vh;
+}
+
+#userList {
+    height: 70vh;
+    max-height: 70vh;
+    overflow-y: auto;
+    margin-top: 0vh;
+}
+
+#userListWrapper {
+    cursor: pointer;
+    padding-bottom: 1vh;
+    padding-top: 1vh;
+    border-radius: 0.5vh;
+}
+
+#userListWrapper:hover {
+    color: blue !important;
+}
+
+#messagesList {
+    height: 70vh;
+    max-height: 70vh;
+    overflow-y: auto;
+    width: 100%;
+    margin-top: 2vh;
+}
+
+#rightMessageWrapper {
+    width: 65%;
+    height: 80vh;
+}
+
+#messageInput {
+    position: absolute;
+    bottom: 7.5vh;
+    margin-left: 2vw;
+}
+
+#messageInput input {
+    width: 43vw;
+    height: 5vh;
+    border-bottom-left-radius: 2vh;
+    border-top-left-radius: 2vh;
+}
+
+#messageInput Button {
+    width: 5vw;
+    height: 5vh;
+    margin-top: -0.7vh;
+    font-size: 2vh;
+}
+
+#dmFrom {
+    font-size: 3vh;
+    color: blue;
+    padding: 1vh;
+    display: flex;
+    justify-content: left;
+}
+
+#dmTo {
+    font-size: 3vh;
+    color: green;
+    padding: 1vh;
+    display: flex;
+    justify-content: right;
+}
+
+#userLogoFrom {
+    border: 2px solid blue;
+    border-radius: 100%;
+    width: 6.25vh;
+    height: 6.25vh;
+    text-align: center;
+    font-size: 2.5vh;
+    margin-right: 0.5vw;
+    margin-top: 0vh;
+    background-color: blue;
+    color: white;
+    text-decoration: none;
+    min-width: 6.25vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#userLogoTo {
+    border: 2px solid green;
+    border-radius: 100%;
+    width: 6.25vh;
+    height: 6.25vh;
+    text-align: center;
+    font-size: 2.5vh;
+    margin-left: 0.5vw;
+    margin-top: 0vh;
+    background-color: green;
+    color: white;
+    text-decoration: none;
+    min-width: 6.25vh;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+#messageTextFrom {
+    font-size: 2.5vh;
+    border: 2px solid gray;
+    border-bottom-left-radius: 0vh;
+    border-top-left-radius: 3vh;
+    border-bottom-right-radius: 3vh;
+    border-top-right-radius: 3vh;
+    padding: 1vh 3vh 1vh 3vh;
+    max-width: 38.5vw;
+    
+}
+
+#messageTextTo {
+    font-size: 2.5vh;
+    border: 2px solid gray;
+    border-bottom-left-radius: 3vh;
+    border-top-left-radius: 3vh;
+    border-bottom-right-radius: 0vh;
+    border-top-right-radius: 3vh;
+    padding: 1vh 3vh 1vh 3vh;
+    max-width: 38.5vw;
+    text-overflow: "";
+    white-space: wrap;
+    overflow-wrap: anywhere;
+}
+
+#userText {
+    cursor: pointer;
+    padding: 1vh 2vh 1vh 2vh;
+}
+
+#peek {
+    color: grey;
+    width: 63%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: -2vh;
+}

@@ -110,8 +110,8 @@ function SaveLocationToList(props){
     const handleClose = () => setNLShow(false);
 
     return (
-        <div>
-            <div style = {{"margin-left": "auto", "margin-right": "auto", "textAlign": "right", "margin-top": "-6vh"}}>
+        <div >
+            <div style = {{"width": "100%", "textAlign": "right", "margin-top": "-6vh", "display": "flex", "justifyContent": "end"}}>
                 {list_dropDown()}
             </div>
 

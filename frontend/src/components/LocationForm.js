@@ -15,7 +15,6 @@ function LocationForm(){
         changeLocation(cookies.token,fromLocation)
         resetFromLocation();
         setShow(false);
-        window.location.reload();
     }
 
     const [show, setShow] = useState(true);
@@ -34,10 +33,10 @@ function LocationForm(){
             </label>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={(e) => handleClose(e)}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSubmit}>
+          <Button variant="primary" onClick={(e) => handleSubmit(e)}>
             Submit
           </Button>
         </Modal.Footer>
