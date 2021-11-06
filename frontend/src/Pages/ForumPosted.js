@@ -7,8 +7,6 @@ import { GetPostByLocation, AddComment, GetCommentFromPost } from '../apis/forum
 import { useCookies } from 'react-cookie';
 import { getProfile } from '../apis/profiles';
 import ForumComment from '../components/ForumComment';
-import Picker from 'emoji-picker-react';
-import {addEmojiToComment} from '../apis/forums';
 
 const ForumPosted = (props) =>{
 
@@ -25,7 +23,6 @@ const ForumPosted = (props) =>{
     const [selectedPost, setSelectedPost] = useState()
     const [selectedComment, setSelectedComment] = useState([])
     const [showPicker, setShowPicker] = useState(false)
-    const [emojis, setEmojis] = useState(props.emojis)
     const user = props.parentUser
     const setUser = props.parentSetUser 
 
@@ -68,7 +65,7 @@ const ForumPosted = (props) =>{
             return (
                 <div>
                 {Object.values(allThreads).map((threads, index) => (
-                        <ListGroupItem id ="threadTitle" className="d-flex" variant="primary" style = {{height: "9vh"}} onClick = {() => (setSelectedPost(threads), showComments(threads[4]), handleClose(true))}>
+                        <ListGroupItem style = {{height: "9vh"}} id ="threadTitle" className="d-flex" variant="primary" onClick = {() => (setSelectedPost(threads), showComments(threads[4]), handleClose(true))}>
                         <h1 >{threads[0]}</h1>
                         <br/>
                         <strong id = "threadTitleText">{threads[3]}</strong>
@@ -87,6 +84,12 @@ const ForumPosted = (props) =>{
         }
     }
 
+    const handlePicker = () => {
+        if (showPicker) {
+            setShowPicker(false)
+        }
+    }
+
     const submitComment = (e) => {
         e.preventDefault()
         let comment = document.getElementById("commentText").value
@@ -99,33 +102,22 @@ const ForumPosted = (props) =>{
         document.getElementById("commentText").value = ''
     }
 
-    const onEmojiClick = (event, emojiObject) => {
-        addEmojiToComment(cookies.token,emojiObject.unified,props.id)
-        setEmojis(emojis.concat([emojiObject.unified]))
-    }
-
     const postComments = () => {
         if (selectedComment) {
             return (
-                <div>
+                <div >
                 {selectedComment.map((comment, index) => (
-                        <ForumComment emojis = {emojis} setEmojis = {setEmojis} showPicker = {showPicker} setShowPicker = {setShowPicker} body={comment.body} user={comment.user} emojis={comment.emoji_list} id={comment.comment_id} />
+                        <ForumComment handlePicker = {handlePicker} showPicker = {showPicker} setShowPicker = {setShowPicker} body={comment.body} user={comment.user} emojis={comment.emoji_list} id={comment.comment_id} />
                     ))}
                 </div>
             )
         }
     }
 
-    const handlePicker = () => {
-        if (showPicker) {
-            setShowPicker(false)
-        }
-    }
-
     const showModal = () => {
         if (selectedPost) {
             return(
-            <Modal show={show} onHide={() => handleClose(false)} onClick = {() => handlePicker()}>
+            <Modal show={show} onHide={() => handleClose(false)}>
                 <Modal.Header closeButton>
                 <Modal.Title>{selectedPost[2]}</Modal.Title>
                 </Modal.Header>
@@ -146,8 +138,6 @@ const ForumPosted = (props) =>{
                     Close
                 </Button>
                 </Modal.Footer>
-                
-                {showPicker && <div style = {{position: "absolute", marginLeft: "100%", height: "80vh"}}><Picker onEmojiClick={onEmojiClick} /></div>}
             </Modal>
             )
         }
@@ -158,10 +148,11 @@ const ForumPosted = (props) =>{
 
 
     return(
-        <ListGroup className="mt-4">
-            <h1>{pathname.replace(/-/g, ' ')}</h1>
+        <ListGroup className="mt-4" onClick={() => handlePicker()} >
+            <h1>{pathname.replace('-', ' ')}</h1>
             {LocationThreads()}
             {showModal()}
+
         </ListGroup>
     )
 

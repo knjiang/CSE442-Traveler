@@ -76,14 +76,14 @@ const ForumContent = () =>{
         for (let number = 1; number <= pages; number++){
             if (number == active){
                 items.push(
-                    <Pagination.Item onClick = {() => (setActive(number), console.log(number, active, number == active))} key={number} active={true}>
+                    <Pagination.Item onClick = {() => (setActive(number))} key={number} active={true}>
                       {number}
                     </Pagination.Item>,
                   );
             }
             else {
                 items.push(
-                    <Pagination.Item onClick = {() => (setActive(number), console.log(number, active, number == active))} key={number} active={false}>
+                    <Pagination.Item onClick = {() => (setActive(number))} key={number} active={false}>
                       {number}
                     </Pagination.Item>,
                   );

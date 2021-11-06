@@ -26,3 +26,8 @@
     color:green;
     cursor: pointer;
 }
+
+#emojiBTN:hover {
+    background-color: rgb(223, 116, 255);
+    border: 0.15rem solid rgb(84, 84, 255);
+}

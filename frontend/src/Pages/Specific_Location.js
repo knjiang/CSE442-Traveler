@@ -37,7 +37,6 @@ function Specific_Location (props) {
         if (data){
           let realLocations = (data.map(({id, name}) => name))
           if (realLocations.some(x => x.toLowerCase().replace(/ /g, '') == currentLocation.replace(/-/g, '').toLowerCase())){
-            console.log("REAL")
             setReal(true)
           }
         }
@@ -56,7 +55,6 @@ function Specific_Location (props) {
     .then(response => response.json())
     .then(data => {
       data = data[0]
-      console.log(data)
       let money = ""
       let length = Object.values(data["currencies"]).length
       let counter = 0
