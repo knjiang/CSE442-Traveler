@@ -99,8 +99,8 @@ function BottomMyList(props){
             res.push(
             <div id = "dataTextDiv">
                 <Button id = "delLocationBTN" onClick = {() => deleteLocationFromList(n)}>Delete {n}</Button>
-                <a id = "dataText" href = {'/locations/' + n.replace(' ', '-')}>
-                    <h1 id = "dataTextInside" href = {'/locations/' + n.replace(' ', '-')}>{n}</h1>
+                <a id = "dataText" href = {'/locations/' + n.replace(/ /g, '-')}>
+                    <h1 id = "dataTextInside" href = {'/locations/' + n.replace(/ /g, '-')}>{n}</h1>
                     </a>
 
             </div>)
