@@ -33,7 +33,7 @@ function ForumComment(props){
         <div onClick={() => handlePicker()} className= "commentdetails" id={props.id} style = {{display: "flex", width: "80%", justifyContent: "space-between", overflowWrap: "anywhere"}}>
             <h1 style = {{fontSize: "2vh", textAlign: "left", maxWidth: "20rem"}}> 
                 {props.body} 
-                <h1 style = {{fontSize: "1.5vh"}}>
+                <h1 style = {{fontSize: "1.5vh", color:"#5c5c5c"}}>
                     Commented by: {props.user}
                 </h1>
                 <div className="emojis" style = {{textAlign: "left", maxWidth: "25rem"}}>
