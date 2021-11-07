@@ -53,10 +53,10 @@ function BottomMyList(props){
             let res = [<div style = {{"borderBottom": "2px solid gray", "display":"flex"}}><h1 style = {{"fontSize": "4vh", "paddingBottom": "1vh", "paddingTop": "1vh", "marginLeft": "auto", "marginRight": "auto"}}>Your Lists </h1></div>]
             for (let name of Object.keys(dataList)){
                 if (name == selectedList){
-                    res.push(<h1 id = "nameTextSelected" onClick = {() => (selectList(name))}>{name} <Button variant="secondary" id = "shareBTN" onClick = {(evt) => (evt.stopPropagation(),shareList(name))}> Share </Button> </h1>)
+                    res.push(<h1 id = "nameTextSelected" onClick = {() => (selectList(name))}>{name} <Button id = "shareBTN" onClick = {(evt) => (evt.stopPropagation(),shareList(name))}> Share </Button> </h1>)
                 }
                 else {
-                    res.push(<h1 id = "nameText" onClick = {() => (selectList(name))}>{name} <Button variant="secondary" id = "shareBTN" onClick = {(evt) => (evt.stopPropagation(),shareList(name))}> Share </Button></h1>)
+                    res.push(<h1 id = "nameText" onClick = {() => (selectList(name))}>{name} <Button id = "shareBTN" onClick = {(evt) => (evt.stopPropagation(),shareList(name))}> Share </Button></h1>)
                 }
     
             }
@@ -96,7 +96,14 @@ function BottomMyList(props){
     const returnListData = () => {
         let res = []
         for (let n of dataList[selectedList]){
-            res.push(<div id = "dataTextDiv"><a id = "dataText" href = {'/locations/' + n.replace(' ', '-')}><h1 id = "dataTextInside" href = {'/locations/' + n.replace(' ', '-')}>{n}</h1></a><Button id = "delLocationBTN" onClick = {() => deleteLocationFromList(n)}>Delete {n}</Button></div>)
+            res.push(
+            <div id = "dataTextDiv">
+                <Button id = "delLocationBTN" onClick = {() => deleteLocationFromList(n)}>Delete {n}</Button>
+                <a id = "dataText" href = {'/locations/' + n.replace(' ', '-')}>
+                    <h1 id = "dataTextInside" href = {'/locations/' + n.replace(' ', '-')}>{n}</h1>
+                    </a>
+
+            </div>)
         }
         return(<div id = "listDataWrapper">{res}</div>)
     }
@@ -142,12 +149,12 @@ function BottomMyList(props){
         return (
             <div id = "descriptionDiv">
                 <div style = {{"display": "flex"}}>
-                    <h3>Description for {selectedList}:</h3>
+                    <h3 style = {{fontSize: "3.5vh"}}>Description for {selectedList}:</h3>
                     <Button style = {{"marginBottom":"auto", "marginTop":"auto", "height": "4vh", "marginRight": "0.5vw", "marginLeft": "0.5vw"}} onClick = {() => setShowDescriptions("edit")}><h3 style = {{"fontSize":"2vh", "marginBottom": "auto"}}>Edit</h3></Button>
                     <Button onClick = {() => deleteDescription()}style = {{"marginBottom":"auto", "marginTop":"auto", "height": "4vh", "backgroundColor": "rgb(255, 198, 198)", "color":"black"}} ><h3 style = {{"fontSize":"2vh", "marginBottom": "auto"}}>Delete</h3></Button>
                 </div>
 
-                <h3>{descriptions}</h3>
+                <h3 style = {{fontSize: "3vh"}}>{descriptions}</h3>
             </div>
     
         )
