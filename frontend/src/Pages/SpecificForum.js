@@ -8,7 +8,7 @@ import { useCookies } from 'react-cookie';
 import { getProfile } from '../apis/profiles';
 import ForumComment from '../components/ForumComment';
 
-const ForumPosted = (props) =>{
+const SpecificForum = (props) =>{
 
     const history = useHistory();
 
@@ -159,4 +159,4 @@ const ForumPosted = (props) =>{
 
 }
 
-export default ForumPosted;
+export default SpecificForum;
