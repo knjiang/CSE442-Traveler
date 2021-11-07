@@ -73,11 +73,6 @@ function Search_Users(props){
               
               )}
           </ul>
-          <br/>
-          <br/>
-          <h1> Search result with: {user.email} </h1>
-          <br/>
-          <h1>Found: {user.name} from {user.from_location}</h1>
         </div>
         </div>
     )

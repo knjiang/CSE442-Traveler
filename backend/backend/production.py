@@ -24,3 +24,12 @@ WHITENOISE_ROOT = os.path.join(BASE_DIR, "../", "frontend", "build", "root")
 
 # Postgres Database Connection (gets database URL and password under the hood)
 DATABASES['default'] = dj_database_url.config(ssl_require=True)
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [os.environ.get("REDIS_URL","redis://localhost:6379")],
+        },
+    },
+}

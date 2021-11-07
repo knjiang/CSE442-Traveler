@@ -11,24 +11,39 @@ function Homepage(props){
   const user = props.parentUser
   const setUser = props.parentSetUser
   const [cookies,setCookie] = useCookies(['token']);
-  const [useDropLocations, setDropLocation] = useState(true)
+  const [useDropLocations, setDropLocation] = useState(false)
+  const [dropBackColor, setDropBackColor] = useState('blue')
+  const [mapBackColor, setMapBackColor] = useState('white')
+  const [dropTextColor, setDropTextColor] = useState('white')
+  const [mapTextColor, setMapTextColor] = useState('black')
 
   const location_set = () => {
     return user.from_location != ""
   }
 
+  const changeBTN = () => {
+    if (dropBackColor == 'white') {
+      setDropBackColor('blue')
+      setMapBackColor('white')
+      setDropTextColor('white')
+      setMapTextColor('black')
+    }
+    else {
+      setDropBackColor('white')
+      setMapBackColor('blue')
+      setDropTextColor('black')
+      setMapTextColor('white')
+    }
+  }
+
   return(
     <div>
       <div id = "masterDiv">
-        <h1>Welcome to the Traveler Homepage</h1>
+        <Button onClick = {() => (setDropLocation(!useDropLocations), changeBTN())} style = {{color: dropTextColor, backgroundColor: dropBackColor, width: "5vw", "height": "5vh", borderTopLeftRadius: "2vh", borderBottomLeftRadius: "2vh", borderTopRightRadius: "0vh", borderBottomRightRadius: "0vh"}} >Map</Button>
+        <Button onClick = {() => (setDropLocation(!useDropLocations), changeBTN())} style = {{color:mapTextColor, backgroundColor: mapBackColor, width: "5vw", "height": "5vh", borderTopLeftRadius: "0vh", borderBottomLeftRadius: "0vh", borderTopRightRadius: "2vh", borderBottomRightRadius: "2vh"}}>List</Button>
         <br/>
-        {user.logged_in && <h3>You are signed in as {user.name} from {user.from_location}</h3>}
-        <br/>
-        {!useDropLocations && <Button style = {{"width": "10vw", "height": "8vh", "marginBottom": "2vh"}} onClick = {() => setDropLocation(true)}>Toggle for map</Button>}
-        {useDropLocations && <Button style = {{"width": "10vw", "height": "8vh", "marginBottom": "2vh"}} onClick = {() => setDropLocation(false)}>Toggle for dropdown</Button>}
-        <br/>
-        {!useDropLocations && <LocationPicker/>}
-        {useDropLocations && <MapPicker/>}
+        {useDropLocations && <LocationPicker/>}
+        {!useDropLocations && <MapPicker/>}
         <br/>
       </div> 
     </div>

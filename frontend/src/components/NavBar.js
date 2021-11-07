@@ -18,23 +18,6 @@ function NavBar(props){
   
     const history = useHistory()
 
-    useEffect(() => {
-      if (cookies.token && !user.logged_in){
-        getProfile(cookies.token)
-        .then(response => response.json())
-        .then(data => {
-          if (!data.detail){
-            setUser({
-              logged_in: true,
-              name: data.first_name,
-              email: data.email,
-              from_location: data.from_location
-            })
-          }
-        })
-      }
-    },[])
-
     const location_set = () => {
       return user.from_location != ""
     }
@@ -102,14 +85,14 @@ function NavBar(props){
             <div id = "NavBar">
               {user.logged_in && !location_set() && <LocationForm/>}
                 <div id = "leftNav"><a href = "/" id = "travelerIcon">Traveler</a></div>
-                <div id = "rightNav">
+                <div id = "rightNav" style = {{display: "flex", justifyContent: 'end'}}>
                   <a href = '/messages'><Button id = "navButtonOn" variant="outline-dark"><h1 id = "buttonText">Messages</h1></Button></a>
                   <a href = '/my-forum'><Button id = "navButtonOn" variant="outline-dark"><h1 id = "buttonText">My Forums</h1></Button></a>
                   {listDropDown()}
                   <a href = '/my-profile'><Button id = "navButtonOn" variant="outline-dark"><h1 id = "buttonText">My Profile</h1></Button></a>
                   <a href = '/user'><Button variant="outline-dark" id = "navButtonOn"><h1 id = "buttonText">Search Users</h1></Button></a>
                   <a href = '/forum'><Button variant="outline-dark" id = "navButtonOn"><h1 id = "buttonText">Forum</h1></Button></a>
-                  <Button id = "navButtonOn" variant="outline-dark" onClick = {logoutUser}><h1 id = "buttonText">Logout</h1></Button>
+                  <Button id = "navButtonOn" variant="outline-dark" onClick = {logoutUser} style = {{"paddingLeft": "1.25vw", height: "6vh", marginTop: "-0vh"}}><h1 id = "buttonText">Logout</h1></Button>
                 </div>
             </div>
         </div>
@@ -120,14 +103,14 @@ function NavBar(props){
         <div>
             <div id = "NavBar">
                 <div id = "leftNav"><a href = "/" id = "travelerIcon">Traveler</a></div>
-                <div id = "rightNav">
+                <div id = "rightNav" style = {{display: "flex", justifyContent: 'end'}}>
                   <a ><Button id = "navButtonOff" variant="outline-dark"><h1 id = "buttonText">Messages</h1></Button></a>
                   <a ><Button id = "navButtonOff" variant="outline-dark"><h1 id = "buttonText">My Forums</h1></Button></a>
                   <a><Button variant="outline-dark" id = "navButtonOff"><h1 id = "buttonText">My Lists</h1></Button></a>
                   <a><Button id = "navButtonOff" variant="outline-dark"><h1 id = "buttonText">My Profile</h1></Button></a>
                   <a href = '/user'><Button variant="outline-dark" id = "navButtonOn" title="forum button"><h1 id = "buttonText">Search Users</h1></Button></a>
                   <a href = '/forum'><Button variant="outline-dark" id = "navButtonOn" title="forum button"><h1 id = "buttonText">Forum</h1></Button></a>
-                  <a><Button id = "navButtonOn" variant="outline-dark" style = {{padding: "0px"}}><Login/></Button></a>
+                  <a style = {{width: "6.65vw", marginTop: "0.3vh"}}><Login/></a>
                 </div>
             </div>
         </div>

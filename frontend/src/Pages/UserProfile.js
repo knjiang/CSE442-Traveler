@@ -97,6 +97,7 @@ const returnListName = () => {
   // const setUser = props.parentSetUser 
   //  const existsCookie = typeof cookies.token != "undefined"
 
+<<<<<<< HEAD
   useEffect(() => {
     if (existsCookie) {
       getProfile(cookies.token)
@@ -116,6 +117,8 @@ const returnListName = () => {
     }
   }, [])
 
+=======
+>>>>>>> 6cce33aee3c5b38a99fa157848c0392ca513797d
   const handleSubmit = (e) => {
     e.preventDefault()
     changeBackground(cookies.token, backgroundInfo)

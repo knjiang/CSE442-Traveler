@@ -266,11 +266,18 @@ class AddLocationView(APIView):
         Adds a new location to db
         """
         name = request.data['name']
-        if (Location.objects.filter(name = name)):
-            return HttpResponseNotFound()
+        if type(json.loads(name)) is list:
+            for c in json.loads(name):
+                if (Location.objects.filter(name = c)):
+                    pass
+                else:
+                    Location.objects.create(name = c)
         else:
-            Location.objects.create(name = name)
-            return HttpResponse()
+            if (Location.objects.filter(name = name)):
+                pass
+            else:
+                Location.objects.create(name = name)
+        return HttpResponse()
 
 class DelLocationView(APIView):
 
@@ -279,11 +286,16 @@ class DelLocationView(APIView):
         Adds a new location to db
         """
         name = request.data['name']
-        if (Location.objects.filter(name = name)):
-            Location.objects.filter(name = name).delete()
+        if name == "AllExistingLocations":
+            Location.objects.all().delete()
             return HttpResponse()
         else:
-            return HttpResponseNotFound()
+            if (Location.objects.filter(name = name)):
+                Location.objects.filter(name = name).delete()
+                return HttpResponse()
+            else:
+                return HttpResponseNotFound()
+
 
 class ChangeBackgroundView(APIView):
     """
