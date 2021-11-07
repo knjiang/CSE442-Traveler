@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { getLocation, addLocation, delLocation } from "../apis/locations";
 import {Button} from 'react-bootstrap'
 import { useCookies } from 'react-cookie';
+import {reset} from '../apis/profiles'
 
 /*This is the page that shows the location the user clicked*/
 
@@ -12,10 +13,7 @@ function AdminAddLocation () {
       })
 
     const [localName, setLocalName] = useState()
-    const wsURL = useRef()
-    const ws = useRef()
     const [cookies,setCookie] = useCookies(['token']);
-    let subprotocol = cookies.token
     const allCountries = [
         "Afghanistan",
         "Angola",
@@ -204,14 +202,6 @@ function AdminAddLocation () {
             setLocation({location: (data.map(({id, name}) => name))})
             }
         })
-        var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-        if (window.location.hostname == 'localhost') {
-            wsURL.current = ws_scheme + '://' + window.location.hostname + ':8000/api/chat/'
-        }
-        else {
-            wsURL.current = ws_scheme + '://' + window.location.hostname + '/api/chat/'
-        }
-        ws.current = new WebSocket(wsURL.current) 
     }, [])
 
     const setName = (e) => {
@@ -257,23 +247,17 @@ function AdminAddLocation () {
     const returnLocation = () => {
         let res = []
         for (let con of location["location"]){
-            res.push(<h3 >|{con}|<Button onClick = {(e) => delName(e, con)}>Delete</Button></h3>)
+            res.push(<h3 >{con},<Button onClick = {(e) => delName(e, con)}>Delete</Button></h3>)
         }
         return (<div style = {{"display":"flex"}}>{res}</div>)
     }
 
     const deleteAllM = () => {
-        let payload = ({
-          "status": "DELETEALL",
-      })
-        ws.current.send(JSON.stringify(payload))
-      }
+      reset(cookies.token, "message")
+    }
 
     const resetAll = () => {
-        let payload = ({
-            "status": "RESETALL",
-        })
-        ws.current.send(JSON.stringify(payload))
+        reset(cookies.token, "all")
     }
   
     const deleteAllLocations = () => {
@@ -290,7 +274,7 @@ function AdminAddLocation () {
                 Enter location name
                 <input type = "text" onChange = {(e) => setLocalName(e.target.value)}></input>
                 <button onClick = {(e) => setName(e)}>Add</button>
-                <button onClick = {(e) => setAllName(e)}>Add all continents</button>
+                <button onClick = {(e) => setAllName(e)}>Add all countries</button>
             </form>
             <button style = {{"width": "7vw", "backgroundColor": "pink", "textAlign": "center"}} onClick = {() => deleteAllLocations()}>DELETE ALL LOCATIONS</button>
             <button style = {{"width": "7vw", "backgroundColor": "pink", "textAlign": "center"}} onClick = {() => deleteAllM()}>DELETE ALL MESSAGES</button>
