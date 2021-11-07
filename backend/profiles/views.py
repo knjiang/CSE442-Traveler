@@ -177,6 +177,8 @@ class DeleteListView(APIView):
             "lists" : listData
         })
 
+        
+
 class SearchUserView(APIView):
     """
     View to get searched user
@@ -411,3 +413,87 @@ class GetDescriptionView(APIView):
             return Response({
                 "listDescriptions": ""
             })
+
+
+
+class AddVisitedView(APIView):
+    """
+    Adds a new list to profile if it does not exist
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        """
+        Input is ()
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        list_name = request.data['listName']
+        if LocationList.objects.filter(profile=profile,name=list_name).exists():
+            return HttpResponseNotFound()
+        else:
+            LocationList.objects.create(profile=profile,name=list_name)
+            return HttpResponse()
+
+
+class DeleteVisitedView(APIView): 
+    """
+    Delete locations to a list from view
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        list_name = request.data['listName']
+        listID = LocationList.objects.get(profile = profile, name = list_name)
+        allList = [list for list in SavedLocation.objects.filter(list = listID)]
+        for m in allList:
+            m.delete()
+        listID.delete()
+
+        lists = [location.name for location in LocationList.objects.filter(profile=profile)]
+        listData = {}
+        for m in lists:
+            convertedLocal = []
+            i = LocationList.objects.filter(profile=profile,name=m).values_list('pk', flat=True)[0]
+            local = [l for l in SavedLocation.objects.filter(list=i).values_list("name_id", flat="true")]
+            for k in local:
+                localName = Location.objects.filter(id = k).values_list("name", flat="true")
+                convertedLocal.append(localName[0])
+            listData[m] = convertedLocal
+        #Array of objects
+        return Response({
+            "lists" : listData
+        })
+
+
+class GetVisitedDataView(APIView):
+    """
+    View to get own lists
+
+    * Requires token authentication.
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def get(self, request, format=None):
+        """
+        Return your own lists in JSON format.
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        lists = [location.name for location in LocationList.objects.filter(profile=profile)]
+        listData = {}
+        for m in lists:
+            convertedLocal = []
+            i = LocationList.objects.filter(profile=profile,name=m).values_list('pk', flat=True)[0]
+            local = [l for l in SavedLocation.objects.filter(list=i).values_list("name_id", flat="true")]
+            for k in local:
+                localName = Location.objects.filter(id = k).values_list("name", flat="true")
+                convertedLocal.append(localName[0])
+            listData[m] = convertedLocal
+        #Array of objects
+        return Response({
+            "lists" : listData
+        })
