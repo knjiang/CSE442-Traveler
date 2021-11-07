@@ -44,7 +44,9 @@ function ForumComment(props){
                 </div>
             </h1>  
 
-            <button id = "emojiBTN" onClick={() => (setShowPicker(true), setChildPicker(true))} style = {{marginTop: "0rem", width: "1.25rem", height: "1.25rem", display: "flex", justifyContent: "center", alignContent: "center", borderRadius: "2vh"}}><h1 style = {{fontSize: "1rem", marginTop: "-0.16rem", marginBottom: "auto"}}>{convertEmoji('1f609')}</h1></button>
+            <button id = "emojiBTN" onClick={() => (setShowPicker(true), setChildPicker(true))} style = {{marginTop: "0rem", width: "1.25rem", height: "1.25rem", display: "flex", justifyContent: "center", alignContent: "center", borderRadius: "2vh"}}>
+                <h1 style = {{fontSize: "1rem", marginTop: "-0.16rem", marginBottom: "auto"}}>{convertEmoji('1f600')}</h1>
+            </button>
             <div style = {{position: "absolute", right: "-20vw"}}>
                 {showPicker && childPicker && <Picker onEmojiClick={onEmojiClick} />}
             </div>
