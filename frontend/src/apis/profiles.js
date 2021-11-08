@@ -277,21 +277,6 @@ const getVisitedListData = (token) => {
 }
 
 
-const deleteVisitedList = (token,listName) => {
-    return fetch(`${BASE_URL}/api/profiles/delete_visited_data/`,
-    {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization' : 'Token ' + token
-        },
-        method: "POST",
-        body : JSON.stringify({
-            "listName" : listName
-        }),
-    })
-}
-
 
 export {getProfile, changeLocation, getList, getUserList, getUserInfo, 
     getListData, addLocationList, deleteLocationList, addList, deleteList, 
@@ -299,3 +284,8 @@ export {getProfile, changeLocation, getList, getUserList, getUserInfo,
     addDescription, editDescription, getDescription, delDescription, changeVisited,
     addVisitedList, getVisitedListData, deleteVisitedList}
 // export {getProfile, changeLocation, getList, getUserList, getUserInfo, getListData, addLocationList, deleteLocationList, addList, deleteList, getSetShareableLink, changeBackground, changeVisited}
+export {getProfile, changeLocation, getList, getUserList, getUserInfo, 
+    getListData, addLocationList, deleteLocationList, addList, deleteList, 
+    getSetShareableLink, changeBackground, 
+    addDescription, editDescription, getDescription, delDescription,
+    reset}

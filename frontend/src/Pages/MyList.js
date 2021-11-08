@@ -1,11 +1,10 @@
 import { useCookies } from 'react-cookie';
-import { getProfile, getListData , addLocationList, addList, deleteList, deleteLocationList, getSetShareableLink } from '../apis/profiles';
+import { getListData, getSetShareableLink } from '../apis/profiles';
 import { getLocation } from '../apis/locations'
 import {useState,useEffect} from "react"
 import NotLoggedIn from '../components/NotLoggedIn';
 import ShareList from '../components/ShareList';
 import './MyList.css'
-import { DropdownButton, Dropdown, Button, Alert } from 'react-bootstrap'
 import { useLocation } from 'react-router-dom'
 import TopMyList from '../components/TopMyList';
 import BottomMyList from '../components/BottomMyList';
@@ -18,8 +17,6 @@ function MyList(props){
     const [dataList,setList] = useState()
     const [selectedList, selectList] = useState()
     const [allLocation, setAllLocation] = useState()
-    const [showSaveListError, setSaveListError] = useState(false)
-    const [showSaveListSuccess, setSaveListSuccess] = useState(false)
     const existsCookie = typeof cookies.token != "undefined"
     const parentData = useLocation()
     const [showShareList, setShareListModal] = useState(false)
@@ -62,32 +59,6 @@ function MyList(props){
         });
     }
 
-
-    const showModal = () => {
-        if (showSaveListError) {
-            return (
-                <Alert style = {{"height": "8vh", "width": "80%", "textAlign":"center", "marginLeft": "auto", "marginRight": "auto"}} show={showSaveListError} variant="danger" onClose={() => setSaveListError(false)} dismissible>
-                                <Alert.Heading>Error adding list!</Alert.Heading>
-                    </Alert>    
-            )
-        }
-        else if (showSaveListSuccess) {
-            return (
-                <Alert style = {{"height": "8vh", "width": "80%", "textAlign":"center", "marginLeft": "auto", "marginRight": "auto"}} show={showSaveListError} variant="success" onClose={() => setSaveListError(false)} dismissible>
-                                <Alert.Heading>Successfully added list!</Alert.Heading>
-                    </Alert>    
-            )
-        }
-    }
-
-    const modalReplace = () => {
-        return (
-            <Alert style = {{"height": "8vh", "width": "80%", "textAlign":"center", "marginLeft": "auto", "marginRight": "auto", "opacity":"0%"}} show={true} variant="danger" dismissible>
-                            {// Fake modal for spacing}
-                            }
-                </Alert>    
-        )
-    }
     
     function MyListRender(){
             if (existsCookie) {
