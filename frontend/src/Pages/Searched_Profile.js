@@ -2,6 +2,7 @@ import {useState,useEffect} from "react"
 import { getUserInfo } from '../apis/profiles';
 import {getFriends, getFriendRequests, sendRequest} from '../apis/friends';
 import { useCookies } from 'react-cookie';
+import { Link } from 'react-router-dom'
 
 function Searched_Profile(props){
 
@@ -55,7 +56,11 @@ function Searched_Profile(props){
         {/* On searched profile users can accept a request, send friend request, cancel the request.. Not sure if delete should be included*/}
 
         {(user.email in friends || user.email in friendRequests) ? <p>Already friends or user sent a request to you.</p> : <button onClick={() => addFriend()}> Send Friend Request </button>}
+    
+        <Link to = {{pathname: '/messages', state: {'userInfo': user}}}>Message {user.username}</Link>
         </div>
+
+        
     )
 }
 

@@ -37,6 +37,7 @@ urlpatterns = [
     path('api/profiles/', include('profiles.urls')),
     path('api/forums/',include('forums.urls')),
     path('api/friends/',include('friends.urls')),
+    path('api/chat/', include('chat.routing')),
     path('api/get_csrf/', GetCSRFTokenView.as_view()),
     path('accounts/', include('allauth.urls'), name='socialaccount_signup'),
     re_path(".*", TemplateView.as_view(template_name="index.html")),

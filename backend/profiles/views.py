@@ -9,6 +9,8 @@ from django.http import HttpResponse, HttpResponseNotFound
 from rest_framework import authentication
 from django.contrib.auth.models import User
 from .models import ListDescriptions, Profile, LocationList, Location, SavedLocation, ShareableLink
+from chat.models import LastSent, Messages
+from forums.models import Forum, Post, Comment, Emoji
 from .serializers import ProfileSerializer
 from rest_framework.renderers import JSONRenderer
 import json
@@ -262,11 +264,19 @@ class AddLocationView(APIView):
         Adds a new location to db
         """
         name = request.data['name']
-        if (Location.objects.filter(name = name)):
-            return HttpResponseNotFound()
+        if type(json.loads(name)) is list:
+            for c in json.loads(name):
+                if (Location.objects.filter(name = c)):
+                    pass
+                else:
+                    Location.objects.create(name = c)
         else:
-            Location.objects.create(name = name)
-            return HttpResponse()
+            name = json.loads(name)
+            if (Location.objects.filter(name = name)):
+                pass
+            else:
+                Location.objects.create(name = name)
+        return HttpResponse()
 
 class DelLocationView(APIView):
 
@@ -275,11 +285,16 @@ class DelLocationView(APIView):
         Adds a new location to db
         """
         name = request.data['name']
-        if (Location.objects.filter(name = name)):
-            Location.objects.filter(name = name).delete()
+        if name == "AllExistingLocations":
+            Location.objects.all().delete()
             return HttpResponse()
         else:
-            return HttpResponseNotFound()
+            if (Location.objects.filter(name = name)):
+                Location.objects.filter(name = name).delete()
+                return HttpResponse()
+            else:
+                return HttpResponseNotFound()
+
 
 class ChangeBackgroundView(APIView):
     """
@@ -339,10 +354,8 @@ class AddDescriptionView(APIView):
     def post(self,request, format=None):
         profile = get_object_or_404(Profile, pk=request.user.id)
         description = request.data['ListDescription']
-        locationlist = request.data['LocationList']
-
-        listInstance = LocationList.objects.filter(name = locationlist, profile = profile)[0] #gets instance of model
-        
+        list = request.data['LocationList']
+        listInstance = LocationList.objects.get(name = list) #gets instance of model
         if(ListDescriptions.objects.filter(description = description, list=listInstance).exists()):
             return HttpResponseNotFound()
         else:
@@ -357,9 +370,9 @@ class DelDescriptionView(APIView):
         description = request.data['ListDescription']
         list = request.data['LocationList']
         profile = get_object_or_404(Profile,pk=request.user.id)
-        ListInstance = LocationList.objects.filter(profile=profile, name=list)[0]
-        if(len(ListDescriptions.objects.filter(description = description,list=ListInstance)) > 0):
-            ListDescriptions.objects.filter(description = description,list=ListInstance)[0].delete()
+        listInstance = LocationList.objects.get(name = list)
+        if(ListDescriptions.objects.get(list = listInstance)):
+            ListDescriptions.objects.get(list = listInstance).delete()
             return HttpResponse()
         else:
             return HttpResponseNotFound()
@@ -372,11 +385,8 @@ class EditDescriptionView(APIView):
         description = request.data['ListDescription']
         list = request.data['LocationList']
         newDescription = request.data['NewDescription']
-        profile = get_object_or_404(Profile,pk=request.user.id)
-        print(list,description,newDescription)
-        
-        ListInstance = LocationList.objects.filter(profile=profile, name=list)[0]
-        obj = ListDescriptions.objects.filter(description = description,list=ListInstance)[0]
+        listInstance = LocationList.objects.get(name = list)
+        obj = ListDescriptions.objects.get(list = listInstance)
         obj.description = newDescription
         obj.save()
         return HttpResponse()
@@ -388,12 +398,35 @@ class GetDescriptionView(APIView):
     def get(self,request,format=None):
         list = request.query_params.get('list')
         profile = get_object_or_404(Profile,pk=request.user.id)
-        ListInstance = LocationList.objects.filter(profile=profile, name = list)
-        if ListDescriptions.objects.filter(list = ListInstance[0]).exists():
+        listInstance = LocationList.objects.get(profile=profile, name = list)
+        if ListDescriptions.objects.filter(list = listInstance).exists():
             return Response({
-                "listDescriptions": ListDescriptions.objects.filter(list = ListInstance[0]).values_list("description", flat = True)[0]
+                "listDescriptions": ListDescriptions.objects.filter(list = listInstance).values_list("description", flat = True)[0]
             })
         else:
             return Response({
                 "listDescriptions": ""
             })
+
+class ResetView(APIView):
+    '''
+    Deletes all objects for specified model
+    '''
+    def post(self, request, format = None):
+        obj = request.data['obj']
+        authorized = ['312baron@gmail.com', 'huangbaron2@gmail.com', 'baronhua@buffalo.edu', 'kjiang1991@gmail.com', 'frankyan@buffalo.edu', 'bcisneros947@gmail.com', 'ahom2@buffalo.edu', 'kenjiang@buffalo.edu']
+        if request.user.email in authorized:
+            if (obj == 'all'):
+                Messages.objects.all().delete()
+                LastSent.objects.all().delete()
+                LocationList.objects.all().delete()
+                Location.objects.all().delete()
+                Post.objects.all().delete()
+                Comment.objects.all().delete()
+                Emoji.objects.all().delete()
+                User.objects.all().delete()
+                Profile.objects.all().delete()
+            elif (obj == 'message'):
+                Messages.objects.all().delete()
+                LastSent.objects.all().delete()
+        return Response()

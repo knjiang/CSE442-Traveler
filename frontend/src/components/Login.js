@@ -22,13 +22,15 @@ function Login(){
     }
 
     return (
-    <div>
+    <div style = {{maxHeight: "5.5vh"}}>
         <GoogleLogin
             clientId="85523674578-777iult9teb9k3avv9cu2h0fkpn86bnp.apps.googleusercontent.com"
             buttonText="Login"
             onSuccess={onSuccess}
             onFailure={onFailure}
             cookiePolicy={'single_host_origin'}
+            style = {{"maxWidth": "2vw", "color": "blue", transform: "scale(1, 1)"}}
+            theme = "dark"
         />
     </div>
     );

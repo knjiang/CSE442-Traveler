@@ -226,7 +226,24 @@ const getDescription = (token, list) =>{
     })
 }
 
+const reset = async(token, obj) => {
+    return fetch(`${BASE_URL}/api/profiles/reset/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "obj": obj
+        }),
+    })
+}
+
 export {getProfile, changeLocation, getList, getUserList, getUserInfo, 
     getListData, addLocationList, deleteLocationList, addList, deleteList, 
     getSetShareableLink, changeBackground, 
-    addDescription, editDescription, getDescription, delDescription}
+    addDescription, editDescription, getDescription, delDescription,
+    reset}

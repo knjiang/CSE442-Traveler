@@ -17,9 +17,7 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     comment_id = models.UUIDField(editable = True)
-
-class OriginEmoji(models.Model):
-    name = models.TextField(max_length=50)
+    
 class Emoji(models.Model):
-    name = models.ForeignKey(OriginEmoji,on_delete=models.CASCADE)
+    name = models.TextField(max_length=50)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
