@@ -116,7 +116,6 @@ class ChatConsumer(WebsocketConsumer):
                 'status': 'getMessage',
                 'message': res
             }))
-<<<<<<< HEAD
         authorized = ['312baron@gmail.com', 'huangbaron2@gmail.com', 'baronhua@buffalo.edu', 'kjiang1991@gmail.com', 'frankyan@buffalo.edu', 'bcisneros947@gmail.com', 'ahom2@buffalo.edu', 'kenjiang@buffalo.edu']
         if (self.user_email in authorized):
             if data["status"] == 'DELETEALL':
@@ -140,8 +139,6 @@ class ChatConsumer(WebsocketConsumer):
                     self.channel_name
                 )
                 self.disconnect()
-=======
->>>>>>> 7b4278112ef7964e319c25cc66f3b11801cd726f
 
     #inwards
     def chat_message(self, event):
