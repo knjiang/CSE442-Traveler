@@ -15,7 +15,6 @@ import MyForum from './Pages/MyForum'
 import SharedListPage from './Pages/SharedListPage'
 import Messages from './Pages/Messages';
 import MyFriends from './Pages/MyFriends';
-import MyFriendRequests from './Pages/MyFriendRequests';
 
 const Routes = (props) => {
     const user = props.parentUser
@@ -39,8 +38,7 @@ const Routes = (props) => {
           <Route exact path ='/my-forum' render = {() => (<MyForum parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route path = '/share/:id' render = {() => (<SharedListPage parentUser = {user} parentSetUser = {setUser} />)}></Route>
           <Route exact path = '/messages' render = {() => (<Messages parentUser = {user} parentSetUser = {setUser} />)}></Route>
-          <Route exact path='/my-friends' render = {() => (<MyFriends parentUser = {user} parentSetUser = {setUser} />)}></Route>
-          <Route exact path='/my-friend-requests' render = {() => (<MyFriendRequests parentUser = {user} parentSetUser = {setUser} />)}></Route>
+          <Route exact path='/friends' render = {() => (<MyFriends parentUser = {user} parentSetUser = {setUser} />)}></Route>
         </Switch>
       </div>
 

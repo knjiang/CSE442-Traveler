@@ -1,6 +1,5 @@
 import { useCookies } from 'react-cookie';
 import { changeBackground, getProfile } from '../apis/profiles';
-import { getFriendList } from '../apis/friends';
 import { useState, useEffect } from "react"
 import NotLoggedIn from '../components/NotLoggedIn';
 import { useTextInput } from '../hooks/text-input';
@@ -9,7 +8,6 @@ import { StyleHTMLAttributes } from 'react';
 function UserProfile(props) {
 
   const [cookies, setCookie] = useCookies(['token']);
-  const [friends, setFriends] = useState([])
   const [dataList, setList] = useState({
     lists: []
   })
@@ -36,13 +34,6 @@ function UserProfile(props) {
             });
           }
         });
-
-      getFriendList(cookies.token)
-      .then(response => response.json())
-      .then(data => {
-          setFriends(data.friends_list)
-      });
-
     }
   }, [])
 
