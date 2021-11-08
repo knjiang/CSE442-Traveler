@@ -12,20 +12,22 @@ class GetFriendRequestsView(APIView):
 
     def get(self, request, format=None):
         profile = get_object_or_404(Profile,pk=request.user.id)
-        received_requests = [requester.user.email for requester in FriendRequest.objects.filter(receiver=profile)]
-        return Response({
-            "requests_list" : received_requests
-        })
+        received_requests = []
+        for r in FriendRequest.objects.filter(receiver=profile):
+            requester = get_object_or_404(Profile,pk=r.requester_id)
+            received_requests.append(requester.user.email)
+        return Response({"requests_list" : received_requests})
 
 class GetFriendsView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
 
     def get(self, request, format=None):
         profile = get_object_or_404(Profile,pk=request.user.id)
-        my_friends = [friend.user.email for friend in Friend.objects.filter(user=profile)]
-        return Response({
-            "friends_list" : my_friends
-        })
+        my_friends = []
+        for f in Friend.objects.filter(user=profile):
+            friend = get_object_or_404(Profile,pk=f.friend_id)
+            my_friends.append(friend.user.email)
+        return Response({"friends_list" : my_friends})
 
 class SendRequestView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
@@ -35,8 +37,8 @@ class SendRequestView(APIView):
         friend_profile = get_object_or_404(Profile,user__email=request.data['friend'])
 
         # Check if user A has already sent a request or has gotten a request from user B
-        if not (FriendRequest.objects.filter(requester = friend_profile, receiver = my_profile).exists()):
-            FriendRequest.objects.create(requester = my_profile, person = friend_profile)
+        if not (FriendRequest.objects.filter(requester = friend_profile, receiver = my_profile).exists()) and not (FriendRequest.objects.filter(requester = my_profile, receiver = friend_profile).exists()):
+            FriendRequest.objects.create(requester = my_profile, receiver = friend_profile)
             return Response({
                 "status":"Sent friend request successfully to " + friend_profile.user.email
             })
