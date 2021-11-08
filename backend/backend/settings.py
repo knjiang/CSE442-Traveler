@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'profiles.apps.ProfilesConfig',
     'forums.apps.ForumsConfig',
+    'friends.apps.FriendsConfig',
     'chat.apps.ChatConfig',
     'corsheaders',
     'allauth',

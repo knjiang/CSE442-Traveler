@@ -12,20 +12,22 @@ class GetFriendRequestsView(APIView):
 
     def get(self, request, format=None):
         profile = get_object_or_404(Profile,pk=request.user.id)
-        received_requests = [requester.user.email for requester in FriendRequest.objects.filter(person=profile)]
-        return Response({
-            "requests_list" : received_requests
-        })
+        received_requests = []
+        for r in FriendRequest.objects.filter(receiver=profile):
+            requester = get_object_or_404(Profile,pk=r.requester_id)
+            received_requests.append(requester.user.email)
+        return Response({"requests_list" : received_requests})
 
 class GetFriendsView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
 
     def get(self, request, format=None):
         profile = get_object_or_404(Profile,pk=request.user.id)
-        my_friends = [friend.user.email for friend in Friend.objects.filter(user=profile)]
-        return Response({
-            "friends_list" : my_friends
-        })
+        my_friends = []
+        for f in Friend.objects.filter(user=profile):
+            friend = get_object_or_404(Profile,pk=f.friend_id)
+            my_friends.append(friend.user.email)
+        return Response({"friends_list" : my_friends})
 
 class SendRequestView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
@@ -33,8 +35,10 @@ class SendRequestView(APIView):
     def post(self, request, format=None):
         my_profile = get_object_or_404(Profile,pk=request.user.id)
         friend_profile = get_object_or_404(Profile,user__email=request.data['friend'])
-        if  not (FriendRequest.objects.filter(requester = my_profile, person = friend_profile).exists()):
-            FriendRequest.objects.create(requester = my_profile, person = friend_profile)
+
+        # Check if user A has already sent a request or has gotten a request from user B
+        if not (FriendRequest.objects.filter(requester = friend_profile, receiver = my_profile).exists()) and not (FriendRequest.objects.filter(requester = my_profile, receiver = friend_profile).exists()):
+            FriendRequest.objects.create(requester = my_profile, receiver = friend_profile)
             return Response({
                 "status":"Sent friend request successfully to " + friend_profile.user.email
             })
@@ -49,11 +53,13 @@ class AcceptRequestView(APIView):
     def post(self, request, format=None):
         my_profile = get_object_or_404(Profile,pk=request.user.id)
         friend_profile = get_object_or_404(Profile,user__email=request.data['friend'])
-        request_exists = FriendRequest.objects.filter(requester = my_profile, person = friend_profile).exists()
-        friend_relation_exists = Friend.objects.filter(user = my_profile, friend = friend_profile).exists()
-        if request_exists and not (friend_relation_exists):
+        request_exists = FriendRequest.objects.filter(requester = friend_profile, receiver = my_profile).exists()
+        friend_relation_exists1 = Friend.objects.filter(user = my_profile, friend = friend_profile).exists()
+        friend_relation_exists2 = Friend.objects.filter(user = friend_profile, friend = my_profile).exists()
+        if request_exists and not (friend_relation_exists1) and not (friend_relation_exists2):
             Friend.objects.create(user = my_profile, friend = friend_profile)
-            FriendRequest.objects.filter(requester = my_profile, person = friend_profile).delete()
+            Friend.objects.create(user = friend_profile, friend = my_profile)
+            FriendRequest.objects.filter(requester = friend_profile, receiver = my_profile).delete()
             return Response({
                 "status":"Accepted request from " + friend_profile.user.email
             })
@@ -68,9 +74,9 @@ class DeleteRequestView(APIView):
     def post(self, request, format=None):
         my_profile = get_object_or_404(Profile,pk=request.user.id)
         friend_profile = get_object_or_404(Profile,user__email=request.data['friend'])
-        request_exists = FriendRequest.objects.filter(requester = my_profile, person = friend_profile).exists()
+        request_exists = FriendRequest.objects.filter(requester = friend_profile, receiver = my_profile).exists()
         if request_exists:
-            FriendRequest.objects.filter(requester = my_profile, person = friend_profile).delete()
+            FriendRequest.objects.filter(requester = friend_profile, receiver = my_profile).delete()
             return Response({
                 "status":"Deleted request from " + friend_profile.user.email
             })
@@ -85,9 +91,11 @@ class DeleteFriendView(APIView):
     def post(self, request, format=None):
         my_profile = get_object_or_404(Profile,pk=request.user.id)
         friend_profile = get_object_or_404(Profile,user__email=request.data['friend'])
-        friend_relation_exists = Friend.objects.filter(user = my_profile, friend = friend_profile).exists()
-        if friend_relation_exists:
+        friend_relation_exists1 = Friend.objects.filter(user = my_profile, friend = friend_profile).exists()
+        friend_relation_exists2 = Friend.objects.filter(user = friend_profile, friend = my_profile).exists()
+        if friend_relation_exists1 and friend_relation_exists2:
             Friend.objects.filter(user = my_profile, friend = friend_profile).delete()
+            Friend.objects.filter(user = friend_profile, friend = my_profile).delete()
             return Response({
                 "status":"Deleted " + friend_profile.user.email + " from friends list"
             })

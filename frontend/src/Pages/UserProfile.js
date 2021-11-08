@@ -8,7 +8,6 @@ import { StyleHTMLAttributes } from 'react';
 function UserProfile(props) {
 
   const [cookies, setCookie] = useCookies(['token']);
-
   const [dataList, setList] = useState({
     lists: []
   })
@@ -38,6 +37,7 @@ function UserProfile(props) {
         <li>Email: {user.email} </li>
         <li>Location: {user.from_location}</li>
         </ul>
+
 
         <h2 style={{textAlign:'center'}}>Background and Interests</h2>
         <p style={{textAlign:'center'}}>{user.background}</p>
