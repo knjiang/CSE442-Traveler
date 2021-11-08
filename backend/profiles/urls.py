@@ -22,7 +22,8 @@ ChangeBackgroundView,
 AddDescriptionView,
 DelDescriptionView,
 EditDescriptionView,
-GetDescriptionView
+GetDescriptionView,
+ResetView
 )
 
 app_name = "profiles"
@@ -47,4 +48,5 @@ urlpatterns = [
     path('del_description/', DelDescriptionView.as_view()),
     path('edit_description/', EditDescriptionView.as_view()),
     path('get_description/', GetDescriptionView.as_view()),
+    path ('reset/', ResetView.as_view())
 ]

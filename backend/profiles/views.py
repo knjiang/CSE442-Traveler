@@ -9,6 +9,8 @@ from django.http import HttpResponse, HttpResponseNotFound
 from rest_framework import authentication
 from django.contrib.auth.models import User
 from .models import ListDescriptions, Profile, LocationList, Location, SavedLocation, ShareableLink
+from chat.models import LastSent, Messages
+from forums.models import Forum, Post, Comment, Emoji
 from .serializers import ProfileSerializer
 from rest_framework.renderers import JSONRenderer
 import json
@@ -269,6 +271,7 @@ class AddLocationView(APIView):
                 else:
                     Location.objects.create(name = c)
         else:
+            name = json.loads(name)
             if (Location.objects.filter(name = name)):
                 pass
             else:
@@ -404,3 +407,26 @@ class GetDescriptionView(APIView):
             return Response({
                 "listDescriptions": ""
             })
+
+class ResetView(APIView):
+    '''
+    Deletes all objects for specified model
+    '''
+    def post(self, request, format = None):
+        obj = request.data['obj']
+        authorized = ['312baron@gmail.com', 'huangbaron2@gmail.com', 'baronhua@buffalo.edu', 'kjiang1991@gmail.com', 'frankyan@buffalo.edu', 'bcisneros947@gmail.com', 'ahom2@buffalo.edu', 'kenjiang@buffalo.edu']
+        if request.user.email in authorized:
+            if (obj == 'all'):
+                Messages.objects.all().delete()
+                LastSent.objects.all().delete()
+                LocationList.objects.all().delete()
+                Location.objects.all().delete()
+                Post.objects.all().delete()
+                Comment.objects.all().delete()
+                Emoji.objects.all().delete()
+                User.objects.all().delete()
+                Profile.objects.all().delete()
+            elif (obj == 'message'):
+                Messages.objects.all().delete()
+                LastSent.objects.all().delete()
+        return Response()
