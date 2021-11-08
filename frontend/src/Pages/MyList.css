@@ -13,24 +13,6 @@
     border-bottom-left-radius: 2vh;
 }
 
-#listScroller {
-    height: 60vh;
-    width: 99%;
-    margin-left: auto;
-    margin-right: auto;
-    overflow-x: hidden;
-    overflow-y: scroll;
-}
-
-#rightList {
-    border: 1px black solid;
-    width: 40%;
-    height: 70vh;
-    margin-right: auto;
-    border-top-right-radius: 2vh;
-    border-bottom-right-radius: 2vh;
-}
-
 #listOptions {
     position: static;
     display: inline-flex;
@@ -42,25 +24,35 @@
     text-align: left;
     padding-left: 2vw;
     border: 1px white solid;
-    font-size: 4vh;
+    font-size: 3vh;
     padding-top: 1vh;
     padding-bottom: 1vh;
     margin-bottom: -0.25vh;
     cursor: pointer;
     width: 100%;
+    display: flex;
+    height: 7vh;
+    justify-content: space-between;
 }
 
 #nameTextSelected {
     text-align: left;
     padding-left: 2vw;
     border: 1px white solid;
-    font-size: 4vh;
+    font-size: 3vh;
     background-color: rgb(41,98,255);
     color: white;
     padding-top: 1vh;
     padding-bottom: 1vh;
     margin-bottom: -0.25vh;
     cursor: pointer;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+#nameDivSelected {
+    display: flex;
 }
 
 
@@ -71,6 +63,7 @@
     color: black;
     font-weight: 600;
     padding-bottom: 1vh;
+    width: 100%;
 }
 
 #dataText:hover {
@@ -78,7 +71,7 @@
 }
 
 #dataTextInside {
-    width: 30vw;
+    width: 100%;
     height: 4vh;
     font-size: 3.5vh;
     text-align: left;
@@ -87,18 +80,15 @@
     padding-bottom: 6vh;
     padding-top: 1vh;
     padding-left: 2vw;
-}
-
-#dataTextInside:hover {
-    background-color: rgb(240, 240, 240);
+    text-align: right;
+    padding-right: 2vw;
 }
 
 #nameText:hover {
     cursor: pointer;
     color: white;
-    background-color: rgb(41,98,255);
+    background-color: rgb(85, 130, 255);
 }
-
 
 #optButtonDiv {
     margin-bottom: 3vh;
@@ -116,11 +106,10 @@
     border-bottom: 0.3vh solid black;
     border-left: 0px;
     border-right: 0px;
-    margin-top: 1vh;
     height: 6vh;
-    width: 10vw;
-    margin-right: 1vw;
+    width: 8vw;
     font-size: 2vh;
+    margin-left: auto;
 }
 
 #delListBTN:hover {
@@ -135,7 +124,6 @@
     border-bottom: 0.3vh solid black;
     border-left: 0px;
     border-right: 0px;
-    margin-top: 1vh;
     height: 6vh;
     width: 10vw;
     font-size: 2vh;
@@ -164,35 +152,16 @@
     background-color: black;
 }
 
-#plusBTN {
-    color: black;
-    border: black 0.2vh solid;
-    border-radius: 1vh;
-    background-color: white;
-    margin-left: 1vw;
-    margin-right: -6vw;
-    margin-top: auto;
-    margin-bottom: auto;
-    width: 7vw;
-    height: 6.5vh;
-}
-
-#plusBTN:hover {
-    border: rgb(41,98,255) 0.2vh solid;
-    background-color: rgb(41,98,255);
-    color: white;
-}
-
 #delLocationBTN {
     background-color: rgb(255, 198, 198);
     color: black;
-    height: 5.5vh;
+    height: 6vh;
     width: 8vw;
     font-size: 1.5vh;
-    margin-left: 22%;
-    position: absolute;
+    margin-left: 2.5vh;
     margin-top: 1vh;
-    overflow-y: hidden;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 #delLocationBTN:hover {
@@ -203,4 +172,88 @@
 #dataTextDiv {
     width: 100%;
     display: flex;
+    justify-content: space-between;
+}
+
+#myListWrapper {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 6vh;
+}
+
+#topListWrapper {
+    display: flex;
+    margin-top: auto;
+    justify-content: space-between;
+    border-bottom: 0.25vh solid black;
+    padding-bottom: 2vh;
+}
+
+#bottomListWrapper {
+    margin-top: 1vh;
+    display: flex;
+}
+
+#bottomLeftListWrapper {
+    width: 30%;
+    height: 60vh;
+    border-bottom: 0.05rem solid black;
+}
+
+#bottomLeftListNameWrapper {
+    width: 100%;
+    height: 60vh;
+    overflow-y: auto;
+}
+
+#bottomRightListWrapper {
+    width: 70%;
+}
+
+#descriptionDiv {
+    border-bottom: 0.25vh solid black;
+    padding-bottom: 1vh;
+    font-size: 3vh;
+    padding-left: 1.5vw;
+}
+
+#descriptionDiv textarea {
+    font-size: 2vh;
+    width: 85%;
+    height: 7vh;
+}
+
+#shareBTN {
+    float: right;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 0.5rem;
+    background-color: rgb(160, 160, 160);
+    height: 4vh;
+    width: 5vw;
+    font-size: 1.5vh;
+}
+
+#shareBTN:hover {
+    background-color: rgb(77, 77, 77)
+}
+
+
+#listDataWrapper {
+    height: 53vh;
+    overflow-y: scroll;
+}
+
+#nameInput {
+    font-size: 2vh;
+}
+
+.red {
+    border: 0.25vh solid red;
+}
+
+.normal {
+    transition-duration: 1s;
+    border: 0.25vh solid black;
 }

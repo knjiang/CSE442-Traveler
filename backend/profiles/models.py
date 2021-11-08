@@ -7,6 +7,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     from_location = models.TextField(max_length=30,default="")
     background = models.TextField(max_length=50,default="")
+    visited = models.TextField(max_length=50,default="")
 
     def __str__(self):
         return self.user.username
@@ -25,6 +26,13 @@ class LocationList(models.Model):
     def __str__(self):
         return self.name
 
+class ListDescriptions(models.Model):
+    description = models.TextField(max_length=30)
+    list = models.OneToOneField(LocationList, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.list
+        
 class Location(models.Model):
     name = models.TextField(max_length=30)
 

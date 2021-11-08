@@ -1,45 +1,23 @@
 import React, { useEffect, useState } from "react";
 import{ListGroup,ListGroupItem,Button, Modal} from "react-bootstrap";
-import {getLocation} from "../apis/locations";
 import {useHistory} from "react-router";
 import '../components/Forum.css'
 import { getUserComment, getUserPost, delUserPost, delUserComment } from '../apis/forums'
 import { useCookies } from 'react-cookie';
 import { getProfile } from '../apis/profiles';
 
-const MyForum = () =>{
+function MyForum (props) {
 
     const history = useHistory();
-
     const pathname = window.location.pathname.substr(7)
-
     const [cookies,setCookie] = useCookies(['token']);
-
     const [allComments, setAllComment] = useState()
     const [allPosts, setAllPost] = useState()
-
-    const [user,setUser] = useState({
-        logged_in : false,
-        name: "None",
-        email: "None",
-        from_location: "",
-      })
+    const user = props.parentUser
+    const setUser = props.parentSetUser 
+    const existsCookie = typeof cookies.token != "undefined"
 
     useEffect (() => {
-        if (cookies.token && !user.logged_in){
-            getProfile(cookies.token)
-            .then(response => response.json())
-            .then(data => {
-                if (!data.detail){
-                setUser({
-                    logged_in: true,
-                    name: data.first_name,
-                    email: data.email,
-                    from_location: data.from_location
-                })
-                }
-            })
-        }
         getUserPost(cookies.token)
         .then(response => response.json())
         .then(data => {
@@ -67,11 +45,11 @@ const MyForum = () =>{
     const displayPosts = () => {
         if (allPosts && allPosts != []) {
             return (
-                <div>
+                <div style = {{overflowWrap: "anywhere", width: "100%"}}>
                     <h1>Your Posts:</h1>
                     {
                     allPosts.map((post, id) => (
-                        <div style = {{"display":"flex"}}><h1>Title: {post[1]}, Body: {post[2]}, Location: {post[3]}</h1> <Button onClick ={() => deletePost(post)} >Delete</Button></div>
+                        <div style = {{"display":"flex", justifyContent: "space-between", overflowWrap: "anywhere"}}><h1 style = {{fontSize: '3vh', width: "88%"}}>Title: {post[1]}, Body: {post[2]}, Location: {post[3]}</h1> <Button style = {{width: "5vw", height: "4vh", backgroundColor: "#d65858", fontSize: "1.5vh"}} onClick ={() => deletePost(post)} >Delete</Button></div>
                     ))
                     }
                 </div>
@@ -96,7 +74,7 @@ const MyForum = () =>{
         if (allComments && allComments != []) {
             for (let comment of allComments){
                 if (comment.length > 0) {
-                    res.push (<div style = {{"display":"flex"}}><h1>Comment: {comment[1]}</h1> <Button onClick ={() => deleteComment(comment)} >Delete</Button></div>)
+                    res.push (<div style = {{"display":"flex", justifyContent: "space-between", overflowWrap: "anywhere"}}><h1 style = {{fontSize: '3vh', width: "88%"}}>Comment: {comment[1]}</h1> <Button style = {{width: "5vw", height: "4vh", backgroundColor: "#d65858", fontSize: "1.5vh"}} onClick ={() => deleteComment(comment)} >Delete</Button></div>)
                 }
             }
             return (
@@ -111,13 +89,19 @@ const MyForum = () =>{
         }
     }
 
-    return(
-        <div>
-            {displayPosts()}
-            {displayComments()}
-        </div>  
-    )
-
+    if (existsCookie){
+        return(
+            <div>
+                {displayPosts()}
+                {displayComments()}
+            </div>  
+        )
+    }
+    else {
+        return (<div>
+            You are not logged in
+        </div>)
+    }
 }
 
 export default MyForum;

@@ -62,10 +62,13 @@ const ForumPost = () =>{
         const listDropdown = () => {
             if (allLists) {
                 return (
-                    <DropdownButton title= {selectedLocation}>
+                    <DropdownButton title= {selectedLocation} style = {{marginRight: "auto"}}>
+                        <div style = {{maxHeight: "40vh", overflow: "auto"}}>
                         {allLists.map((locations, index) => (
                             <Dropdown.Item onClick = {() => setSelectedLocation(locations)}>{locations}</Dropdown.Item>
                         ))}
+                        </div>
+
                     </DropdownButton>
                 )
             }
@@ -92,12 +95,14 @@ const ForumPost = () =>{
                 <InputGroup.Text>Body</InputGroup.Text>
                 <FormControl  as="textarea" aria-label="With textarea" id = "bodyText"/>
                 </InputGroup>
-
-                {listDropdown()}
+                <div style = {{display: "flex", justifyContent: "end", marginTop: "2vh"}}>
+                    {listDropdown()}
+                    <Button type= "submit" variant="primary" onClick = {() => SubmitPost}>Submit</Button>
+                    <Button variant="danger" type='reset'> Clear Text</Button>
+                </div>
 
             </FormGroup>
-            <Button type= "submit" variant="primary" onClick = {() => SubmitPost}>Submit</Button>
-            <Button variant="danger" type='reset'> Clear Text</Button>
+
 
             <Alert show={showAlertE} variant="danger" onClose={() => setAlertError(false)} dismissible>
                     <Alert.Heading>Error!</Alert.Heading>

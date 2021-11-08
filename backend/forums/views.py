@@ -4,31 +4,11 @@ from rest_framework.response import Response
 from rest_framework import authentication
 
 from profiles.models import Profile, Location
-from .models import Post,Comment
+from .models import Post,Comment, Emoji
+from django.contrib.auth.models import User
 
 import json
-
-# class AddForumView(APIView):
-#     """
-#     View to add forum
-
-#     * Requires token authentication.
-#     """
-#     authentication_classes = [authentication.TokenAuthentication]
-
-#     def post(self, request, format=None):
-#         """
-#         Adds a forum to Forum Model
-#         """
-#         new_forum_name = request.data['title']
-#         new_forum_body = request.data['body']
-#         new_forum_location = request.data['location']
-#         profile = get_object_or_404(Profile,pk=request.user.id)
-
-#         locationObject = Location.objects.get(name = new_forum_location)
-#         forum = Forum(name=new_forum_name)
-#         forum.save()
-#         return Response()
+import uuid
 
 class AddPostView(APIView):
     """
@@ -70,7 +50,7 @@ class AddCommentView(APIView):
         profile = get_object_or_404(Profile,pk=request.user.id)
         post = Post.objects.get(id=request.data['postID'])
         body = request.data['body']
-        comment = Comment(post=post,body=body,profile=profile)
+        comment = Comment(post=post,body=body,profile=profile,comment_id=uuid.uuid4())
         comment.save()
         return Response()
 
@@ -82,27 +62,35 @@ class GetCommentFromPostView(APIView):
     """
     authentication_classes = [authentication.TokenAuthentication]
 
-    def post(self, request, format=None):
+    def get(self, request, format=None):
         """
         Adds a comment to a post
         """
-        profile = get_object_or_404(Profile,pk=request.user.id)
-        post = Post.objects.get(id=request.data['postID'])
-        all_posts = Comment.objects.filter(post_id = request.data['postID'])
+        post_id = request.query_params.get('post_id')
+        post = Post.objects.get(id=post_id)
+        all_comments = Comment.objects.filter(post_id=post_id)
         res = []
-        for p in all_posts:
-            res.append([p.body, p.profile.user.username])
+        for comment in all_comments:
+            if not comment.comment_id:
+                comment.comment_id = uuid.uuid4()
+                comment.save()
+            res.append({
+                "comment_id": comment.comment_id,
+                "body": comment.body,
+                "user":  comment.profile.user.username,
+                "emoji_list" : [emoji.name for emoji in comment.emoji_set.all()]
+            })
         return Response(res)
 
 class GetPostFromLocationView(APIView):
     """
     View to get all posts 
     """
-    def post(self, request, format=None):
+    def get(self, request, format=None):
         """
         Get all posts 
         """
-        location_name = request.data['location']
+        location_name = request.query_params.get('location')
         locationObject = Location.objects.get(name = location_name).id
         all_posts = Post.objects.filter(location = locationObject)
         res = {}
@@ -184,3 +172,17 @@ class DeleteCommentView(APIView):
         for p in comment:
             res.append([p.id, p.body, p.profile.user.username])
         return Response(res)
+
+class AddEmojiToComment(APIView):
+    """
+        View to add an emoji to a commment
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+    
+    def post(self, request, format=None):
+        comment_id = request.data['comment_id']
+        comment = get_object_or_404(Comment,comment_id=comment_id)
+        emoji_name = request.data['emoji_name']
+        if not Emoji.objects.filter(comment=comment,name=emoji_name).exists():
+            Emoji.objects.create(comment=comment,name=emoji_name)
+        return Response()

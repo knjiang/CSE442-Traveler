@@ -48,24 +48,26 @@ function SaveLocationToList(props){
             })
         }
         resetNewList()
-        console.log(newList)
+        
       }
 
     const handleADLocationList = (list) => {
         //Adding location to a preexisting list
-        addLocationList(cookies.token, list, currentLocation)
-        .then(res => {
-            if (res.ok){
-                setSLShowError(false)
-                setNLShowSuccess(false)
-                setSLShowSuccess(true)
-            }
-            else{
-                setSLShowError(false)
-                setNLShowSuccess(false)
-                setSLShowError(true)
-            }
-        })
+        if (list){
+            addLocationList(cookies.token, list, currentLocation)
+            .then(res => {
+                if (res.ok){
+                    setSLShowError(false)
+                    setNLShowSuccess(false)
+                    setSLShowSuccess(true)
+                }
+                else{
+                    setSLShowError(false)
+                    setNLShowSuccess(false)
+                    setSLShowError(true)
+                }
+            })
+        }
     }
 
     const list_dropDown = () => {
@@ -108,8 +110,8 @@ function SaveLocationToList(props){
     const handleClose = () => setNLShow(false);
 
     return (
-        <div>
-            <div style = {{"margin-left": "auto", "margin-right": "auto", "textAlign": "right", "margin-top": "-6vh"}}>
+        <div >
+            <div style = {{"width": "100%", "textAlign": "right", "margin-top": "-6vh", "display": "flex", "justifyContent": "end"}}>
                 {list_dropDown()}
             </div>
 
