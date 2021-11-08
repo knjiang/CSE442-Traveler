@@ -16,6 +16,7 @@ function App() {
     email: "None",
     from_location: "",
     background: "",
+    visited: "",
   })
 
   useEffect(() => {
@@ -29,7 +30,8 @@ function App() {
             name: data.first_name,
             email: data.email,
             from_location: data.from_location,
-            background: data.background
+            background: data.background,
+            visited: data.visited,
           })
         }
       })
