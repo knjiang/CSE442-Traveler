@@ -116,29 +116,6 @@ class ChatConsumer(WebsocketConsumer):
                 'status': 'getMessage',
                 'message': res
             }))
-        authorized = ['312baron@gmail.com', 'huangbaron2@gmail.com', 'baronhua@buffalo.edu', 'kjiang1991@gmail.com', 'frankyan@buffalo.edu', 'bcisneros947@gmail.com', 'ahom2@buffalo.edu', 'kenjiang@buffalo.edu']
-        if (self.user_email in authorized):
-            if data["status"] == 'DELETEALL':
-                Messages.objects.all().delete()
-                LastSent.objects.all().delete()
-                self.send(text_data=json.dumps({
-                    'status': 'eradicate',
-                }))
-            elif data["status"] == "RESETALL":
-                Messages.objects.all().delete()
-                LastSent.objects.all().delete()
-                LocationList.objects.all().delete()
-                Location.objects.all().delete()
-                Post.objects.all().delete()
-                Comment.objects.all().delete()
-                Emoji.objects.all().delete()
-                User.objects.all().delete()
-                Profile.objects.all().delete()
-                async_to_sync(self.channel_layer.group_discard)(
-                    self.room_group_name,
-                    self.channel_name
-                )
-                self.disconnect()
 
     #inwards
     def chat_message(self, event):

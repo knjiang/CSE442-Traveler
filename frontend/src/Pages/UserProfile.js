@@ -8,8 +8,7 @@ import { getShareableContents } from "../apis/locations"
 import { getLocation } from '../apis/locations'
 import { useLocation } from 'react-router-dom';
 import { DropdownButton, Dropdown, Button, Alert } from 'react-bootstrap'
-import BottomVisted from '../components/BottomVisited';
-import ShareList from '../components/ShareList';
+import BottomVisited from '../components/BottomVisited';
 
 function UserProfile(props) {
 
@@ -21,8 +20,6 @@ function UserProfile(props) {
   const parentData = useLocation()
   const [selectedList, selectList] = useState()
   const [allLocation, setAllLocation] = useState()
-  const [showSaveListError, setSaveListError] = useState(false)
-  const [showSaveListSuccess, setSaveListSuccess] = useState(false)
   const [showShareList, setShareListModal] = useState(false)
   const [shareLink, setShareLink] = useState("")
   
@@ -40,107 +37,62 @@ function UserProfile(props) {
             setAllLocation(data.map(({id, name}) => name))
           }
         })
-    }
-}, [])
+      }
+  }, [])
 
-useEffect(() => {
+  useEffect(() => {
     if (parentData.state && dataList){
         selectList(parentData.state)
         parentData.state = false
     }
-}, [dataList])
+  }, [dataList])
 
-const callbackShareList = () => {
+  const callbackShareList = () => {
     setShareListModal(false)
-}
+  }
 
-const shareList = (name) => {
+  const shareList = (name) => {
     getSetShareableLink(cookies.token,name)
     .then(response => response.json())
     .then(data => {
         setShareLink(data.url)
         setShareListModal(true)
     });
-}
+  }
 
 
-const returnListName = () => {
-    if (typeof dataList != 'undefined'){
-        let res = [<div style = {{"borderBottom": "2px solid gray", "display":"flex"}}><h1 style = {{"fontSize": "4vh", "paddingBottom": "1vh", "paddingTop": "1vh", "marginLeft": "auto", "marginRight": "auto"}}>Your Lists </h1></div>]
-        for (let name of Object.keys(dataList)){
-            if (name == selectedList){
-                res.push(<h1 id = "nameTextSelected" onClick = {() => (selectList(name))}>{name} <Button variant="secondary" id = "shareBTN" onClick = {(evt) => (evt.stopPropagation(),shareList(name))}> Share </Button> </h1>)
-            }
-            else {
-                res.push(<h1 id = "nameText" onClick = {() => (selectList(name))}>{name} <Button variant="secondary" id = "shareBTN" onClick = {(evt) => (evt.stopPropagation(),shareList(name))}> Share </Button></h1>)
-            }
+  const returnListName = () => {
+      if (typeof dataList != 'undefined'){
+          let res = [<div style = {{"borderBottom": "2px solid gray", "display":"flex"}}><h1 style = {{"fontSize": "4vh", "paddingBottom": "1vh", "paddingTop": "1vh", "marginLeft": "auto", "marginRight": "auto"}}>Your Lists </h1></div>]
+          for (let name of Object.keys(dataList)){
+              if (name == selectedList){
+                  res.push(<h1 id = "nameTextSelected" onClick = {() => (selectList(name))}>{name} <Button variant="secondary" id = "shareBTN" onClick = {(evt) => (evt.stopPropagation(),shareList(name))}> Share </Button> </h1>)
+              }
+              else {
+                  res.push(<h1 id = "nameText" onClick = {() => (selectList(name))}>{name} <Button variant="secondary" id = "shareBTN" onClick = {(evt) => (evt.stopPropagation(),shareList(name))}> Share </Button></h1>)
+              }
 
-        }
-        return(res)
-    }
-}
-
-
-  // const [cookies, setCookie] = useCookies(['token']);
-
-  /*const [dataList, setList] = useState({
-    lists: []
-  })*/
-  // const [countryList, setCountryList] = useState("")
+          }
+          return(res)
+      }
+  }
+  
   const [visitedCounttries, setVisitedCountries] = useState("")
 
   const { value: backgroundInfo, bind: backgroundInfoBind, reset: resetBackgroundInfo } = useTextInput('')
   const { value: visitedInfo, bind: visitedInfoBind, reset: resetVisitedInfo } = useTextInput('')
 
-
-  // const user = props.parentUser
-  // const setUser = props.parentSetUser 
-  //  const existsCookie = typeof cookies.token != "undefined"
-
-  useEffect(() => {
-    if (existsCookie) {
-      getProfile(cookies.token)
-        .then(response => response.json())
-        .then(data => {
-          if (!data.detail) {
-            setUser({
-              logged_in: true,
-              name: data.first_name,
-              email: data.email,
-              from_location: data.from_location,
-              background: data.background,
-              visited: data.visited
-            });
-          }
-        });
-    }
-  }, [])
-
   const handleSubmit = (e) => {
     e.preventDefault()
     changeBackground(cookies.token, backgroundInfo)
-    e.background = backgroundInfo // does not work
-    user.background = backgroundInfo // does not work
-    // window.location.reload()
+    setUser(prevState => ({...prevState, background : backgroundInfo}))
   }
 
   const handleSubmit2 = (b) => {
     b.preventDefault()
     changeVisited(cookies.token, visitedInfo)
-    // window.location.reload()
+    setUser(prevState => ({...prevState, visited : visitedInfo}))
   }
-
-  useEffect(() => {
-    const pathname = window.location.pathname.substr(7)
-    console.log(pathname)
-    getShareableContents(pathname)
-      .then(response => response.json())
-      .then(data => {
-        console.log(data)
-        // setDataList(data.locations)
-        setVisitedCountries(data.visitedCounttries)
-      })
-  }, [])
 
 
   if (existsCookie) {
@@ -162,9 +114,12 @@ const returnListName = () => {
         "Refresh Browser to see changes applied"</p>
       
         {/* This is for background */}
-        <h5 style={{ textAlign: 'center', textDecoration: 'underline'}}>Background and Interests</h5>
-        <p style={{ textAlign: 'center' }}>{user.background}</p>
         <form onSubmit={(e) => handleSubmit(e)} style={{ textAlign: 'center' }}>
+
+        <h2 style={{textAlign:'center'}}>Background and Interests</h2>
+        <p style={{textAlign:'center'}}>{user.background}</p>
+        </form>
+        <form onSubmit={(e) => handleSubmit(e)} style={{textAlign:'center'}}>
           <label>
             <br />
             <p>Change Background: <input type="text" {...backgroundInfoBind} /></p>
@@ -191,12 +146,11 @@ const returnListName = () => {
 
         <h5 style = {{ textAlign: 'center', textDecoration: 'underline'}}>Some of my favorite places: </h5>
         <div style = {{textAlign: 'center'}}>
-          <BottomVisted cookies={cookies} setList={setList} dataList={dataList} allLocation={allLocation} selectList={selectList}
+          <BottomVisited cookies={cookies} setList={setList} dataList={dataList} allLocation={allLocation} selectList={selectList}
            selectedList={selectedList} shareLink={shareLink} setShareLink={setShareLink} showShareList={showShareList}
             setShareListModal={setShareListModal} shareList={shareList} />
 
         </div>
-        <ShareList show={showShareList} link={shareLink} callback={callbackShareList} />
       </div>
     )
   }

@@ -1,6 +1,6 @@
 import { useEffect,useState, useRef } from "react";
 import { useCookies } from "react-cookie";
-import { addList, getListData, addLocationList, getDescription } from '../apis/profiles'
+import { addList, getListData, addLocationList } from '../apis/profiles'
 import { Button, Dropdown, DropdownButton } from 'react-bootstrap'
 
 function TopMyList(props){
