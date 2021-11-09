@@ -41,11 +41,14 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'profiles.apps.ProfilesConfig',
     'forums.apps.ForumsConfig',
+    'friends.apps.FriendsConfig',
+    'chat.apps.ChatConfig',
     'corsheaders',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'channels',
 ]
 
 
@@ -85,7 +88,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
+ASGI_APPLICATION = "backend.asgi.application"
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

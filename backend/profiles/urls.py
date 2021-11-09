@@ -2,10 +2,14 @@ from django.urls import path
 
 from .views import (
 AddDescriptionView,
+AddVisitedView,
 DelDescriptionView,
+DeleteVisitedView,
 EditDescriptionView,
+ChangeVisitedView,
 GetProfileView, 
-ChangeLocationView, 
+ChangeLocationView,
+GetVisitedDataView, 
 SearchUserView, 
 AddListView, 
 DeleteListView, 
@@ -22,7 +26,8 @@ ChangeBackgroundView,
 AddDescriptionView,
 DelDescriptionView,
 EditDescriptionView,
-GetDescriptionView
+GetDescriptionView,
+ResetView
 )
 
 app_name = "profiles"
@@ -41,10 +46,15 @@ urlpatterns = [
     path('add_location/', AddLocationView.as_view()),
     path('del_location/', DelLocationView.as_view()),
     path('change_background/', ChangeBackgroundView.as_view()),
+    path('change_visited/', ChangeVisitedView.as_view()),
     path('shareable_link/',GetSetShareableLink.as_view()),
     path('get_shareable_contents/', GetShareableLinkList.as_view()),
     path('add_description/', AddDescriptionView.as_view()),
     path('del_description/', DelDescriptionView.as_view()),
     path('edit_description/', EditDescriptionView.as_view()),
     path('get_description/', GetDescriptionView.as_view()),
+    path('add_visited_list/', AddVisitedView.as_view()),
+    path('get_visited_data/', DeleteVisitedView.as_view()),
+    path('delete_visited_data', GetVisitedDataView.as_view()), 
+    path ('reset/', ResetView.as_view())
 ]
