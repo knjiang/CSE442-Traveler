@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import authentication
 
 from profiles.models import Profile, Location
-from .models import Post,Comment, Emoji
+from .models import Post,Comment, Emoji, Tag
 from django.contrib.auth.models import User
 
 import json
@@ -52,6 +52,10 @@ class AddCommentView(APIView):
         body = request.data['body']
         comment = Comment(post=post,body=body,profile=profile,comment_id=uuid.uuid4())
         comment.save()
+        if request.tags:
+            for user in request.tags:
+                user_profile = get_object_or_404(Profile,email=user)
+                Tag.objects.create(tagged=user_profile,comment=comment)
         return Response()
 
 class GetCommentFromPostView(APIView):
