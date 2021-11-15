@@ -45,7 +45,7 @@ function MessageRight(props) {
         let m = document.getElementById("inputMessage").value
         if (m.length > 0){
             let payload = ({
-                "status": "send",
+                "status": "solo_message",
                 "receiver": selectedUser,
                 "message": document.getElementById("inputMessage").value
               })

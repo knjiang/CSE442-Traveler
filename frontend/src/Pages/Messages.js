@@ -29,10 +29,10 @@ function Messages(props) {
     useEffect(() => {
         var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
         if (window.location.hostname == 'localhost') {
-          wsURL.current = ws_scheme + '://' + window.location.hostname + ':8000/api/chat/'
+          wsURL.current = ws_scheme + '://' + window.location.hostname + ':8000/api/chat-socket/'
         }
         else {
-          wsURL.current = ws_scheme + '://' + window.location.hostname + '/api/chat/'
+          wsURL.current = ws_scheme + '://' + window.location.hostname + '/api/chat-socket/'
         }
         ws.current = new WebSocket(wsURL.current) 
         ws.current.onopen = function() {

@@ -31,11 +31,10 @@ class GetFriendsView(APIView):
 
 class SendRequestView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
-
+    
     def post(self, request, format=None):
         my_profile = get_object_or_404(Profile,pk=request.user.id)
         friend_profile = get_object_or_404(Profile,user__email=request.data['friend'])
-
         # Check if user A has already sent a request or has gotten a request from user B
         if not (FriendRequest.objects.filter(requester = friend_profile, receiver = my_profile).exists()) and not (FriendRequest.objects.filter(requester = my_profile, receiver = friend_profile).exists()):
             FriendRequest.objects.create(requester = my_profile, receiver = friend_profile)
@@ -43,6 +42,7 @@ class SendRequestView(APIView):
                 "status":"Sent friend request successfully to " + friend_profile.user.email
             })
         else:
+            print("A")
             return Response({
                "status": "Unsuccessfully sent friend request successfully to " + friend_profile.user.email
             })
