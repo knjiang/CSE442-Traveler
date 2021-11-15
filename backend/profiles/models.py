@@ -53,6 +53,11 @@ class ShareableLink(models.Model):
     def __str__(self):
         return self.url
 
+class ShareableListPageComment(models.Model):
+    body = models.TextField(max_length=50)
+    shareable_list = models.ForeignKey(ShareableLink, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

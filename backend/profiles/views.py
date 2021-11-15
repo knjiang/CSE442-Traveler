@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from django.http import HttpResponse, HttpResponseNotFound
 from rest_framework import authentication
 from django.contrib.auth.models import User
-from .models import ListDescriptions, Profile, LocationList, Location, SavedLocation, ShareableLink
+from .models import ListDescriptions, Profile, LocationList, Location, SavedLocation, ShareableLink, ShareableListPageComment
 from chat.models import LastSent, Messages
 from forums.models import Forum, Post, Comment, Emoji
 from .serializers import ProfileSerializer

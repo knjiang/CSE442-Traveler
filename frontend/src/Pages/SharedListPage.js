@@ -54,7 +54,8 @@ function SharedListPage(){
         <div>
         <h1> {title} </h1>
         <h1 style = {{fontSize: "3vh"}}>Created by: {author} </h1>
-        <div style={{"fontWeight":"500", "fontSize":"3vh"}}> Description: {descriptions} </div>
+        <h1 style={{"fontWeight":"500", "fontSize":"3vh"}}> Description: {descriptions} </h1>
+        <h1 style = {{fontSize: "3vh"}}> Comments: </h1>
         {returnLocations()}
         
         </div>
