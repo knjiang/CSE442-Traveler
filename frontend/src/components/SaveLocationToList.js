@@ -80,7 +80,7 @@ function SaveLocationToList(props){
                 </div>
             ))}
             <div>
-                <Dropdown.Item id = "dropdown-item" onClick = {() => setNLShow(true)}>Add new list</Dropdown.Item>
+                <Dropdown.Item id = "dropdown-item" onClick = {() => setNLShow(true)}>Create new list</Dropdown.Item>
             </div>
             </DropdownButton>
         )
@@ -88,7 +88,7 @@ function SaveLocationToList(props){
     else {
         return (
         <DropdownButton id="dropdown-basic-button" title="Choose your location">
-            <Dropdown.Item id = "dropdown-item" onClick = {() => setNLShow(true)} >Add new list</Dropdown.Item>
+            <Dropdown.Item id = "dropdown-item" onClick = {() => setNLShow(true)} >Create new list</Dropdown.Item>
         </DropdownButton>
         )
     }
