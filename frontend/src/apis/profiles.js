@@ -147,7 +147,7 @@ const changeName = async(token,name) => {
         },
         method: "POST",
         body : JSON.stringify({
-            "name" : name,   // tried first_name 
+            "display_name" : name,   // tried first_name 
         }),
     })
 }
