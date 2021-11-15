@@ -104,78 +104,13 @@ function UserProfile(props) {
     setIsInEditMode(false)
   }
 
-  const returnEditMode = () => {
-    return (
-      <div>
-        <h1 style={{ textAlign: 'center', color: (214, 122, 127) }}>Welcome {user.name} </h1>
-        <br />
-
-
-        <form onSubmit={() => handleDone()} style={{ textAlign: 'center' }}>
-          <input type="submit" value="Done" />
-        </form>
-
-        <h5 style={{ textAlign: 'center', textDecoration: 'underline' }}> About Me</h5>
-        <div style={{ textAlign: 'center' }}>
-          <ul style={{ textAlign: 'left', display: 'inline-block' }}>
-            <li>Name: {user.name}</li>
-            <li>Email: {user.email} </li>
-            <li>Location: {user.from_location}</li>
-          </ul>
-        </div>
-
-        <p style={{ textAlign: 'center', fontStyle: 'italic' }}>For the following text fields, please enter the information you want to display and press Submit <br />
-          "Refresh Browser to see changes applied"</p>
-
-        <form onSubmit={(e) => handleSubmit(e)} style={{ textAlign: 'center' }}>
-
-          <h5 style={{ textAlign: 'center', textDecoration: 'underline' }}>Background and Interests</h5>
-          <p style={{ textAlign: 'center' }}>{user.background}</p>
-        </form>
-        <form onSubmit={(e) => handleSubmit(e)} style={{ textAlign: 'center' }}>
-          <label>
-            <br />
-            <p>Change Background: <input type="text" {...backgroundInfoBind} /></p>
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
-        <p style={{ textAlign: 'center' }}>{backgroundInfo}</p>
-
-        <h5 style={{ textAlign: 'center', textDecoration: 'underline' }}>Recommendations based on Favorites</h5>
-        <p style={{ textAlign: 'center' }}>{user.visited}</p>
-
-        <form onSubmit={(b) => handleSubmit2(b)} style={{ textAlign: 'center' }}>
-          <label>
-            {/*<h5 style={{ textAlign: 'center' }}>My Recommendations for Favorite Locations</h5>*/}
-            <p>Recommendations: <input type="text" {...visitedInfoBind} /></p>
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
-
-        <p style={{ textAlign: 'center' }}>{visitedInfo}</p>
-
-        <h5 style={{ textAlign: 'center', textDecoration: 'underline' }}>Some of my favorite places: </h5>
-        <div style={{ textAlign: 'center' }}>
-          <BottomVisited cookies={cookies} setList={setList} dataList={dataList} allLocation={allLocation} selectList={selectList}
-            selectedList={selectedList} shareLink={shareLink} setShareLink={setShareLink} showShareList={showShareList}
-            setShareListModal={setShareListModal} shareList={shareList} />
-
-        </div>
-      </div>
-    )
-  }
 
   const returnNormal = () => {
     return (
       <div>
         <h1 style={{ textAlign: 'center', color: (214, 122, 127) }}>Welcome {user.name} </h1>
         <br />
-
-        {/*<form onSubmit={() => handleEdit()} style={{ textAlign: 'center' }}>*/}
-        <form onSubmit={() => handleEdit()} style={{ textAlign: 'center' }}>
-
-          <input type="submit" value="Edit Profile" />
-        </form>
+        <a href = '/editprofile'><Button id = "navButtonOn" variant="outline-dark"><h1 id = "buttonText"> Edit Profile </h1></Button></a>
 
         <br />
 
@@ -214,19 +149,12 @@ function UserProfile(props) {
   }
 
   if (existsCookie) {
-    if(isInEditMode){
-      return(
-        <div>
-          {returnEditMode()}
-        </div>
-      )
-    }else{
-      return(
-        <div>
+    return (
+      <div>
           {returnNormal()}
-        </div>
-      )
-    }
+      </div>
+
+    )
   } return <NotLoggedIn />
 }
 export default UserProfile;
