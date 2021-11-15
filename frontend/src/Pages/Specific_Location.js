@@ -6,6 +6,7 @@ import NavBar from '../components/NavBar'
 import SaveLocationtoList from "../components/SaveLocationToList";
 import './Specific_Location.css'
 import { Spinner } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 /*This is the page that shows the location the user clicked*/
 
@@ -112,6 +113,10 @@ function Specific_Location (props) {
           <div style = {{"display": "block", "textAlign": "center", "marginLeft": "0vw", "marginRight": "0vw", "marginTop": "3vh","marginBottom": "5vh"}}>
             <h1 style = {{"fontSize": "5vh"}}>Welcome to {returnLocationName()}</h1>
             {user.logged_in && <SaveLocationtoList parentCurrentLocation = {currentLocation} parentCookies = {cookies} parentUser = {user}/>}
+            {user.logged_in && <div style = {{display: "flex", justifyContent: "end",
+             width: "100%"}}> <Link style = {{backgroundColor:"lightgreen", color:"white", textDecoration:"None"}} 
+            Link to= {{pathname: '/forum/' + currentLocation}}>{currentLocation} Forum</Link>
+            </div>}
           </div>
           {returnLocationInfo()}
       </div>
