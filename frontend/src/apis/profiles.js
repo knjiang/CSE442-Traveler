@@ -119,16 +119,9 @@ const changeBackground = async(token,background) => {
     })
 }
 
-const getBackground = (background) => {
-    const encoded_input = encodeURIComponent(background)
-    return fetch(`${BASE_URL}/api/profiles/getBackground/`, {
-        method: "GET",
-    })
 
-}
-
-const changeUserName = async(token,name) => {
-    return fetch(`${BASE_URL}/api/profiles/change_name/`,
+const changeName = async(token,displayName) => {
+    return fetch(`${BASE_URL}/api/profiles/change_username/`,
     {
         headers: {
             'Accept': 'application/json',
@@ -138,17 +131,9 @@ const changeUserName = async(token,name) => {
         },
         method: "POST",
         body : JSON.stringify({
-            "name" : name,
+            "displayName" : displayName,
         }),
     })
-}
-
-const getUserName = (name) => {
-    const encoded_input = encodeURIComponent(name)
-    return fetch(`${BASE_URL}/api/profiles/getUserName/`, {
-        method: "GET",
-    })
-
 }
 
 
@@ -168,13 +153,6 @@ const changeEmail = async(token,email) => {
     })
 }
 
-const getEmail = (email) => {
-    const encoded_input = encodeURIComponent(email)
-    return fetch(`${BASE_URL}/api/profiles/getUserEmail/`, {
-        method: "GET",
-    })
-
-}
 
 const changeVisited = async(token,visited) => {
     return fetch(`${BASE_URL}/api/profiles/change_visited/`,
@@ -300,31 +278,6 @@ const getDescription = (token, list) =>{
 }
 
 
-const addVisitedList = (token,listName) => {
-    return fetch(`${BASE_URL}/api/profiles/add_visited_list/`,
-    {
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization' : 'Token ' + token
-        },
-        method: "POST",
-        body : JSON.stringify({
-            "listName" : listName
-        }),
-    })
-}
-
-const getVisitedListData = (token) => {
-    return fetch(`${BASE_URL}/api/profiles/get_visited_data/`,
-    {
-        headers: {
-            'Authorization' : 'Token ' + token
-        },
-        method: "GET",
-    })
-}
-
 const reset = async(token, obj) => {
     return fetch(`${BASE_URL}/api/profiles/reset/`,
     {
@@ -347,4 +300,4 @@ export {getProfile, changeLocation, getList, getUserList, getUserInfo,
     getListData, addLocationList, deleteLocationList, addList, deleteList, 
     getSetShareableLink, changeBackground, 
     addDescription, editDescription, getDescription, delDescription, changeVisited,
-    reset, changeUserName, changeEmail}
+    reset, changeName, changeEmail}

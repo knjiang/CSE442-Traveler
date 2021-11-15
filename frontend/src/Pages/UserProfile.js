@@ -1,6 +1,6 @@
 import { useCookies } from 'react-cookie';
 import { changeBackground, changeVisited } from '../apis/profiles';
-import { getProfile, getListData, addLocationList, addList, deleteList, deleteLocationList, getSetShareableLink } from '../apis/profiles';
+import { getProfile, getListData, addLocationList, changeName, changeEmail, getSetShareableLink } from '../apis/profiles';
 import { useState, useEffect } from "react"
 import NotLoggedIn from '../components/NotLoggedIn';
 import { useTextInput } from '../hooks/text-input';
@@ -80,7 +80,8 @@ function UserProfile(props) {
   }
 
   // const [visitedCounttries, setVisitedCountries] = useState("")
-
+  const { value: nameInfo, bind: nameBind, reset: resetNameBind } = useTextInput('')
+  const { value: emailInfo, bind: emailBind, reset: resetEmailBind } = useTextInput('')
   const { value: backgroundInfo, bind: backgroundInfoBind, reset: resetBackgroundInfo } = useTextInput('')
   const { value: visitedInfo, bind: visitedInfoBind, reset: resetVisitedInfo } = useTextInput('')
 
@@ -102,6 +103,18 @@ function UserProfile(props) {
 
   const handleDone = () => {
     setIsInEditMode(false)
+  }
+
+  const handleName = (c) => {
+    c.preventDefault()
+    changeName(cookies.token, nameInfo)
+    setUser(prevState => ({ ...prevState, displayName: nameInfo }))
+  }
+
+  const handleEmail = (d) => {
+    d.preventDefault()
+    changeEmail(cookies.token, emailInfo)
+    setUser(prevState => ({ ...prevState, email: emailInfo }))
   }
 
 
@@ -148,10 +161,79 @@ function UserProfile(props) {
     )
   }
 
+  const returnEditMode = () => {
+    return (
+        <div>
+            <h1 style={{ textAlign: 'center', color: (214, 122, 127) }}>Edit Your Profile</h1>
+            <br />
+
+            <a href='/my-profile'><Button id="navButtonOn" variant="outline-dark"><h1 id="buttonText">Done Editing</h1></Button></a>
+
+            <h5 style={{ textAlign: 'center', textDecoration: 'underline' }}> About Me</h5>
+            <div style={{ textAlign: 'center' }}>
+                <ul style={{ textAlign: 'left', display: 'inline-block' }}>
+                    <li>Email: {user.email} </li>
+                    <li>Location: {user.from_location}</li>
+                </ul>
+            </div>
+
+            <form onSubmit={(e) => handleSubmit(e)} style={{ textAlign: 'center' }}>
+                <h5 style={{ textAlign: 'center', textDecoration: 'underline' }}>Name</h5>
+                <p style={{ textAlign: 'center' }}>{user.displayName}</p>
+            </form>
+
+
+            <form onSubmit={(e) => handleName(e)} style={{ textAlign: 'center' }}>
+                <label>
+                    <br />
+                    <p>Change Name: <input type="text" {...nameBind} /></p>
+                </label>
+                <input type="submit" value="Submit" />
+            </form>
+
+
+            <form onSubmit={(e) => handleEmail(e)} style={{ textAlign: 'center' }}>
+                <label>
+                    <br />
+                    <p>Change Email: <input type="text" {...emailBind} /></p>
+                </label>
+                <input type="submit" value="Submit" />
+            </form>
+
+
+            <form onSubmit={(e) => handleSubmit(e)} style={{ textAlign: 'center' }}>
+                <h5 style={{ textAlign: 'center', textDecoration: 'underline' }}>Background and Interests</h5>
+                <p style={{ textAlign: 'center' }}>{user.background}</p>
+            </form>
+
+            <form onSubmit={(e) => handleSubmit(e)} style={{ textAlign: 'center' }}>
+                <label>
+                    <p>Change Background: <input type="text" {...backgroundInfoBind} /></p>
+                </label>
+                <input type="submit" value="Submit" />
+            </form>
+
+            <p style={{ textAlign: 'center' }}>{backgroundInfo}</p>
+            <h5 style={{ textAlign: 'center'}}>Recommendations based on Favorites</h5>
+            <p style={{ textAlign: 'center' }}>{user.visited}</p>
+
+            <form onSubmit={(b) => handleSubmit2(b)} style={{ textAlign: 'center' }}>
+                <label>
+                    {/*<h5 style={{ textAlign: 'center' }}>My Recommendations for Favorite Locations</h5>*/}
+                    <p>Recommendations: <input type="text" {...visitedInfoBind} /></p>
+                </label>
+                <input type="submit" value="Submit" />
+            </form>
+
+            <p style={{ textAlign: 'center' }}>{visitedInfo}</p>
+        </div>
+    )
+}
+
   if (existsCookie) {
     return (
       <div>
-          {returnNormal()}
+          {returnEditMode()}
       </div>
 
     )
