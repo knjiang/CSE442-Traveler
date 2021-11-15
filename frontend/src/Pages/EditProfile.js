@@ -1,68 +1,18 @@
 import { useCookies } from 'react-cookie';
-import { changeBackground, changeVisited } from '../apis/profiles';
-import { getProfile, getListData, addLocationList, addList, deleteList, deleteLocationList, getSetShareableLink } from '../apis/profiles';
-import { useState, useEffect } from "react"
+import { changeBackground, changeEmail, changeUserName, changeVisited } from '../apis/profiles';
 import NotLoggedIn from '../components/NotLoggedIn';
 import { useTextInput } from '../hooks/text-input';
-import { getShareableContents } from "../apis/locations"
-import { getLocation } from '../apis/locations'
-import { useLocation } from 'react-router-dom';
-import { DropdownButton, Dropdown, Button, Alert } from 'react-bootstrap'
-import BottomVisited from '../components/BottomVisited';
-
+import { Button } from 'react-bootstrap'
 
 function EditProfile(props) {
 
     const user = props.parentUser
     const setUser = props.parentSetUser
     const [cookies, setCookie] = useCookies(['token']);
-    const [dataList, setList] = useState()
     const existsCookie = typeof cookies.token != "undefined"
-    const parentData = useLocation()
-    const [selectedList, selectList] = useState()
-    const [allLocation, setAllLocation] = useState()
-    const [showShareList, setShareListModal] = useState(false)
-    const [shareLink, setShareLink] = useState("")
 
-    const [editMode, setEditMode] = useState(false)
-
-    useEffect(() => {
-        if (existsCookie) {
-            getListData(cookies.token)
-                .then(response => response.json())
-                .then(data => {
-                    setList(data["lists"])
-                });
-            getLocation()
-                .then(response => response.json())
-                .then(data => {
-                    if (data) {
-                        setAllLocation(data.map(({ id, name }) => name))
-                    }
-                })
-        }
-    }, [])
-
-    useEffect(() => {
-        if (parentData.state && dataList) {
-            selectList(parentData.state)
-            parentData.state = false
-        }
-    }, [dataList])
-
-
-    const shareList = (name) => {
-        getSetShareableLink(cookies.token, name)
-            .then(response => response.json())
-            .then(data => {
-                setShareLink(data.url)
-                setShareListModal(true)
-            });
-    }
-
-    const { value: name, bind: nameBind, reset: resetNameBind } = useTextInput('')
-    const { value: email, bind: emailBind, reset: resetEmailBind } = useTextInput('')
-    const { value: newLocation, bind: newLocationBind, reset: resetnewLocationBind } = useTextInput('')
+    const { value: nameInfo, bind: nameBind, reset: resetNameBind } = useTextInput('')
+    const { value: emailInfo, bind: emailBind, reset: resetEmailBind } = useTextInput('')
     const { value: backgroundInfo, bind: backgroundInfoBind, reset: resetBackgroundInfo } = useTextInput('')
     const { value: visitedInfo, bind: visitedInfoBind, reset: resetVisitedInfo } = useTextInput('')
 
@@ -78,7 +28,20 @@ function EditProfile(props) {
         setUser(prevState => ({ ...prevState, visited: visitedInfo }))
     }
 
-    
+    const handleName = (e) => {
+        e.preventDefault()
+        changeUserName(cookies.token, nameInfo)
+        setUser(prevState => ({ ...prevState, first_name: nameInfo}))
+
+    }
+
+    const handleEmail = (e) => {
+        e.preventDefault()
+        changeEmail(cookies.token, emailInfo)
+        setUser(prevState => ({ ...prevState, email: emailInfo}))
+        user.email = emailInfo
+    }
+
 
     const returnEditMode = () => {
         return (
@@ -89,9 +52,16 @@ function EditProfile(props) {
                 <a href='/my-profile'><Button id="navButtonOn" variant="outline-dark"><h1 id="buttonText">Done Editing</h1></Button></a>
 
                 <h5 style={{ textAlign: 'center', textDecoration: 'underline' }}> About Me</h5>
+                <div style={{ textAlign: 'center' }}>
+                    <ul style={{ textAlign: 'left', display: 'inline-block' }}>
+                        <li>Name: {user.name}</li>
+                        <li>Email: {user.email} </li>
+                        <li>Location: {user.from_location}</li>
+                    </ul>
+                </div>
 
 
-                <form onSubmit={(e) => handleSubmit(e)} style={{ textAlign: 'center' }}>
+                <form onSubmit={(e) => handleName(e)} style={{ textAlign: 'center' }}>
                     <label>
                         <br />
                         <p>Change Name: <input type="text" {...nameBind} /></p>
@@ -100,10 +70,10 @@ function EditProfile(props) {
                 </form>
 
 
-                <form onSubmit={(e) => handleSubmit(e)} style={{ textAlign: 'center' }}>
+                <form onSubmit={(e) => handleEmail(e)} style={{ textAlign: 'center' }}>
                     <label>
                         <br />
-                        <p>Change Email: <input type="text" {...nameBind} /></p>
+                        <p>Change Email: <input type="text" {...emailBind} /></p>
                     </label>
                     <input type="submit" value="Submit" />
                 </form>

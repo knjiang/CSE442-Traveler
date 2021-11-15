@@ -127,6 +127,55 @@ const getBackground = (background) => {
 
 }
 
+const changeUserName = async(token,name) => {
+    return fetch(`${BASE_URL}/api/profiles/change_name/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "name" : name,
+        }),
+    })
+}
+
+const getUserName = (name) => {
+    const encoded_input = encodeURIComponent(name)
+    return fetch(`${BASE_URL}/api/profiles/getUserName/`, {
+        method: "GET",
+    })
+
+}
+
+
+const changeEmail = async(token,email) => {
+    return fetch(`${BASE_URL}/api/profiles/change_email/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "email" : email,
+        }),
+    })
+}
+
+const getEmail = (email) => {
+    const encoded_input = encodeURIComponent(email)
+    return fetch(`${BASE_URL}/api/profiles/getUserEmail/`, {
+        method: "GET",
+    })
+
+}
+
 const changeVisited = async(token,visited) => {
     return fetch(`${BASE_URL}/api/profiles/change_visited/`,
     {
@@ -298,4 +347,4 @@ export {getProfile, changeLocation, getList, getUserList, getUserInfo,
     getListData, addLocationList, deleteLocationList, addList, deleteList, 
     getSetShareableLink, changeBackground, 
     addDescription, editDescription, getDescription, delDescription, changeVisited,
-    reset}
+    reset, changeUserName, changeEmail}

@@ -316,6 +316,40 @@ class ChangeBackgroundView(APIView):
         return Response()
 
 
+class ChangeUserNameView(APIView):
+    """
+    View to change user's name 
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        """
+        View to change user's name.
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        name = request.data['name']
+        profile.first_name = name
+        profile.save()
+        return Response()
+
+
+class ChangeEmailView(APIView):
+    """
+    View to change background 
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        """
+        View to change background.
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        profile.email = request.data['email']
+        profile.save()
+        return Response()
+
+
+
 class ChangeVisitedView(APIView):
     """
     View to change displayed visited countries
