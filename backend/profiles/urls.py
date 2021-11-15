@@ -27,6 +27,8 @@ AddDescriptionView,
 DelDescriptionView,
 EditDescriptionView,
 GetDescriptionView,
+ChangeNameView,
+ChangeEmailView,
 ResetView
 )
 
@@ -56,5 +58,7 @@ urlpatterns = [
     path('add_visited_list/', AddVisitedView.as_view()),
     path('get_visited_data/', DeleteVisitedView.as_view()),
     path('delete_visited_data', GetVisitedDataView.as_view()), 
+    path('change_name', ChangeNameView.as_view()), 
+    path('delete_email', ChangeEmailView.as_view()), 
     path ('reset/', ResetView.as_view())
 ]
