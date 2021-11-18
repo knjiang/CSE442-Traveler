@@ -12,6 +12,9 @@ class Post(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return '{}, {}, {}'.format(self.title, self.body, self.location)
+
 class Comment(models.Model):
     body = models.TextField(max_length=50)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

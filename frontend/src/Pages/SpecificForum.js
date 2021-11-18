@@ -7,6 +7,7 @@ import { GetPostByLocation, AddComment, GetCommentFromPost } from '../apis/forum
 import { useCookies } from 'react-cookie';
 import { getProfile } from '../apis/profiles';
 import ForumComment from '../components/ForumComment';
+import { Link } from "react-router-dom";
 
 const SpecificForum = (props) =>{
 
@@ -44,6 +45,7 @@ const SpecificForum = (props) =>{
         GetPostByLocation(cookies.token, pathname.replace('-', ' '))
         .then(response => response.json())
         .then(data => {
+            console.log(data)
             setAllThreads(data)
         })
     }, [])
@@ -150,7 +152,17 @@ const SpecificForum = (props) =>{
 
     return(
         <ListGroup className="mt-4" onClick={() => handlePicker()} >
-            <h1>{pathname.replace('-', ' ')}</h1>
+            
+            <div style = {{marginTop: "-3vh", display: "flex", justifyContent:"space-evenly"}}>
+                <h1 style = {{ marginRight: "auto", width: "15vw", height: "4vh"}}>{pathname.replace('-', ' ')} </h1>
+                <Link to={{
+                    pathname: "/post",
+                    state: pathname.replace('-', ' ')
+                }} style = {{height: "4vh", display: "flex", justifyContent: "center", 
+                textAlign: "center", fontSize: "2vh"}} 
+                className="btn btn-success">New Post</Link>
+            </div>
+
             {LocationThreads()}
             {showModal()}
 

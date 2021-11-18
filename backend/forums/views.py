@@ -94,12 +94,17 @@ class GetPostFromLocationView(APIView):
         """
         Get all posts 
         """
+        
         location_name = request.query_params.get('location')
-        locationObject = Location.objects.get(name = location_name).id
+        
+        locationObject = Location.objects.get(name = location_name)
+        
         all_posts = Post.objects.filter(location = locationObject)
+        
         res = {}
         for p in all_posts:
             res[p.id] = [p.title, p.body, p.location.name, p.profile.user.username, p.id]
+        
         return Response(res)
 
 class GetPostView(APIView):
