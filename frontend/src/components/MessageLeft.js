@@ -121,13 +121,20 @@ function MessageLeft(props) {
                 }
             }
           return (
-            <div id = "dropdown" style = {{"display": "flex", "maxHeight": "5vh", "justifyContent": "space-between", "marginBottom": "1vh"}}>
-                <h1 style = {{"fontSize": "2.5vh", "marginRight": "0vw", "fontWeight": "800"}}>Search Users:</h1>
-                <input onChange = {(e) => filterUser(e)} id = "filterUser" style = {{"width": "17vw", "height": "4vh", "marginRight": "0.5vw"}}/>
-{/*               <div style = {{'marginTop': "4vh", "cursor": "pointer", "width": "16vw", "maxHeight": "15vh", "overflowY": "scroll"}}>
-                {res} 
-              </div> */}
-            </div>
+              <div>
+                  <div style = {{display: "flex", justifyContent: "end"}}>
+                    <h1 style = {{fontSize: "3.5vh", textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>Messages </h1>
+                    <i style = {{fontSize: "3.5vh", marginTop: "auto", marginBottom: "auto"}} id = "iconBTN" class="bi bi-pencil-square"></i>
+                  </div>
+                <div id = "dropdown" style = {{"display": "flex", "maxHeight": "5vh", "justifyContent": "space-between", "marginBottom": "1vh"}}>
+                    <h1 style = {{"fontSize": "2.5vh", "marginRight": "0vw", "fontWeight": "800"}}>Search Users:</h1>
+                    <input onChange = {(e) => filterUser(e)} id = "filterUser" style = {{"width": "17vw", "height": "4vh", "marginRight": "0.5vw"}}/>
+    {/*               <div style = {{'marginTop': "4vh", "cursor": "pointer", "width": "16vw", "maxHeight": "15vh", "overflowY": "scroll"}}>
+                    {res} 
+                </div> */}
+                </div>
+              </div>
+
           )
         }
         else {

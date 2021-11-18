@@ -3,7 +3,7 @@ from channels.generic.websocket import WebsocketConsumer
 from rest_framework.authtoken.models import Token
 from asgiref.sync import async_to_sync
 from django.contrib.auth.models import Group, User
-from .models import Messages, LastSent
+from .models import GroupChat, GroupChatMessages, Messages, LastSent
 from profiles.models import Profile, Location, LocationList, SavedLocation
 from forums.models import Post, Comment, Emoji
 from django.db.models import Q
@@ -69,7 +69,23 @@ class ChatConsumer(WebsocketConsumer):
     #outwards
     def receive(self, text_data):
         data = json.loads(text_data)
-        if data["status"] == "send":
+        if data["status"] == "group_message":
+            gc_id = data["id"] #group_chat id
+            message = data["message"]
+            group = GroupChat.objects.get(pk = gc_id)
+            for users in group.users.all():
+                async_to_sync(self.channel_layer.group_send)(
+                    'room-{}'.format(users.user.id),
+                    {
+                        'type': 'group_message',
+                        'group': gc_id,
+                        'message': message,
+                        'from': self.user_id
+                    }
+                )
+            senderInstance = Profile.objects.get(pk = self.user_id)
+            GroupChatMessages.objects.create(sender = senderInstance, messages = message)
+        elif data["status"] == "solo_message":
             receiver = data["receiver"]
             message = data["message"]
             self.receiver_id = User.objects.get(email__exact=receiver).id
@@ -80,7 +96,7 @@ class ChatConsumer(WebsocketConsumer):
             async_to_sync(self.channel_layer.group_send)(
                 'room-{}'.format(self.receiver_id),
                 {
-                    'type': 'chat_message',
+                    'type': 'solo_message',
                     'message': message,
                     'from': self.user_id
                 }
@@ -118,7 +134,7 @@ class ChatConsumer(WebsocketConsumer):
             }))
 
     #inwards
-    def chat_message(self, event):
+    def solo_message(self, event):
         message = event['message']
         senderInstance = Profile.objects.get(pk = self.user_id)
         logs = Messages.objects.filter(profile = senderInstance) #latest(bottom) to oldest
