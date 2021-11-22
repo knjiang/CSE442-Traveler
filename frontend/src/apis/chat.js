@@ -1,0 +1,71 @@
+// All chat-related API calls
+
+import {BASE_URL, getCsrfToken} from './base';
+
+const createChat = async(token, users, message) => {
+    return fetch(`${BASE_URL}/api/chat-request/create_chat/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "users": users,
+            "message": message
+        }),
+    })
+}
+
+const addToGroupChat = async(token, users, id) => {
+    return fetch(`${BASE_URL}/api/chat-request/add_to_group_chat/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "users": users,
+            "id": id
+        }),
+    })
+}
+
+const getChat = async(token, id) => {
+    return fetch(`${BASE_URL}/api/chat-request/get_chat/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "id": id
+        }),
+    })
+}
+
+const deleteChat = async(token, id) => {
+    return fetch(`${BASE_URL}/api/chat-request/delete_chat/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "id": id
+        }),
+    })
+}
+
+export {createChat, addToGroupChat, getChat, deleteChat};

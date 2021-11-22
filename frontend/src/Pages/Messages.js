@@ -16,10 +16,12 @@ function Messages(props) {
     const [cookies,setCookie] = useCookies(['token']);
     const existsCookie = typeof cookies.token != "undefined"
     const [selectedUser, setSelectedUser] = useState() //The current selected account the user is talking to
+    //{id, name, users}
     const [newUser, setNewUser] = useState()
     const [allUsers, setAllUsers] = useState([])    //Gets all users that user has messaged previously
     const [userPeek, setUserPeek] = useState({}) //Sneak peek for unselected users with latest messages
     const [selectedMessages, setSelectedMessages] = useState([]) //All messages for selected individual [message, from, to]
+    const [newChat, setNewChat] = useState(false)
     let subprotocol = cookies.token
     const ws = useRef() //refer to as ws.current
     const wsURL = useRef()
@@ -48,7 +50,6 @@ function Messages(props) {
               })
               ws.current.send(JSON.stringify(payload))
             }
-
           }
         }
     }, [])
@@ -57,36 +58,38 @@ function Messages(props) {
       ws.current.onmessage = function(event){
         if (event["data"]){
           let data = JSON.parse(event["data"])
-
-          if (data["status"] == "updateChat"){ //announces there is a new message
-            let message = data["message"]
-            let from = data["from"]
-            let to = data["to"]
-            if (from == selectedUser || from == user.email){
-              setSelectedMessages(prevSelectedMesssage => [...prevSelectedMesssage, [message, from, to]])
-              if (from != user.email){
-                setUserPeek(prevUserPeek => ({...prevUserPeek, [from]:message}))
+          if (data["status"] == "updateConnected") {
+            setAllUsers(data["chat"])
+/*             let messages = chat.messages
+            let name = chat.name.filter(item => item !== user.email).join()
+            let type = chat.type */
+            
+          }
+          else if (data["status"] == "updateChat") {
+            if (!data['new']) {
+              let sender = data["from"]
+              let message = data["message"]
+              let oldMessage = {...selectedMessages}
+              oldMessage.messages.push({"sender": sender, "message": message})
+              setSelectedMessages(oldMessage)
+            }
+            else {
+              let title = ''
+              if (!data['nameChanged']){
+                  title = data['users'].filter(item => item !== user.email).join()
               }
               else {
-                setUserPeek(prevUserPeek => ({...prevUserPeek, [to]:message}))
+                  title = data['name']
               }
+              let sender = data["from"]
+              let message = data["message"]
+              let newSelected = {}
+              newSelected['id'] = data['id']
+              newSelected['messages'] = []
+              newSelected.messages.push({"sender": sender, "message": message})
+              setSelectedMessages(newSelected)
+              setSelectedUser({id: data['id'], name: title, users: data['users']})
             }
-            else{
-              setUserPeek(prevUserPeek => ({...prevUserPeek, [from]:message}))
-              if (!allUsers.includes(from)){
-                setAllUsers(prevAllUsers => [from, ...prevAllUsers])
-              }
-            }
-          }
-          else if (data["status"] == "updateConnected"){ //grabs all messaged users once user connects
-            let users = data["users"]
-            let lastSent = data["lastSent"]
-            setAllUsers(users)
-            setUserPeek(lastSent)
-          }
-          else if (data["status"] == "getMessage"){
-            let m = data["message"]
-            setSelectedMessages(m)
           }
           else if (data["status"] == "eradicate"){
             setNewUser('')
@@ -97,7 +100,7 @@ function Messages(props) {
           }
         }
       }
-    })
+    }, [selectedUser])
 
 
     let passProps = {
@@ -110,7 +113,11 @@ function Messages(props) {
       selectedMessages: selectedMessages,
       setSelectedMessages: setSelectedMessages,
       ws: ws.current,
-      newUser: newUser
+      newUser: newUser,
+      newChat: newChat,
+      setNewChat: setNewChat,
+      user: user,
+      cookies: cookies
       }
       
     if (existsCookie){
@@ -118,7 +125,7 @@ function Messages(props) {
             <div id = "messageWrapper">
               <MessageLeft {...passProps}/>
               <MessageRight {...passProps}/>
-             
+
             </div> 
 
         )
