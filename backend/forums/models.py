@@ -21,3 +21,7 @@ class Comment(models.Model):
 class Emoji(models.Model):
     name = models.TextField(max_length=50)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+
+class Tag(models.Model):
+    tagged = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)

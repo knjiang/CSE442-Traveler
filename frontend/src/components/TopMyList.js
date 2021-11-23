@@ -100,7 +100,7 @@ function TopMyList(props){
                         {inputname()}
                     </div>
                 {selectedList && <DropdownButton drop = "down" id = "addLocalBTN" title = "Add Location">{addLocalDrop()}</DropdownButton>}
-                {!selectedList && <DropdownButton drop = "down" id = "addLocalBTN" title = "Select a list"></DropdownButton>}
+                {!selectedList && <Button drop = "down" id = "addLocalBTN" id = "addLocalBTNOff" title = "Select a list">Select a list</Button>}
             </div>
         )
     }

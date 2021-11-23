@@ -20,7 +20,7 @@ function Messages(props) {
     const [newUser, setNewUser] = useState()
     const [allUsers, setAllUsers] = useState([])    //Gets all users that user has messaged previously
     const [userPeek, setUserPeek] = useState({}) //Sneak peek for unselected users with latest messages
-    const [selectedMessages, setSelectedMessages] = useState([]) //All messages for selected individual [message, from, to]
+    const [selectedMessages, setSelectedMessages] = useState({}) //All messages for selected individual
     const [newChat, setNewChat] = useState(false)
     let subprotocol = cookies.token
     const ws = useRef() //refer to as ws.current
@@ -31,10 +31,10 @@ function Messages(props) {
     useEffect(() => {
         var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
         if (window.location.hostname == 'localhost') {
-          wsURL.current = ws_scheme + '://' + window.location.hostname + ':8000/api/chat/'
+          wsURL.current = ws_scheme + '://' + window.location.hostname + ':8000/api/chat-socket/'
         }
         else {
-          wsURL.current = ws_scheme + '://' + window.location.hostname + '/api/chat/'
+          wsURL.current = ws_scheme + '://' + window.location.hostname + '/api/chat-socket/'
         }
         ws.current = new WebSocket(wsURL.current) 
         ws.current.onopen = function() {
@@ -69,8 +69,8 @@ function Messages(props) {
             if (!data['new']) {
               let sender = data["from"]
               let message = data["message"]
-              let oldMessage = {...selectedMessages}
-              oldMessage.messages.push({"sender": sender, "message": message})
+              let oldMessage = {...selectedMessages} 
+              selectedMessages['messages'] ? oldMessage['messages'].push({"sender": sender, "message": message}) : oldMessage = {'messages': [{"sender": sender, "message": message}]}
               setSelectedMessages(oldMessage)
             }
             else {
@@ -100,7 +100,7 @@ function Messages(props) {
           }
         }
       }
-    }, [selectedUser])
+    })
 
 
     let passProps = {

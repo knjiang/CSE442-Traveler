@@ -9,6 +9,7 @@ from rest_framework import authentication
 from django.contrib.auth.models import User
 from rest_framework.renderers import JSONRenderer
 import json
+from django.db.models import Q, Count
 
 from .models import Chat, Messages
 from profiles.models import Profile
@@ -18,7 +19,6 @@ class CreateChatView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
 
     def post(self, request, format=None):
-        print("Creating a new Chat", request.data["users"], request.data["message"])
         """
         Creates a group chat
         """
@@ -55,11 +55,13 @@ class CreateChatView(APIView):
             })
         else:
             partner = get_object_or_404(Profile,user__email = users[0])
-            if Chat.objects.filter(type = "Single", users = (profile.id, partner.id)).exists():
+            b = Chat.objects.annotate(count=Count('users')).filter(count=len([profile.id, partner.id]))
+            exists = False
+            for i in b:
+                if (partner in i.users.all() and profile in i.users.all() and i.type == "Single"):
+                    exists = True
+            if exists:#Chat.objects.filter(type = "Single", users__in = [profile.id, partner.id]).exists():
                 chat = Chat.objects.get(type = "Single", users = (profile.id, partner.id))
-                '''
-                                Messages.objects.create(sender = profile, message = message, chat = chat)
-                '''
                 emails = []
                 for m in chat.users.all():
                     emails.append(m.user.email)
@@ -84,7 +86,6 @@ class CreateChatView(APIView):
                 emails = []
                 for m in dm.users.all():
                     emails.append(m.user.email)
-                print("SINGLEID", dm.id, dm.name, emails)
                 return Response({
                     'new': True,
                     "id": dm.id,
@@ -147,7 +148,6 @@ class ChangeGroupChatView(APIView):
         Changes group chat name
         """
         id = request.data['id']
-
 
         return Response()
 

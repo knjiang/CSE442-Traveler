@@ -101,7 +101,6 @@ class ChatConsumer(WebsocketConsumer):
         sender = event['from']
         id = event['id']
         users = event['users']
-        print(message, sender, id, users)
         # Send message to WebSocket
         self.send(text_data=json.dumps({
             'status': 'updateChat',
@@ -113,74 +112,3 @@ class ChatConsumer(WebsocketConsumer):
             'nameChanged': event['nameChanged'],
             'name': event['name']
         }))
-
-'''
-        if data["status"] == "group_message":
-            print(data, GroupChat.all())
-            gc_id = data["id"] #group_chat id
-            message = data["message"]
-            group = get_object_or_404(GroupChat, pk = gc_id)
-            for users in group.users.all():
-                async_to_sync(self.channel_layer.group_send)(
-                    'room-{}'.format(users.user.id),
-                    {
-                        'type': 'group_message',
-                        'group': gc_id,
-                        'message': message,
-                        'from': self.user_id
-                    }
-                )
-            senderInstance = Profile.objects.get(pk = self.user_id)
-            groupMessage = GroupChatMessages.objects.create(sender = senderInstance, messages = message)
-            group.add(groupMessage)
-            group.lastSent = groupMessage
-
-        elif data["status"] == "solo_message":
-            receiver = data["receiver"]
-            message = data["message"]
-            self.receiver_id = User.objects.get(email__exact=receiver).id
-            # Send message to room group
-            receiverInstance = Profile.objects.get(pk = self.receiver_id)
-            senderInstance = Profile.objects.get(pk = self.user_id)
-            Messages.objects.create(sender = senderInstance, profile = receiverInstance, messages = message)
-            async_to_sync(self.channel_layer.group_send)(
-                'room-{}'.format(self.receiver_id),
-                {
-                    'type': 'chat_message',
-                    'message': message,
-                    'from': self.user_id
-                }
-            )
-            if LastSent.objects.filter(user_1 = senderInstance, user_2 = receiverInstance).first():
-                LastSent.objects.get(user_1 = senderInstance, user_2 = receiverInstance).delete()
-                LastSent.objects.create(user_1 = senderInstance, user_2 = receiverInstance, messages = message)
-            else:
-                LastSent.objects.create(user_1 = senderInstance, user_2 = receiverInstance, messages = message)
-
-            if LastSent.objects.filter(user_2 = senderInstance, user_1 = receiverInstance).first():
-                LastSent.objects.get(user_2 = senderInstance, user_1 = receiverInstance).delete()
-                LastSent.objects.create(user_2 = senderInstance, user_1 = receiverInstance, messages = message)
-            else:
-                LastSent.objects.create(user_2 = senderInstance, user_1 = receiverInstance, messages = message)
-            self.send(text_data=json.dumps({
-                'status': 'updateSoloChat',
-                'message': message,
-                'from': self.user_email,
-                'to': User.objects.get(email__exact=receiver).email
-            }))
-
-                    elif data["status"] == "get":
-            friend = data["user"]
-            self.friend_id = User.objects.get(email__exact=friend).id
-            friendInstance = Profile.objects.get(pk = self.friend_id)
-            userInstance = Profile.objects.get(pk = self.user_id)
-            logs = Messages.objects.filter(Q(profile = userInstance, sender = friendInstance)|
-                                           Q(profile = friendInstance, sender = userInstance))
-            res = []
-            for m in logs:
-                res.append([m.messages, m.sender.user.email, m.profile.user.email])
-            self.send(text_data=json.dumps({
-                'status': 'getMessage',
-                'message': res
-            }))
-'''

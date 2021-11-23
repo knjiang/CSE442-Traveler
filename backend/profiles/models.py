@@ -10,7 +10,7 @@ class Profile(models.Model):
     visited = models.TextField(max_length=50,default="")
 
     def __str__(self):
-        return self.user.username
+        return self.user.email
 
 class Language(models.Model):
     name = models.TextField(max_length=30)

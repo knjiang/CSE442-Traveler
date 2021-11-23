@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { getLocation, addLocation, delLocation } from "../apis/locations";
-import {Button} from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import { useCookies } from 'react-cookie';
 import {reset} from '../apis/profiles'
 import {createChat, addToGroupChat} from '../apis/chat'
@@ -288,6 +288,8 @@ function AdminAddLocation () {
             <button style = {{"width": "7vw", "backgroundColor": "pink", "textAlign": "center"}} onClick = {() => deleteAllLocations()}>DELETE ALL LOCATIONS</button>
             <button style = {{"width": "7vw", "backgroundColor": "pink", "textAlign": "center"}} onClick = {() => deleteAllM()}>DELETE ALL MESSAGES</button>
             <button style = {{"width": "7vw", "backgroundColor": "red", "textAlign": "center", color: "white"}} onClick = {() => resetAll()}>RESET ALL</button>
+            <button style = {{"width": "7vw", "textAlign": "center"}} onClick = {() => createGC()}>Create new group chat (hardcoded so dont press)</button>
+            <button style = {{"width": "7vw", "textAlign": "center"}} onClick = {() => addToGC()}>Add to GC (hardcoded so dont press)</button>
         </div>
     )
 }

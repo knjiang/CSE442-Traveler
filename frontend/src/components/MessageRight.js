@@ -115,7 +115,7 @@ function MessageRight(props) {
                             "messages": data['message'],
                             "nameChanged": data['nameChanged']
                         }
-                        setAllUsers(re => [...re, info])
+                        setAllUsers(re => [info, ...re])
                         setSelectedUser({"id": data['id'], users: data['users'], name: title})
                         setNewChat(false)
                         let payload = ({
@@ -137,7 +137,7 @@ function MessageRight(props) {
                             "messages": data['message'],
                             "nameChanged": data['nameChanged'] 
                         }
-                        setAllUsers(re => [...re, info])
+                        setAllUsers(re => [info, ...re])
                         setSelectedUser({"id": data['id'], users: data['users'], name: title})
                         setNewChat(false)
                         let payload = ({
