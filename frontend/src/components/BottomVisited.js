@@ -1,13 +1,23 @@
 import { useEffect,useState, useRef } from "react";
 import { useCookies } from "react-cookie";
-import { getDescription} from '../apis/profiles'
+import { getListData, deleteList, deleteLocationList, getDescription, addDescription, editDescription, delDescription} from '../apis/profiles'
+import { Button, Dropdown, DropdownButton } from 'react-bootstrap'
+import ShareList from '../components/ShareList';
 
-
-function BottomVisited(props){
+function BottomMyList(props){
+    const user = props.parentUser
+    const setUser = props.parentSetUser
     const dataList = props.dataList
     const selectedList = props.selectedList
     const selectList = props.selectList
     const cookies = props.cookies
+    const setList = props.setList
+    const allLocation = props.allLocation
+    const shareLink = props.shareLink
+    const setShareLink = props.setShareLink
+    const showShareList = props.showShareList
+    const setShareListModal = props.setShareListModal
+    const shareList = props.shareList
 
     const[showDescriptions,setShowDescriptions] = useState()
     const[descriptions,setDescriptions] = useState()
@@ -18,7 +28,7 @@ function BottomVisited(props){
             .then(res => res.json())
             .then(data => {
                 if (data["listDescriptions"].length < 1){
-                    setShowDescriptions(false)
+                    setShowDescriptions(true)
                 }
                 else {
                     setShowDescriptions(true)
@@ -29,49 +39,64 @@ function BottomVisited(props){
         }
     }, [descriptions, showDescriptions])
 
+
     const returnListName = () => {
-        let idx = 0;
         if (typeof dataList != 'undefined'){
-            let res = [<div><h1 stlye = {{textAlign: 'right', display: "block", width: 700}}></h1></div>]
-            
+            let res = [<div style = {{"borderBottom": "2px solid gray"}}></div>]
             for (let name of Object.keys(dataList)){
-                if (idx < 5){
-                    if (name == selectedList){
-                        res.push(<h1 style = {{textAlign: 'left', margin: 'auto' }}>{name} </h1>)
-                    }
-                    else {
-                        res.push(<h5 style = {{textAlign: 'left', marginLeft:500,  }}>{name}</h5>)
-                    }
+                if (name == "Favorite Locations"){
+                    res.push(<h5 id = "favoriteClicked" style={{textAlign: 'center'}} 
+                    onClick = {() => (selectList(name))}>{name}</h5>)
+                }else{
+
                 }
-                idx++;
             }
             return(res)
         }
     }
 
 
-    const returnBottomLeft = () => {
+    const returnListData = () => {
+        let res = []
+        for (let n of dataList[selectedList]){
+            res.push(
+            <div>
+                <a id = "actualLocations" href = {'/locations/' + n.replace(/ /g, '-')}>
+                    <h1 style={{ fontSize: 30,}} href = {'/locations/' + n.replace(/ /g, '-')}>{n}</h1>
+                    </a>
+
+            </div>)
+        }
+        return(<div>{res}</div>)
+    }
+
+
+    const showDescriptionTrue = () => {
         return (
-            <div  id = "bottomLeftListWrapper">
-                <div style = {{display: "inline-block"}}>
-                    {returnListName()}
+            <div>
+                <h3 style = {{fontSize: "2vh", textAlign: 'center'}}>{descriptions}</h3>
+            </div>
+    
+        )
+    }
+
+    return (
+        <div id="finalDisplay">
+
+            <div id="LocationsButton">
+                {returnListName()}
+            </div>
+
+            <div id="actualLocations">
+                <div>
+                {selectedList && returnListData()}
+                </div>
+                <div>
+                {descriptions}
                 </div>
             </div>
-        )
-    }
 
-    const returnBottomRight = () => {
-        return (
-            <div id = "bottomRightListWrapper">
-                {selectedList} Is listed as a favorite on "My Lists"
-            </div>
-        )
-    }
-
-    return(
-        <div style = {{textAlign: 'center'}} id = "bottomListWrapper">
-            {returnBottomLeft()}
         </div>
     )
 }
-export default BottomVisited;
+export default BottomMyList;

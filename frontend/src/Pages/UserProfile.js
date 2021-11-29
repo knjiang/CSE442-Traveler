@@ -1,25 +1,58 @@
 import { useCookies } from 'react-cookie';
-import { changeBackground, changeVisited } from '../apis/profiles';
+import { changeBackground, changeVisited, getListData, getSetShareableLink} from '../apis/profiles';
+import { getLocation } from '../apis/locations'
 import { useState, useEffect } from "react"
 import NotLoggedIn from '../components/NotLoggedIn';
 import { useTextInput } from '../hooks/text-input';
 import { useLocation } from 'react-router-dom';
 import { Button } from 'react-bootstrap'
 import BottomVisited from '../components/BottomVisited';
+import { getShareableContents } from "../apis/locations"
+import './UserProfile.css'
+
 
 function UserProfile(props) {
 
   const user = props.parentUser
   const setUser = props.parentSetUser
   const [cookies, setCookie] = useCookies(['token']);
-  const [dataList, setList] = useState()
   const existsCookie = typeof cookies.token != "undefined"
+
+
+
+  const [dataList, setList] = useState()
   const parentData = useLocation()
   const [selectedList, selectList] = useState()
-  const [allLocation, setAllLocation] = useState()
   const [showShareList, setShareListModal] = useState(false)
 
-  const [isInEditMode, setIsInEditMode] = useState(false)
+  const [allLocation, setAllLocation] = useState()
+
+
+  useEffect(() => {
+    if (existsCookie){
+        getListData(cookies.token)
+        .then(response => response.json())
+        .then(data => {
+            setList(data["lists"])
+        });
+        getLocation()
+        .then(response => response.json())
+        .then(data => {
+          if (data){
+            setAllLocation(data.map(({id, name}) => name))
+          }
+        })
+    }
+}, [])
+
+
+  useEffect(() => {
+    if(parentData.state && dataList){
+      selectList(parentData.state)
+      parentData.state = false
+    }
+  }, [dataList])
+  
 
   const returnNormal = () => {
     return (
@@ -47,7 +80,16 @@ function UserProfile(props) {
         <h5 style={{ textAlign: 'center', textDecoration: 'underline' }}>Recommendations based on Favorites</h5>
         <p style={{ textAlign: 'center' }}>{user.visited}</p>
 
-        <h5 style={{ textAlign: 'center', textDecoration: 'underline' }}>Some of my favorite places: </h5>
+        <h5 style={{ textAlign: 'center' }}>Click "Favorite Locations" to show favorite countries</h5>
+
+        <div style={{textAlign: 'center'}}>
+        <BottomVisited cookies={cookies} setList={setList} dataList={dataList} allLocation={allLocation} selectList={selectList}
+           selectedList={selectedList} setShareListModal={setShareListModal} />
+
+        </div>
+
+
+
 
       </div>
     )

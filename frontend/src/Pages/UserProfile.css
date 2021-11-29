@@ -1,37 +1,36 @@
-.userprofile {
+#LocationsButton {
+  width: 20%;
+  height: 20vh;
   text-align: center;
-}
-
-h1, h2 {
-  text-align: center;
-}
-
-h3 {
-  text-align: center;
-}
-
-h3 {
-  text-align: center;
-}
-
-img {
   display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
+  object-position: center;
+  position: absolute;
 }
 
-h3 {
-  text-align: center;
+#finalDisplay {
+  margin-top: 1vh;
+  display: flex;
 }
 
-p {
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
+#actualLocations {
+  text-decoration: none;
+  font-size: small;
+  color: rgb(27, 25, 25);
+  width: 100%;
 }
 
-form, label, input {
+#favoriteClicked {
   text-align: center;
+  padding-left: 2vw;
+  border: 1px white solid;
+  font-size: 3vh;
+  background-color: rgb(5, 22, 68);
+  color: white;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  margin-bottom: -0.25vh;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
