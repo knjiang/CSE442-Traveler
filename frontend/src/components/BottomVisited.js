@@ -22,6 +22,9 @@ function BottomMyList(props){
     const[showDescriptions,setShowDescriptions] = useState()
     const[descriptions,setDescriptions] = useState()
 
+    var i = 0
+    var limit = 0
+
     useEffect (() => {
         if (descriptions == undefined && selectedList) {
             getDescription(cookies.token, selectedList)
@@ -44,12 +47,19 @@ function BottomMyList(props){
         if (typeof dataList != 'undefined'){
             let res = [<div style = {{"borderBottom": "2px solid gray"}}></div>]
             for (let name of Object.keys(dataList)){
-                if (name == "Favorite Locations"){
-                    res.push(<h5 id = "favoriteClicked" style={{textAlign: 'center'}} 
-                    onClick = {() => (selectList(name))}>{name}</h5>)
-                }else{
 
+
+                if (name == "Favorite Countries" && limit < 4){
+                    res.push(<h5 id = "favoriteClicked" style={{textAlign: 'center'}} onClick={() => (selectList(name))}>{name}</h5>)
+                    i = 1
+                    limit = limit + 1
                 }
+
+
+
+            }
+            if(i == 0){
+                res = [<div style = {{"borderBottom": "2px solid gray"}}>User has no "Favorite Countries" list in 'My Lists'</div>]
             }
             return(res)
         }
