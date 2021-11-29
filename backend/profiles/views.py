@@ -9,7 +9,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 from rest_framework import authentication
 from django.contrib.auth.models import User
 from .models import ListDescriptions, Profile, LocationList, Location, SavedLocation, ShareableLink
-from chat.models import LastSent, Messages
+from chat.models import Chat, Messages
 from forums.models import Forum, Post, Comment, Emoji
 from .serializers import ProfileSerializer
 from rest_framework.renderers import JSONRenderer
@@ -566,7 +566,7 @@ class ResetView(APIView):
         if request.user.email in authorized:
             if (obj == 'all'):
                 Messages.objects.all().delete()
-                LastSent.objects.all().delete()
+                Chat.objects.all().delete()
                 LocationList.objects.all().delete()
                 Location.objects.all().delete()
                 Post.objects.all().delete()
@@ -576,5 +576,5 @@ class ResetView(APIView):
                 Profile.objects.all().delete()
             elif (obj == 'message'):
                 Messages.objects.all().delete()
-                LastSent.objects.all().delete()
+                Chat.objects.all().delete()
         return Response()
