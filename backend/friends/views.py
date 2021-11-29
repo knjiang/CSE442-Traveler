@@ -42,7 +42,6 @@ class SendRequestView(APIView):
                 "status":"Sent friend request successfully to " + friend_profile.user.email
             })
         else:
-            print("A")
             return Response({
                "status": "Unsuccessfully sent friend request successfully to " + friend_profile.user.email
             })

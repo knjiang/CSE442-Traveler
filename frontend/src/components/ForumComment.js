@@ -38,7 +38,6 @@ function ForumComment(props){
                 </h1>
                 <div className="emojis" style = {{textAlign: "left", maxWidth: "25rem"}}>
                 {emojis.map((emoji,index) => (
-                    console.log(emoji),
                     convertEmoji(emoji)
                 ))}
                 </div>

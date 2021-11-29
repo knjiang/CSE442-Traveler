@@ -2,8 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import { getLocation, addLocation, delLocation } from "../apis/locations";
 import { Button } from 'react-bootstrap'
 import { useCookies } from 'react-cookie';
-import { reset } from '../apis/profiles'
-import { createGroupChat, addToGroupChat } from '../apis/chat'
+import {reset} from '../apis/profiles'
+import {createChat, addToGroupChat} from '../apis/chat'
 
 /*This is the page that shows the location the user clicked*/
 
@@ -266,7 +266,7 @@ function AdminAddLocation () {
     }
 
     const createGC = () => {
-        createGroupChat(cookies.token, ['huangbaron2@gmail.com'], [])
+        createChat(cookies.token, ['huangbaron2@gmail.com'])
     }
 
     const addToGC = () => {
