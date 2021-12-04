@@ -136,8 +136,8 @@ const changeVisited = async(token,visited) => {
     })
 }
 
-const changeName = async(token,name) => {
-    return fetch(`${BASE_URL}/api/profiles/change_name/`,
+const changeName = async(token, displayName) => {
+    return fetch(`${BASE_URL}/api/profiles/change_username/`,
     {
         headers: {
             'Accept': 'application/json',
@@ -147,13 +147,13 @@ const changeName = async(token,name) => {
         },
         method: "POST",
         body : JSON.stringify({
-            "display_name" : name,   // tried first_name 
+            "displayName" : displayName,   
         }),
     })
 }
 
-const changeEmail = async(token,email) => {
-    return fetch(`${BASE_URL}/api/profiles/change_email/`,
+const changeProfileLocation = async(token, newLocation) => {
+    return fetch(`${BASE_URL}/api/profiles/change_profile_location/`,
     {
         headers: {
             'Accept': 'application/json',
@@ -163,7 +163,7 @@ const changeEmail = async(token,email) => {
         },
         method: "POST",
         body : JSON.stringify({
-            "email" : email,
+            "profileLocation" : newLocation,
         }),
     })
 }
@@ -318,4 +318,4 @@ export {getProfile, changeLocation, getList, getUserList, getUserInfo,
     getListData, addLocationList, deleteLocationList, addList, deleteList, 
     getSetShareableLink, changeBackground, 
     addDescription, editDescription, getDescription, delDescription, changeVisited,
-    reset, changeName, changeEmail}
+    reset, changeName, changeProfileLocation}

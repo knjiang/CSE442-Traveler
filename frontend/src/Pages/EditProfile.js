@@ -1,5 +1,5 @@
 import { useCookies } from 'react-cookie';
-import { changeBackground, changeVisited, changeName, changeEmail } from '../apis/profiles';
+import { changeBackground, changeVisited, changeName, changeProfileLocation } from '../apis/profiles';
 import { useState, useEffect } from "react";
 import NotLoggedIn from '../components/NotLoggedIn';
 import { useTextInput } from '../hooks/text-input';
@@ -12,7 +12,7 @@ function EditProfile(props) {
   const existsCookie = typeof cookies.token != "undefined"
 
   const { value: nameInfo, bind: nameBind, reset: resetNameBind } = useTextInput('')
-  const { value: emailInfo, bind: emailBind, reset: resetEmailBind } = useTextInput('')
+  const { value: locationInfo, bind: locationBind, reset: resetLocationBind } = useTextInput('')
   const { value: backgroundInfo, bind: backgroundInfoBind, reset: resetBackgroundInfo } = useTextInput('')
   const { value: recommendInfo, bind: recommendInfoBind, reset: resetRecommendInfo } = useTextInput('')
 
@@ -31,14 +31,35 @@ function EditProfile(props) {
   const handleName = (e) => {
     e.preventDefault()
     changeName(cookies.token, nameInfo)
-    setUser(prevState => ({ ...prevState, name: nameInfo }))
+    setUser(prevState => ({ ...prevState, displayName: nameInfo }))
   }
 
-  const handleEmail = (e) => {
+  const handleLocation = (e) => {
     e.preventDefault()
-    changeEmail(cookies.token, emailInfo)
-    setUser(prevState => ({ ...prevState, email: emailInfo }))
+    changeProfileLocation(cookies.token, locationInfo)
+    setUser(prevState => ({ ...prevState, profileLocation: locationInfo }))
   }
+
+  const returnName = () => {
+    let res = [<p></p>]
+    if(user.displayName == ""){
+      res = [<p style = {{display: 'inline-block', margin: '0px', padding: '0px'}}>{user.name}</p>]
+    }else {
+      res = [<p style = {{display: 'inline-block', margin: '0px', padding: '0px'}}>{user.displayName}</p>]
+    }
+    return(res)
+  }
+
+  const returnLocation = () => {
+    let res = [<p></p>]
+    if(user.profileLocation == ""){
+      res = [<p style = {{display: 'inline-block'}}>{user.from_location}</p>]
+    }else {
+      res = [<p style = {{display:'inline-block', whiteSpace: 'nowrap'}}>{user.profileLocation}</p>]
+    }
+    return(res)
+  }
+
 
   const returnEditMode = () => {
     return (
@@ -50,14 +71,14 @@ function EditProfile(props) {
         <h5 style={{ textAlign: 'center', textDecoration: 'underline' }}> About Me</h5>
         <div style={{ textAlign: 'center' }}>
           <ul style={{ textAlign: 'left', display: 'inline-block' }}>
-            <li>Name: {user.name}</li>
+            <li>Name: {returnName()}</li>
             <li>Email: {user.email} </li>
-            <li>Location: {user.from_location}</li>
+            <li>Location: {returnLocation()}</li>
           </ul>
         </div>
 
 
-        <h5 style={{ textAlign: 'center' }}>Name: {user.name}</h5>
+        <h5 style={{ textAlign: 'center' }}>Name: {returnName()}</h5>
         <form onSubmit={(e) => handleName(e)} style={{ textAlign: 'center' }}>
           <label>
             <p>Change Name: <input type="text" {...nameBind} /></p>
@@ -68,10 +89,10 @@ function EditProfile(props) {
 
 
 
-        <h5 style={{ textAlign: 'center' }}>Email: {user.email} </h5>
-        <form onSubmit={(e) => handleEmail(e)} style={{ textAlign: 'center' }}>
+        <h5 style={{ textAlign: 'center' }}>Location: {returnLocation()} </h5>
+        <form onSubmit={(e) => handleLocation(e)} style={{ textAlign: 'center' }}>
           <label>
-            <p>Change Email: <input type="text" {...emailBind} /></p>
+            <p>Change Location: <input type="text" {...locationBind} /></p>
           </label>
           <input type="submit" value="Submit" />
         </form>

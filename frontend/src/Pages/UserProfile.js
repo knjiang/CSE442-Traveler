@@ -52,23 +52,46 @@ function UserProfile(props) {
       parentData.state = false
     }
   }, [dataList])
+
+
+  const returnName = () => {
+    let res = [<p></p>]
+    if(user.displayName == ""){
+      res = [<p style = {{display: 'inline-block', margin: '0px', padding: '0px'}}>{user.name}</p>]
+    }else {
+      res = [<p style = {{display: 'inline-block', margin: '0px', padding: '0px'}}>{user.displayName}</p>]
+    }
+    return(res)
+  }
+
+  const returnLocation = () => {
+    let res = [<p></p>]
+    if(user.profileLocation == ""){
+      res = [<p style = {{display: 'inline-block'}}>{user.from_location}</p>]
+    }else {
+      res = [<p style = {{display:'inline-block', whiteSpace: 'nowrap'}}>{user.profileLocation}</p>]
+    }
+    return(res)
+  }
   
 
   const returnNormal = () => {
     return (
       <div>
-        <h1 style={{ textAlign: 'center', color: (214, 122, 127) }}>Welcome {user.name} </h1>
+        <h1 style={{ textAlign: 'center', color: (214, 122, 127) }}>Welcome, {returnName()}</h1>
+
         <br />
         <a href = '/edit-profile'><Button id = "navButtonOn" variant="outline-dark"><h1 id = "buttonText"> Edit Profile </h1></Button></a>
 
         <br />
 
         <h5 style={{ textAlign: 'center', textDecoration: 'underline' }}> About Me</h5>
-        <div style={{ textAlign: 'center' }}>
-          <ul style={{ textAlign: 'left', display: 'inline-block' }}>
-            <li>Name: {user.name}</li>
+        <div style={{ textAlign: 'center', whiteSpace: 'nowrap'}}>
+          <ul style={{ textAlign: 'left', display: 'inline-block', whiteSpace: 'nowrap' }}>
+            <li>Name: {returnName()}</li>
+
             <li>Email: {user.email} </li>
-            <li>Location: {user.from_location}</li>
+            <li>Location: {returnLocation()}</li>
           </ul>
         </div>
 
@@ -87,8 +110,6 @@ function UserProfile(props) {
            selectedList={selectedList} setShareListModal={setShareListModal} />
 
         </div>
-
-
 
 
       </div>
