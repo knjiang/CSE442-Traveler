@@ -1,6 +1,6 @@
 import {useState,useEffect,useRef} from "react"
-import { Button } from 'react-bootstrap'
-import { getChat, deleteChat } from '../apis/chat'
+import { Button, Dropdown, Modal} from 'react-bootstrap'
+import { getChat, deleteChat, renameChat } from '../apis/chat'
 
 function MessageLeft(props) {
 
@@ -20,6 +20,11 @@ function MessageLeft(props) {
     const newChat = props.newChat
     const setNewChat = props.setNewChat
     const cookies = props.cookies
+
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     
     const onClickUser = (m) => {
         setNewChat(false)
@@ -111,6 +116,50 @@ function MessageLeft(props) {
         }
     })
 
+    const changeName = () => {
+        renameChat(cookies.token, selectedUser.id, document.getElementById("nameInput").value)
+        document.getElementById("nameInput").value = ""
+        handleClose()
+        window.location.reload()
+    }
+
+    const chatMenu = () => {
+        if (selectedUser){
+            if (selectedUser.users.length > 2){
+                return (
+                    <div>
+                    <Dropdown>
+                        <Dropdown.Toggle id="dropdown-basic" style = {{backgroundColor: "white", border: "none"}}>
+                            <i style = {{color: "black", fontSize: "1.1rem"}} class="bi bi-three-dots"></i>
+                        </Dropdown.Toggle>
+    
+                        <Dropdown.Menu>
+                            <Dropdown.Item onClick = {() => (deleteChat(cookies.token, selectedMessages.id), window.location.reload())}>Delete chat</Dropdown.Item>
+                            <Dropdown.Item onClick = {() => handleShow()}>Rename chat</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    </div>   
+                )
+            }
+            else {
+                return (
+                    <div>
+                        <Dropdown>
+                            <Dropdown.Toggle id="dropdown-basic" style = {{backgroundColor: "white", border: "none"}}>
+                                <i style = {{color: "black", fontSize: "1.1rem"}} class="bi bi-three-dots"></i>
+                            </Dropdown.Toggle>
+        
+                            <Dropdown.Menu>
+                                {selectedUser && <Dropdown.Item onClick = {() => (deleteChat(cookies.token, selectedMessages.id), window.location.reload())}>Delete chat</Dropdown.Item>}
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </div>   
+                )
+            }
+        }
+
+    }
+
     const searchUsers = () => {
         let res = []
         if (allUsers) {
@@ -121,8 +170,28 @@ function MessageLeft(props) {
             }
           return (
               <div>
+
+                    <Modal
+                            show={show}
+                            onHide={handleClose}
+                            backdrop="static"
+                        >
+                            <Modal.Header closeButton>
+                            <Modal.Title>Renaming group chat</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                            New name: <input id = "nameInput"/>
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Close
+                            </Button>
+                            <Button variant="primary" onClick = {() => changeName()}>Submit</Button>
+                            </Modal.Footer>
+                    </Modal>
+
                   <div style = {{display: "flex", justifyContent: "end", width: "99%"}}>
-                    {selectedUser && <Button onClick = {() => deleteChat(cookies.token, selectedMessages.id)}>DELETE</Button>}
+                    {chatMenu()}
                     <h1 style = {{fontSize: "3.5vh", textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>Messages</h1>
                     <i style = {{fontSize: "3.5vh", marginTop: "auto", marginBottom: "auto", cursor: "pointer"}} id = "iconBTN" class="bi bi-pencil-square" onClick = {() => (setNewChat(true), setSelectedUser())}></i>
                   </div>
