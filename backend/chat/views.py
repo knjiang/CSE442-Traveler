@@ -9,50 +9,115 @@ from rest_framework import authentication
 from django.contrib.auth.models import User
 from rest_framework.renderers import JSONRenderer
 import json
+from django.db.models import Q, Count
 
-from .models import GroupChatMessages, LastSent, Messages, GroupChat
+from .models import Chat, Messages
 from profiles.models import Profile
 
 
-class CreateGroupChatView(APIView):
+class CreateChatView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
 
     def post(self, request, format=None):
         """
         Creates a group chat
         """
-        name = request.data['name']
         users = request.data['users'] #emails
+        message = request.data['message']
         profile = get_object_or_404(Profile,pk=request.user.id)
-        GroupChat.objects.all().delete()
-        group = GroupChat()
-        group.save()
-        group.users.add(profile)
-        if (users):
+        if len(users) > 1:
+            #group chat
+            group = Chat()
+            group.save()
+            group.users.add(profile)
             for u in users:
                 group.users.add(get_object_or_404(Profile,user__email = u))
-        group.save()
-        newName = ''
-        for u in group.users.all():
-            newName += u.user.email
-            newName += ', '
-        newName = newName[:-2]
-        group.name = newName
-        group.save()
+            group.save()
+            newName = ''
+            for u in group.users.all():
+                newName += u.user.email
+                newName += ', '
+            newName = newName[:-2]
+            group.name = newName
+            group.type = "Group"
+            group.nameChanged = False
+            group.save()
+            emails = []
+            for m in group.users.all():
+                emails.append(m.user.email)
+            return Response({
+                'new': True,
+                "id": group.id,
+                "name": emails,
+                "users": emails,
+                "nameChanged": group.nameChanged,
+                'message': message
+            })
+        else:
+            partner = get_object_or_404(Profile,user__email = users[0])
+            b = Chat.objects.annotate(count=Count('users')).filter(count=len([profile.id, partner.id]))
+            exists = False
+            for i in b:
+                if (partner in i.users.all() and profile in i.users.all() and i.type == "Single"):
+                    exists = True
+            if exists:#Chat.objects.filter(type = "Single", users__in = [profile.id, partner.id]).exists():
+                chat = Chat.objects.get(type = "Single", users = (profile.id, partner.id))
+                emails = []
+                for m in chat.users.all():
+                    emails.append(m.user.email)
+                return Response({
+                    'new': False,
+                    "id": chat.id,
+                    "name": chat.name if chat.nameChanged else emails, 
+                    "users": emails,
+                    "nameChanged": chat.nameChanged,
+                    "message": message
+                })
+            else:
+                dm = Chat()
+                dm.save()
+                dm.users.add(profile)
+                dm.users.add(get_object_or_404(Profile,user__email = users[0]))
+                dm.save()
+                dm.name = request.user.email + ', ' + users[0]
+                dm.type = "Single"
+                dm.nameChanged = False
+                dm.save()
+                emails = []
+                for m in dm.users.all():
+                    emails.append(m.user.email)
+                return Response({
+                    'new': True,
+                    "id": dm.id,
+                    "name": emails,
+                    "users": emails,
+                    "nameChanged": dm.nameChanged,
+                    'message': message
+                })
+            
+class GetChatView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+        
+    def post(self, request, format=None):
+        id = request.data["id"]
+        chat = Chat.objects.get(pk = id)
+        messages = []
+        for a in chat.chatLog.all():
+            messages.append({"sender": a.sender.user.email, "message": a.message})
+        return Response({
+            "id": id,
+            "messages": messages
+        })
 
-        return Response()
-
-class DeleteGroupChatView(APIView):
+class DeleteChatView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
         
     def post(self, request, format=None):
         """
-        Adds a new location to db
+        Deletes chat with id
         """
-        id = request.data['id']
-        group = GroupChat.objects.get(pk = id)
-        group.delete()
-
+        id = request.data["id"]
+        Chat.objects.get(pk = id).delete()
         return Response()
 
 class AddToGroupChatView(APIView):
@@ -61,21 +126,6 @@ class AddToGroupChatView(APIView):
         Add a [user[s]] to a group chat
         """
         id = request.data['id']
-        group = GroupChat.objects.get(pk = id)
-
-        users = request.data['users'] #emails
-        for u in users:
-            profile = get_object_or_404(Profile,user__email = u)
-            group.users.add(profile)
-        group.save()
-
-        newName = ''
-        for u in group.users.all():
-            newName += u.user.email
-            newName += ', '
-        newName = newName[:-2]
-        group.name = newName
-        group.save()
 
         return Response()
 
@@ -87,26 +137,10 @@ class DeleteFromGroupChatView(APIView):
         Delete a user a group chat
         """
         id = request.data['id']
-        group = GroupChat.objects.get(pk = id)
-        user = request.data['user'] #emails
-        profile = get_object_or_404(Profile,user_email = user)
-        group.users.remove(profile)
-        group.save()
-
-        if len(group.users.all()) == 0:
-            group.delete()
-        else:    
-            newName = ''
-            for u in group.users.all():
-                newName += u.user.email
-                newName += ', '
-            newName = newName[:-2]
-            group.name = newName
-            group.save()
 
         return Response()
     
-class ChangeGroupChatView(APIView):
+class RenameChatView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
 
     def post(self, request, format=None):
@@ -115,9 +149,11 @@ class ChangeGroupChatView(APIView):
         """
         id = request.data['id']
         name = request.data['name']
-        group = GroupChat.objects.get(pk = id)
-        group.name = name
-        group.save()
+
+        chat = Chat.objects.get(pk = id)
+        chat.name = name
+        chat.nameChanged = True
+        chat.save()
 
         return Response()
 
@@ -128,6 +164,5 @@ class DeleteAllGroupChatView(APIView):
         """
         Delete all group chats
         """
-        GroupChat.objects.all.delete()
 
         return Response()
