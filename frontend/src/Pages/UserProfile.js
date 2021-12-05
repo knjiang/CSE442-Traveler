@@ -1,159 +1,153 @@
 import { useCookies } from 'react-cookie';
-import { changeBackground, changeVisited } from '../apis/profiles';
-import { getProfile, getListData , addLocationList, addList, deleteList, deleteLocationList, getSetShareableLink } from '../apis/profiles';
+import { changeBackground, changeVisited, getListData, getSetShareableLink } from '../apis/profiles';
+import { getLocation } from '../apis/locations'
 import { useState, useEffect } from "react"
 import NotLoggedIn from '../components/NotLoggedIn';
 import { useTextInput } from '../hooks/text-input';
-import { getShareableContents } from "../apis/locations"
-import { getLocation } from '../apis/locations'
 import { useLocation } from 'react-router-dom';
-import { DropdownButton, Dropdown, Button, Alert } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import BottomVisited from '../components/BottomVisited';
+import { getShareableContents } from "../apis/locations"
+import './UserProfile.css'
+
 
 function UserProfile(props) {
 
   const user = props.parentUser
-  const setUser = props.parentSetUser 
-  const [cookies,setCookie] = useCookies(['token']);
-  const [dataList,setList] = useState()
+  const setUser = props.parentSetUser
+  const [cookies, setCookie] = useCookies(['token']);
   const existsCookie = typeof cookies.token != "undefined"
+
+
+
+  const [dataList, setList] = useState()
   const parentData = useLocation()
   const [selectedList, selectList] = useState()
-  const [allLocation, setAllLocation] = useState()
   const [showShareList, setShareListModal] = useState(false)
-  const [shareLink, setShareLink] = useState("")
-  
-  useEffect(() => {
-    if (existsCookie){
-        getListData(cookies.token)
-        .then(response => response.json())
-        .then(data => {
-            setList(data["lists"])
-        });
-        getLocation()
-        .then(response => response.json())
-        .then(data => {
-          if (data){
-            setAllLocation(data.map(({id, name}) => name))
-          }
-        })
-      }
-  }, [])
+
+  const [allLocation, setAllLocation] = useState()
+
 
   useEffect(() => {
-    if (parentData.state && dataList){
-        selectList(parentData.state)
-        parentData.state = false
+    if (existsCookie) {
+      getListData(cookies.token)
+        .then(response => response.json())
+        .then(data => {
+          setList(data["lists"])
+        });
+      getLocation()
+        .then(response => response.json())
+        .then(data => {
+          if (data) {
+            setAllLocation(data.map(({ id, name }) => name))
+          }
+        })
+    }
+  }, [])
+
+
+  useEffect(() => {
+    if (parentData.state && dataList) {
+      selectList(parentData.state)
+      parentData.state = false
     }
   }, [dataList])
 
-  const callbackShareList = () => {
-    setShareListModal(false)
+
+  const returnName = () => {
+    let res = [<p></p>]
+    if (user.displayName == "") {
+      res = [<p style={{ display: 'inline-block', margin: '0px', padding: '0px' }}>{user.name}</p>]
+    } else {
+      res = [<p style={{ display: 'inline-block', margin: '0px', padding: '0px' }}>{user.displayName}</p>]
+    }
+    return (res)
   }
 
-  const shareList = (name) => {
-    getSetShareableLink(cookies.token,name)
-    .then(response => response.json())
-    .then(data => {
-        setShareLink(data.url)
-        setShareListModal(true)
-    });
+  const returnLocation = () => {
+    let res = [<p></p>]
+    if (user.profileLocation == "") {
+      res = [<p style={{ display: 'inline-block' }}>{user.from_location}</p>]
+    } else {
+      res = [<p style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>{user.profileLocation}</p>]
+    }
+    return (res)
   }
 
 
-  const returnListName = () => {
-      if (typeof dataList != 'undefined'){
-          let res = [<div style = {{"borderBottom": "2px solid gray", "display":"flex"}}><h1 style = {{"fontSize": "4vh", "paddingBottom": "1vh", "paddingTop": "1vh", "marginLeft": "auto", "marginRight": "auto"}}>Your Lists </h1></div>]
-          for (let name of Object.keys(dataList)){
-              if (name == selectedList){
-                  res.push(<h1 id = "nameTextSelected" onClick = {() => (selectList(name))}>{name} <Button variant="secondary" id = "shareBTN" onClick = {(evt) => (evt.stopPropagation(),shareList(name))}> Share </Button> </h1>)
-              }
-              else {
-                  res.push(<h1 id = "nameText" onClick = {() => (selectList(name))}>{name} <Button variant="secondary" id = "shareBTN" onClick = {(evt) => (evt.stopPropagation(),shareList(name))}> Share </Button></h1>)
-              }
+  const returnNormal = () => {
+    return (
+      <div>
+        <h1 style={{ textAlign: 'center', color: 'rgb(23, 23, 68)', textDecoration: 'bold' }}>Welcome, {returnName()}</h1>
+        <br />
 
-          }
-          return(res)
-      }
-  }
-  
-  const [visitedCounttries, setVisitedCountries] = useState("")
+        <a href='/edit-profile'><Button id="editButton" variant="outline-dark"><h1 id="buttonText"> Edit Profile </h1></Button></a>
 
-  const { value: backgroundInfo, bind: backgroundInfoBind, reset: resetBackgroundInfo } = useTextInput('')
-  const { value: visitedInfo, bind: visitedInfoBind, reset: resetVisitedInfo } = useTextInput('')
+        <p style={{
+          textAlign: 'center', fontStyle: 'italic', fontSize: '2vh', border: 'dotted', justifyContent: 'center',
+          alignItems: 'center', width: '400px', marginLeft: '27%', borderRadius: '5px', display: 'inline'
+        }}>To edit profile please click "Edit Profile"</p>
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    changeBackground(cookies.token, backgroundInfo)
-    setUser(prevState => ({...prevState, background : backgroundInfo}))
-  }
+        <div style={{ border: 'solid', borderRadius: '10px', width: '800px', margin: 'auto', paddingTop: '20px', backgroundColor: 'rgb(23, 23, 68)', color: 'white' }}>
 
-  const handleSubmit2 = (b) => {
-    b.preventDefault()
-    changeVisited(cookies.token, visitedInfo)
-    setUser(prevState => ({...prevState, visited : visitedInfo}))
+
+
+
+
+
+          <h3 id="heading"> About Me</h3>
+
+          <div style={{ textAlign: 'center' }}>
+            <ul style={{ textAlign: 'left', display: 'inline-block', whiteSpace: 'nowrap', fontSize: '2.2vh', listStyle: 'none' }}>
+
+              <li style={{ fontWeight: 'bold', display: 'inline' }}>Name: </li>
+              <p style={{ display: 'inline' }}>{returnName()}</p>
+              <br />
+              <li style={{ fontWeight: 'bold', display: 'inline' }}>Email: </li>
+              <p style={{ display: 'inline' }}>{user.email}</p>
+              <br />
+              <li style={{ fontWeight: 'bold', display: 'inline' }}>Location: </li>
+              <p style={{ display: 'inline' }}>{returnLocation()}</p>
+
+
+            </ul>
+          </div>
+
+
+          <h3 id="heading">Background/Interests</h3>
+          <p id="description" style={{ color: 'white' }}>{user.background}</p>
+
+          <h3 id="heading">Travel Recommendations</h3>
+          <p id="description">{user.visited}</p>
+
+          <br />
+
+        </div>
+
+        <br />
+
+
+
+        <div style={{ textAlign: 'center' }}>
+          <BottomVisited cookies={cookies} setList={setList} dataList={dataList} allLocation={allLocation} selectList={selectList}
+            selectedList={selectedList} setShareListModal={setShareListModal} />
+        </div>
+        <br />
+        <br />
+        <br />
+
+      </div>
+    )
   }
 
 
   if (existsCookie) {
     return (
       <div>
-        <h1 style={{ textAlign: 'center', color: (214, 122, 127) }}>Welcome {user.name} </h1>
-        <br />
-
-        <h5 style={{ textAlign: 'center', textDecoration: 'underline'}}> About Me</h5>
-        <div style = {{ textAlign: 'center'}}>
-        <ul style = {{ textAlign: 'left', display: 'inline-block'}}>
-          <li>Name: {user.name}</li>
-          <li>Email: {user.email} </li>
-          <li>Location: {user.from_location}</li>
-        </ul>
-        </div>
-
-        <p style={{textAlign: 'center' , fontStyle: 'italic'}}>For the following text fields, please enter the information you want to display and press Submit <br />
-        "Refresh Browser to see changes applied"</p>
-      
-        {/* This is for background */}
-        <form onSubmit={(e) => handleSubmit(e)} style={{ textAlign: 'center' }}>
-
-        <h2 style={{textAlign:'center'}}>Background and Interests</h2>
-        <p style={{textAlign:'center'}}>{user.background}</p>
-        </form>
-        <form onSubmit={(e) => handleSubmit(e)} style={{textAlign:'center'}}>
-          <label>
-            <br />
-            <p>Change Background: <input type="text" {...backgroundInfoBind} /></p>
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
-        <p style={{ textAlign: 'center' }}>{backgroundInfo}</p>
-
-        {/* This is for Recommendations for favorite countries */}
-        <h5 style={{ textAlign: 'center', textDecoration: 'underline' }}>Recommendations based on Favorites</h5>
-        <p style={{ textAlign: 'center' }}>{user.visited}</p>
-
-        <form onSubmit={(b) => handleSubmit2(b)} style={{ textAlign: 'center' }}>
-          <label>
-            {/*<h5 style={{ textAlign: 'center' }}>My Recommendations for Favorite Locations</h5>*/}
-            <p>Recommendations: <input type="text" {...visitedInfoBind} /></p>
-          </label>
-          <input type="submit" value="Submit" />
-        </form>
-
-        <p style={{ textAlign: 'center' }}>{visitedInfo}</p>
-
-        {/* Display the visited countries*/}
-
-        <h5 style = {{ textAlign: 'center', textDecoration: 'underline'}}>Some of my favorite places: </h5>
-        <div style = {{textAlign: 'center'}}>
-          <BottomVisited cookies={cookies} setList={setList} dataList={dataList} allLocation={allLocation} selectList={selectList}
-           selectedList={selectedList} shareLink={shareLink} setShareLink={setShareLink} showShareList={showShareList}
-            setShareListModal={setShareListModal} shareList={shareList} />
-
-        </div>
+        {returnNormal()}
       </div>
+
     )
-  }
-  return <NotLoggedIn />
+  } return <NotLoggedIn />
 }
 export default UserProfile;
