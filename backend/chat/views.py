@@ -140,7 +140,7 @@ class DeleteFromGroupChatView(APIView):
 
         return Response()
     
-class ChangeGroupChatView(APIView):
+class RenameChatView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
 
     def post(self, request, format=None):
@@ -148,6 +148,12 @@ class ChangeGroupChatView(APIView):
         Changes group chat name
         """
         id = request.data['id']
+        name = request.data['name']
+
+        chat = Chat.objects.get(pk = id)
+        chat.name = name
+        chat.nameChanged = True
+        chat.save()
 
         return Response()
 
