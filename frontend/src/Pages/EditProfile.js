@@ -68,7 +68,7 @@ function EditProfile(props) {
         <br />
         <a href='/my-profile'><Button id="editButton" variant="outline-dark"><h1 id="buttonText">Done Editing</h1></Button></a>
 
-        <div style = {{border: 'solid', borderRadius: '10px', width: '900px', margin: 'auto', paddingTop: '20px', backgroundColor: '#084298', color: 'white'}}>
+        <div style = {{border: 'solid', borderRadius: '15px', width: '900px', margin: 'auto', paddingTop: '20px',paddingBottom: '20px', backgroundColor: 'rgb(23, 23, 68)', color: 'white'}}>
 
         <h5 style={{ textAlign: 'center' }}> About Me</h5>
         <div style={{ textAlign: 'center' }}>
@@ -80,45 +80,45 @@ function EditProfile(props) {
         </div>
 
 
-        <h5 style={{ textAlign: 'center' , color: 'white'}}>Current Name</h5>
-        <h5 style={{ textAlign: 'center', color: 'rgb(23, 23, 68)' , textDecoration: 'bold', color: 'white'}}>"{returnName()}"</h5>
+        <h4 style={{ textAlign: 'center' , color: 'white'}}>Current Name</h4>
+        <p style={{ textAlign: 'center', marginLeft:'250px', marginRight: '250px' ,color:'rgb(23, 23, 68)', textDecoration: 'bold',backgroundColor: 'white', color: 'black', border: 'solid', borderRadius: '10px', fontStyle: 'italic'}}>{returnName()}</p>
 
         <form onSubmit={(e) => handleName(e)} style={{ textAlign: 'center' }}>
           <label>
-            <p style={{textAlign: 'left', marginLeft: 'auto'}}>New Name: <input type="text" {...nameBind} /></p>
+            <p style={{textAlign: 'left', marginLeft: 'auto'}}><input type="text" placeholder="New Name" style={{color:'black', width: '330px'}}{...nameBind} /></p>
           </label>
           <input type="submit" value="Submit" />
         </form>
 
 
 
-        <h5 style={{ textAlign: 'center' , color: 'white'}}>Current Location</h5>
-        <h5 style={{ textAlign: 'center', color: 'rgb(23, 23, 68)', textDecoration: 'bold' , color: 'white'}}>"{returnLocation()}"</h5>
+        <h4 style={{ textAlign: 'center' , color: 'white'}}>Current Location</h4>
+        <p style={{ textAlign: 'center', marginLeft:'250px', marginRight: '250px' ,color:'rgb(23, 23, 68)', textDecoration: 'bold',backgroundColor: 'white', color: 'black', border: 'solid', borderRadius: '10px',fontStyle: 'italic'}}>{returnLocation()}</p>
 
         <form onSubmit={(e) => handleLocation(e)} style={{ textAlign: 'center' }}>
           <label>
-            <p style={{textAlign: 'left', margin: 'auto'}}>New Location: <input type="text" {...locationBind} /></p>
+            <p style={{textAlign: 'left'}}><input type="text" placeholder="New Location" style={{color:'black', width: '330px', border: 'solid'}}{...locationBind} /></p>
           </label>
           <input type="submit" value="Submit" />
         </form>
 
 
-        <h5 style={{ textAlign: 'center', marginLeft:'300px', marginRight: '300px', marginTop: '0px'}}>Background and Interests</h5>
-        <h5 style={{ textAlign: 'center', marginLeft:'300px', marginRight: '300px' ,color:'rgb(23, 23, 68)', textDecoration: 'bold', color: 'white'}}>{user.background}</h5>
+        <h4 style={{ textAlign: 'center', marginLeft:'300px', marginRight: '300px', marginTop: '0px'}}>Background/Interests</h4>
+        <p style={{ textAlign: 'center', marginLeft:'170px', marginRight: '170px' ,color:'rgb(23, 23, 68)', textDecoration: 'bold',backgroundColor: 'white', color: 'black', border: 'solid', borderRadius: '10px',fontStyle: 'italic'}}>{user.background}</p>
         <form onSubmit={(e) => handleBackground(e)} style={{ textAlign: 'center' }}>
           <label>
-            <p style={{textAlign: 'left', marginLeft: 'auto'}}>New Background: <input type="text" {...backgroundInfoBind} /></p>
+            <p style={{textAlign: 'left', textAlign: 'right'}}><input type="text" placeholder="New Background" style={{color:'black', width: '430px'}}{...backgroundInfoBind} /></p>
           </label>
           <input type="submit" value="Submit" />
         </form>
 
 
-        <h5 style={{textAlign: 'center', marginLeft:'300px', marginRight: '300px', marginTop: '0px'}}>Recommendations</h5>
-        <h5 style={{ textAlign: 'center', marginLeft:'300px', marginRight: '300px' ,color:'rgb(23, 23, 68)', textDecoration: 'bold', color: 'white'}}>{user.visited}</h5>
+        <h4 style={{textAlign: 'center', marginLeft:'300px', marginRight: '300px', marginTop: '0px'}}>Recommendations</h4>
+        <p style={{ textAlign: 'center', marginLeft:'170px', marginRight: '170px' ,color:'rgb(23, 23, 68)', textDecoration: 'bold',backgroundColor: 'white', color: 'black', border: 'solid', borderRadius: '10px',fontStyle: 'italic'}}>{user.visited}</p>
         <form onSubmit={(b) => handleRecommended(b)} style={{ textAlign: 'center' }}>
           <label>
             {/*<h5 style={{ textAlign: 'center' }}>My Recommendations for Favorite Locations</h5>*/}
-            <p style={{textAlign: 'left', marginLeft: 'auto'}}>New Recommendations: <input type="text" {...recommendInfoBind} /></p>
+            <p style={{textAlign: 'left', marginLeft: 'auto'}}><input type="text" placeholder="New Recommendations" style={{color:'black', width: '430px'}}{...recommendInfoBind} /></p>
           </label>
           <input type="submit" value="Submit" />
         </form>
