@@ -73,44 +73,67 @@ function UserProfile(props) {
     }
     return(res)
   }
+
+
   
 
   const returnNormal = () => {
     return (
       <div>
         <h1 style={{ textAlign: 'center', color: (214, 122, 127) }}>Welcome, {returnName()}</h1>
-
-        <br />
-        <a href = '/edit-profile'><Button id = "navButtonOn" variant="outline-dark"><h1 id = "buttonText"> Edit Profile </h1></Button></a>
-
         <br />
 
-        <h5 style={{ textAlign: 'center', textDecoration: 'underline' }}> About Me</h5>
-        <div style={{ textAlign: 'center', whiteSpace: 'nowrap'}}>
-          <ul style={{ textAlign: 'left', display: 'inline-block', whiteSpace: 'nowrap' }}>
-            <li>Name: {returnName()}</li>
+        <a href = '/edit-profile'><Button id = "editButton" variant="outline-dark"><h1 id = "buttonText"> Edit Profile </h1></Button></a>
 
-            <li>Email: {user.email} </li>
-            <li>Location: {returnLocation()}</li>
+        <p style={{ textAlign: 'center', fontStyle: 'italic', fontSize: '2vh', border: 'dotted', justifyContent: 'center',
+        alignItems: 'center', width: '400px', marginLeft: '25%', borderRadius: '5px', display: 'inline' }}>To edit profile please click "Edit Profile"</p>
+
+        <div style = {{border: 'solid', borderRadius: '10px', width: '800px', margin: 'auto', paddingTop: '20px', backgroundColor: '#084298', color: 'white'}}>
+
+
+
+
+
+
+        <h3 id="heading"> About Me</h3>
+
+        <div style={{ textAlign: 'center'}}>
+          <ul style={{ textAlign: 'left', display: 'inline-block', whiteSpace: 'nowrap', fontSize: '2.2vh', listStyle: 'none'}}>
+           
+            <li style = {{fontWeight: 'bold', display: 'inline'}}>Name: </li>
+              <p style = {{display: 'inline'}}>{returnName()}</p>
+                <br />
+            <li style = {{fontWeight: 'bold', display: 'inline'}}>Email: </li>
+              <p style = {{display: 'inline'}}>{user.email}</p>
+                <br />
+              <li style = {{fontWeight: 'bold', display: 'inline'}}>Location: </li>
+              <p style = {{display: 'inline'}}>{returnLocation()}</p>            
+
+
           </ul>
         </div>
 
-        <p style={{ textAlign: 'center', fontStyle: 'italic' }}>To edit profile please click "Edit Profile"</p>
 
-        <h5 style={{ textAlign: 'center', textDecoration: 'underline' }}>Background and Interests</h5>
-        <p style={{ textAlign: 'center' }}>{user.background}</p>
+        <h3 id="heading">Background and Interests</h3>
+        <p id = "description" style={{color: 'white'}}>{user.background}</p>
 
-        <h5 style={{ textAlign: 'center', textDecoration: 'underline' }}>Recommendations based on Favorites</h5>
-        <p style={{ textAlign: 'center' }}>{user.visited}</p>
+        <h3 id="heading">Recommendations based on Favorites</h3>
+        <p id = "description">{user.visited}</p>
 
-        <h5 style={{ textAlign: 'center' }}>Click "Favorite Locations" to show favorite countries</h5>
+        <br />
+
+        </div>
+
+        <h5 style={{ textAlign: 'center', fontSize: '2.5vh'}}>Click "Favorite Locations" to show favorite countries</h5>
+        <br />
 
         <div style={{textAlign: 'center'}}>
         <BottomVisited cookies={cookies} setList={setList} dataList={dataList} allLocation={allLocation} selectList={selectList}
            selectedList={selectedList} setShareListModal={setShareListModal} />
-
         </div>
-
+          <br />
+          <br />
+          <br />
 
       </div>
     )

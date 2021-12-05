@@ -42,17 +42,33 @@ function BottomMyList(props){
         }
     }, [descriptions, showDescriptions])
 
+    const returnList = () => {
+        let res = [<p></p>]
+
+        let list = selectList("Favorite Countries")        
+
+        limit = 5
+        return(res)
+    }
+
 
     const returnListName = () => {
         if (typeof dataList != 'undefined'){
             let res = [<div style = {{"borderBottom": "2px solid gray"}}></div>]
+
+
+            //iterate through my list
             for (let name of Object.keys(dataList)){
 
-
+                res.push(<p></p>)
                 if (name == "Favorite Countries" && limit < 4){
-                    res.push(<h5 id = "favoriteClicked" style={{textAlign: 'center'}} onClick={() => (selectList(name))}>{name}</h5>)
+                    res.push(<h5 id = "favoriteClicked" style={{textAlign: 'center'}} 
+                    
+                    onClick={() => (
+                        returnList()
+                        
+                        )}>{"My Favorites"}</h5>)
                     i = 1
-                    limit = limit + 1
                 }
 
 
@@ -67,31 +83,27 @@ function BottomMyList(props){
 
 
     const returnListData = () => {
-        let res = []
+        let res = [<ul style={{borderStyle: 'solid'}}></ul>]
         for (let n of dataList[selectedList]){
-            res.push(
-            <div>
-                <a id = "actualLocations" href = {'/locations/' + n.replace(/ /g, '-')}>
-                    <h1 style={{ fontSize: 30,}} href = {'/locations/' + n.replace(/ /g, '-')}>{n}</h1>
-                    </a>
 
-            </div>)
+            if(limit < 5){
+
+            res.push(
+                <li style = {{textAlign: 'left', marginLeft: '35%', marginRight: '35%', borderStyle: 'outset', display: 'flex'}}>
+                <a id = "actualLocations" href = {'/locations/' + n.replace(/ /g, '-')} style={{textAlign: 'left'}}>
+                    <h1 style={{ fontSize: 25, display: 'inline', textAlign: 'right'}} href = {'/locations/' + n.replace(/ /g, '-')}>{n}</h1>
+                    </a>
+                </li>)
+
+            ++limit
+        }
         }
         return(<div>{res}</div>)
     }
 
 
-    const showDescriptionTrue = () => {
-        return (
-            <div>
-                <h3 style = {{fontSize: "2vh", textAlign: 'center'}}>{descriptions}</h3>
-            </div>
-    
-        )
-    }
-
     return (
-        <div id="finalDisplay">
+        <div>
 
             <div id="LocationsButton">
                 {returnListName()}
