@@ -21,6 +21,7 @@ function Messages(props) {
     const [allUsers, setAllUsers] = useState([])    //Gets all users that user has messaged previously
     const [userPeek, setUserPeek] = useState({}) //Sneak peek for unselected users with latest messages
     const [selectedMessages, setSelectedMessages] = useState({}) //All messages for selected individual
+    const [recipents, setRecipents] = useState([])
     const [newChat, setNewChat] = useState(false)
     let subprotocol = cookies.token
     const ws = useRef() //refer to as ws.current
@@ -88,7 +89,7 @@ function Messages(props) {
               newSelected['messages'] = []
               newSelected.messages.push({"sender": sender, "message": message})
               setSelectedMessages(newSelected)
-              setSelectedUser({id: data['id'], name: title, users: data['users']})
+              setSelectedUser({id: data['id'], name: title, users: data['users'], group: data['group']})
             }
           }
           else if (data["status"] == "eradicate"){
@@ -117,7 +118,10 @@ function Messages(props) {
       newChat: newChat,
       setNewChat: setNewChat,
       user: user,
-      cookies: cookies
+      cookies: cookies,
+      recipents: recipents,
+      setRecipents: setRecipents,
+      locationProps: locationProps
       }
       
     if (existsCookie){

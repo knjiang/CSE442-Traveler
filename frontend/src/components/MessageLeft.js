@@ -17,9 +17,12 @@ function MessageLeft(props) {
     const newUser = props.newUser
     const ws = props.ws
     const filter = useRef()
+    const recipents = props.recipents
+    const setRecipents = props.setRecipents
     const newChat = props.newChat
     const setNewChat = props.setNewChat
     const cookies = props.cookies
+    const locationProps = props.locationProps
 
     const [show, setShow] = useState(false);
 
@@ -35,7 +38,7 @@ function MessageLeft(props) {
         else {
             title = m['name']
         }
-        setSelectedUser({"id": m["id"], "name": title, "users": m['users']})
+        setSelectedUser({"id": m["id"], "name": title, "users": m['users'], "type": m['type']})
         getChat(cookies.token, m['id'])
         .then(response => response.json())
         .then(data => {
@@ -68,19 +71,19 @@ function MessageLeft(props) {
                 else {
                     title = m['name']
                 }
-                if (selectedUser) {
+                if (selectedUser && selectedMessages.messages) {
                     if (selectedUser.id == m['id']){
-                        res.push(<div id = "userListWrapper" style = {{"display": "block", "backgroundColor": "lightgray", maxWidth: "30rem"}} onClick = {() => onClickUser(m)}><div style = {{"display": "flex"}}><h1 id = "userLogoFrom" style = {{"marginLeft": "0.25vw"}}>{title.substring(0, 3)}</h1><h1 id = "userText" style = {{"fontSize": "2.25vh", maxWidth: "25vw", overflowWrap: "break-word"}}>{title}</h1></div>
-                        <h1 id = "peek" style = {{"fontSize":"2vh"}}>{userPeek[m]}</h1></div>)
+                        res.push(<div id = "userListWrapper" style = {{"display": "block", "backgroundColor": "lightgray"}} onClick = {() => onClickUser(m)}><div style = {{"display": "flex"}}><h1 id = "userLogoFrom" style = {{"marginLeft": "0.1rem"}}>{title.substring(0, 3)}</h1><h1 id = "userText" style = {{"fontSize": "1rem", maxWidth: "18rem", maxHeight: "3.1rem", overflowWrap: "break-word", overflow: "hidden", }}>{title}</h1></div>
+                        <h1 id = "peek" style = {{"fontSize":"1rem"}}></h1></div>)
                     }
                     else {
-                        res.push(<div id = "userListWrapper" style = {{"display": "block"}} onClick = {() => onClickUser(m)}><div style = {{"display": "flex"}}><h1 id = "userLogoFrom" style = {{"marginLeft": "0.25vw"}}>{title.substring(0, 3)}</h1><h1 id = "userText" style = {{"fontSize": "2.25vh", maxWidth: "25vw", overflowWrap: "break-word"}}>{title}</h1></div>
-                        <h1 id = "peek" style = {{"fontSize":"2vh"}}>{userPeek[m]}</h1></div>)
+                        res.push(<div id = "userListWrapper" style = {{"display": "block"}} onClick = {() => onClickUser(m)}><div style = {{"display": "flex"}}><h1 id = "userLogoFrom" style = {{"marginLeft": "0.1rem"}}>{title.substring(0, 3)}</h1><h1 id = "userText" style = {{"fontSize": "1rem", maxWidth: "18rem", overflowWrap: "break-word", maxHeight: "3.1rem", overflow: "hidden", marginBottom: "auto"}}>{title}</h1></div>
+                        <h1 id = "peek" style = {{"fontSize":"1rem"}}></h1></div>)
                     }
                 }
                 else {
-                    res.push(<div id = "userListWrapper" style = {{"display": "block"}} onClick = {() => onClickUser(m)}><div style = {{"display": "flex"}}><h1 id = "userLogoFrom" style = {{"marginLeft": "0.25vw"}}>{title.substring(0, 3)}</h1><h1 id = "userText" style = {{"fontSize": "2.25vh", maxWidth: "25vw", overflowWrap: "break-word"}}>{title}</h1></div>
-                    <h1 id = "peek" style = {{"fontSize":"2vh"}}>{userPeek[m]}</h1></div>)
+                    res.push(<div id = "userListWrapper" style = {{"display": "block"}} onClick = {() => onClickUser(m)}><div style = {{"display": "flex"}}><h1 id = "userLogoFrom" style = {{"marginLeft": "0.1rem"}}>{title.substring(0, 3)}</h1><h1 id = "userText" style = {{"fontSize": "1rem", maxWidth: "18rem", overflowWrap: "break-word", maxHeight: "3.1rem", overflow: "hidden", marginBottom: "auto"}}>{title}</h1></div>
+                    <h1 id = "peek" style = {{"fontSize":"1rem"}}></h1></div>)
                 }
             }
             return (
@@ -111,8 +114,33 @@ function MessageLeft(props) {
     }
 
     useEffect (() => {
-        if (allUsers.length > 0 && allUsers != filteredUsers) {
+        if (allUsers.length > 0 && allUsers != filteredUsers && document.getElementById("filterUser").value.length == 0) {
             setFilteredUsers(allUsers)
+        }
+        if (locationProps.state && !selectedUser) {
+            if (locationProps.state.type == 'email') {
+                for (let u of allUsers) {
+                    if ((u.type == "Single" && JSON.stringify(u.users) == JSON.stringify([user.email, locationProps.state.user])) || (u.type == "Single" && JSON.stringify(u.users) == JSON.stringify([locationProps.state.user, user.email]))) {
+                        setSelectedUser(u)
+                        onClickUser(u)
+                        locationProps.state = {}
+                    }
+                    else {
+                        setNewChat(true)
+                        setSelectedUser()
+                        setRecipents([locationProps.state.user])
+                    }
+                }
+            }
+            if (locationProps.state.type == 'id') {
+                for (let u of allUsers) {
+                    if (u.id == locationProps.state.user) {
+                        setSelectedUser(u)
+                        onClickUser(u)
+                        locationProps.state = {}
+                    }
+                }
+            }
         }
     })
 
@@ -125,7 +153,7 @@ function MessageLeft(props) {
 
     const chatMenu = () => {
         if (selectedUser){
-            if (selectedUser.users.length > 2){
+            if (selectedUser.type == 'Group'){
                 return (
                     <div>
                     <Dropdown>
@@ -165,7 +193,7 @@ function MessageLeft(props) {
         if (allUsers) {
             if (filteredUsers) {
                 for (let m of filteredUsers){
-                    res.push(<h1 style = {{"fontSize": "2vh", "padding": "0.5vh"}} onClick = {() => (setSelectedUser(m), onClickUser(m))}>{m}</h1>)
+                    res.push(<h1 style = {{"fontSize": "5rem", "padding": "0.1rem"}} onClick = {() => (setSelectedUser(m), onClickUser(m))}>{m}</h1>)
                 }
             }
           return (
@@ -192,12 +220,12 @@ function MessageLeft(props) {
 
                   <div style = {{display: "flex", justifyContent: "end", width: "99%"}}>
                     {chatMenu()}
-                    <h1 style = {{fontSize: "3.5vh", textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>Messages</h1>
-                    <i style = {{fontSize: "3.5vh", marginTop: "auto", marginBottom: "auto", cursor: "pointer"}} id = "iconBTN" class="bi bi-pencil-square" onClick = {() => (setNewChat(true), setSelectedUser())}></i>
+                    <h1 style = {{fontSize: "1.5rem", textAlign: "center", marginLeft: "auto", marginRight: "auto"}}>Messages</h1>
+                    <i style = {{fontSize: "1.5rem", marginTop: "auto", marginBottom: "auto", cursor: "pointer"}} id = "iconBTN" class="bi bi-pencil-square" onClick = {() => (setNewChat(true), setSelectedUser(), setRecipents(''))}></i>
                   </div>
-                <div id = "dropdown" style = {{"display": "flex", "maxHeight": "5vh", "justifyContent": "space-between", "marginBottom": "1vh"}}>
-                    <h1 style = {{"fontSize": "2.5vh", "marginRight": "0vw", "fontWeight": "800"}}>Search Users:</h1>
-                    <input onChange = {(e) => filterUser(e)} id = "filterUser" style = {{"width": "17vw", "height": "4vh", "marginRight": "0.5vw"}}/>
+                <div id = "dropdown" style = {{"display": "flex", "maxHeight": "3rem", "justifyContent": "space-between", "marginBottom": "0.5rem"}}>
+                    <h1 style = {{"fontSize": "0.9rem", "marginRight": "0vw", "fontWeight": "800", marginTop: "auto", marginBottom: "auto"}}>Search Users:</h1>
+                    <input onChange = {(e) => filterUser(e)} id = "filterUser" style = {{"width": "15rem", "height": "1.5rem", "marginRight": "0.2rem"}}/>
     {/*               <div style = {{'marginTop': "4vh", "cursor": "pointer", "width": "16vw", "maxHeight": "15vh", "overflowY": "scroll"}}>
                     {res} 
                 </div> */}

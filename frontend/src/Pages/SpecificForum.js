@@ -41,7 +41,7 @@ const SpecificForum = (props) =>{
             }
             })
         }
-        GetPostByLocation(cookies.token, pathname.replace('-', ' '))
+        GetPostByLocation(cookies.token, pathname.replace(/-/g, ' '))
         .then(response => response.json())
         .then(data => {
             setAllThreads(data)
@@ -161,7 +161,7 @@ const SpecificForum = (props) =>{
 
     return(
         <ListGroup className="mt-4" onClick={() => handlePicker()} >
-            <h1>{pathname.replace('-', ' ')}</h1>
+            <h1>{pathname.replace(/-/g, ' ')}</h1>
             {LocationThreads()}
             {showModal()}
             <ShareTag cookies = {cookies} show = {showTag} postID = {selectedTag} callback = {callbackTagModal}/>
