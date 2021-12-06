@@ -53,6 +53,23 @@ const addToGroupChat = async(token, users, id) => {
     })
 }
 
+const removeFromGroupChat = async(token, user, id) => {
+    return fetch(`${BASE_URL}/api/chat-request/remove_from_group_chat/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "user": user,
+            "id": id
+        }),
+    })
+}
+
 const getChat = async(token, id) => {
     return fetch(`${BASE_URL}/api/chat-request/get_chat/`,
     {
@@ -85,4 +102,14 @@ const deleteChat = async(token, id) => {
     })
 }
 
-export {createChat, addToGroupChat, getChat, deleteChat, renameChat};
+const getRecentChat = (token) => {
+    return fetch(`${BASE_URL}/api/chat-request/get_recent_chat/`,
+    {
+        headers: {
+            'Authorization' : 'Token ' + token
+        },
+        method: "GET",
+    })
+}
+
+export {createChat, addToGroupChat, getChat, deleteChat, renameChat, removeFromGroupChat, getRecentChat};

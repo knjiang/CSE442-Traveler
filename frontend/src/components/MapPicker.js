@@ -16,9 +16,9 @@ function MapPicker() {
     }
 
     return (
-      <div id = "mapWrapper" style = {{"width": "80%", "marginLeft":"auto", "marginRight": "auto", "height": "100vh", "zIndex":"-1"}}>
-        <div style = {{"margin-left": "auto", "margin-right": "auto", "textAlign": "center", "height": "100vh"}}>
-          <ComposableMap style = {{ "marginTop": "-14vh", "preserveAspectRatio":"none", "maxHeight": "100vh", "width": "140vh", "transform": "scale(1, 0.8)"}}>
+      <div id = "mapWrapper" style = {{"width": "80%", "marginLeft":"auto", "marginRight": "auto", "height": "100vh", "zIndex":"-1", marginTop: "1vh"}}>
+        <div style = {{"margin-left": "auto", "margin-right": "auto", "textAlign": "center", "height": "80rem"}}>
+          <ComposableMap style = {{ "marginTop": "-14vh", "preserveAspectRatio":"none", "maxHeight": "80rem", "width": "60rem", "transform": "scale(1, 0.8)"}}>
             <Geographies geography={geoUrl} style = {{"cursor":"pointer","transform": "scale(1, 1)", "preserveAspectRatio":"none"}}>
               {({ geographies }) => ( 
                 geographies.map(geo => 
