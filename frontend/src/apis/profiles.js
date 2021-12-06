@@ -294,6 +294,28 @@ const getVisitedListData = (token) => {
     })
 }
 
+const addListComment = async(token,text,sharedlist_url) => {
+    return fetch(`${BASE_URL}/api/profiles/add_sharedlist_comments/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "comment_text": text,
+            "shared_list": sharedlist_url,
+        }),
+    })
+}
+
+const getListComment = (url) => {
+    const encoded_input = encodeURIComponent(url)
+    return fetch(`${BASE_URL}/api/profiles/get_sharedlist_comments/?url=${encoded_input}`)
+}
+
 const reset = async(token, obj) => {
     return fetch(`${BASE_URL}/api/profiles/reset/`,
     {
@@ -318,4 +340,4 @@ export {getProfile, changeLocation, getList, getUserList, getUserInfo,
     getListData, addLocationList, deleteLocationList, addList, deleteList, 
     getSetShareableLink, changeBackground, 
     addDescription, editDescription, getDescription, delDescription, changeVisited,
-    reset, changeName, changeProfileLocation}
+    reset, addListComment,getListComment, changeName, changeProfileLocation}

@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from django.http import HttpResponse, HttpResponseNotFound
 from rest_framework import authentication
 from django.contrib.auth.models import User
-from .models import ListDescriptions, Profile, LocationList, Location, SavedLocation, ShareableLink
+from .models import ListDescriptions, Profile, LocationList, Location, SavedLocation, ShareableLink, ShareableListPageComment
 from chat.models import Chat, Messages
 from forums.models import Forum, Post, Comment, Emoji
 from .serializers import ProfileSerializer
@@ -548,6 +548,35 @@ class GetVisitedDataView(APIView):
         return Response({
             "lists" : listData
         })
+
+class GetSharedListCommentView(APIView):
+    """
+        View to get all comments in a shared list
+    """
+
+    def get(self, request, format=None):
+        url = request.query_params.get('url')
+        shareable_link = get_object_or_404(ShareableLink,url=url)
+        comments = []
+        if (ShareableListPageComment.objects.filter(shareable_list=shareable_link).exists()):
+            for comment in ShareableListPageComment.objects.filter(shareable_list=shareable_link):
+                comments.append([comment.profile.user.email, comment.body])
+        return Response({"list_comments": comments})
+
+
+class AddSharedListCommentView(APIView):
+    """
+        View to add a commment to shared list
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        my_profile = get_object_or_404(Profile,pk=request.user.id)
+        url = get_object_or_404(ShareableLink,url=request.data['shared_list'])
+        comment = request.data['comment_text']        
+        ShareableListPageComment.objects.create(body=comment,shareable_list=url,profile=my_profile)
+        return Response()
+
 class ResetView(APIView):
     '''
     Deletes all objects for specified model

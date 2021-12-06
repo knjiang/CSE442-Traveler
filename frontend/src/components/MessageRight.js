@@ -1,8 +1,8 @@
 import {useState,useEffect} from "react"
-import { Button, Dropdown } from 'react-bootstrap'
+import { Button, Modal, Dropdown } from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 import { getUserList } from '../apis/profiles';
-import { createChat } from '../apis/chat'
+import { createChat, removeFromGroupChat, addToGroupChat } from '../apis/chat'
 
 function MessageRight(props) {
 
@@ -19,9 +19,14 @@ function MessageRight(props) {
     const newChat = props.newChat
     const setNewChat = props.setNewChat
     const cookies = props.cookies
-    const [recipents, setRecipents] = useState([])
+    const recipents = props.recipents
+    const setRecipents = props.setRecipents
     const [filterRecipents, setFilterRecipents] = useState("")
     const [allEmails, setAllEmails] = useState([])
+
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const showMessages = () => {
         let res = []
@@ -183,9 +188,27 @@ function MessageRight(props) {
     const sendUsers = () => {
         let res = []
         for (let u of allEmails){
-            if (u.includes(filterRecipents) || filterRecipents.value ==  ""){
+            if ((u.includes(filterRecipents) || filterRecipents.value ==  "")){
                 if (!recipents.includes(u) && u != user.email) {
                     res.push(<Dropdown.Item style = {{justifyContent: "center"}} onClick = {() => setRecipents(re => [...re, u])}>{u}</Dropdown.Item>)
+                }
+            }
+        }
+        return (
+            <Dropdown.Menu style = {{justifyContent: "center", width: "60%", marginLeft: "2.5rem", maxHeight: "15rem", overflowY: "auto"}}>
+                {res}
+            </Dropdown.Menu>
+        )
+    }
+
+    const addFilteredUsers = () => {
+        let res = []
+        for (let u of allEmails){
+            if ((u.includes(filterRecipents) || filterRecipents.value ==  "" ) && selectedUser){
+                if (!recipents.includes(u) && u != user.email) {
+                    if (!selectedUser.users.includes(u)){
+                        res.push(<Dropdown.Item style = {{justifyContent: "center"}} onClick = {() => (setRecipents(re => [...re, u]))}>{u}</Dropdown.Item>)
+                    }
                 }
             }
         }
@@ -207,28 +230,73 @@ function MessageRight(props) {
             res.push(<div style = {{fontSize: "1rem", marginRight: "1rem"}}><a style = {{color: "black", textDecoration: "none", border: "0.1rem solid gray", borderRadius: "0.5rem", padding: "0.25rem 0.5rem 0.25rem 0.5rem"}} href = {'/user/' + u}>{u}</a><i onClick = {() => removeRecipent(u)}style = {{fontSize: "1.25rem", color: "red", cursor: "pointer"}} class="bi bi-dash-circle"></i></div>)
         }
         return (
-            <div style = {{display: "flex", width: "90%", height: "10rem", overflowY: "auto", margin: "auto"}}>
-            {res}
+            <div style = {{display: "grid", width: "90%", maxWidth: "90%", height: "10rem", margin: "auto", overflowY: "auto", gridTemplateColumns: "repeat(2, 0.5fr)"}}>
+                {res}
             </div>
         )
     }
 
-    const resetRecipents = () => {
-        if (recipents != "") {
-            setRecipents("")
+    const returnMembers = () => {
+        let res = []
+        {selectedUser.type == "Group" && res.push(<Dropdown.Item onClick={() => (handleShow(), setRecipents(''))} style = {{display: "flex", justifyContent: "space-between"}}>Add members <i style = {{padding: "0.10rem 0.35rem 0.10rem 0.35rem"}} class="bi bi-person-plus-fill"></i></Dropdown.Item>)}
+        res.push(<Dropdown.Divider />)
+        for (let m of selectedUser.users){
+            if (m != user.email){
+                let link = '/user/' + m
+                res.push(<Dropdown.Item style = {{display: "flex", justifyContent: "space-between"}}><h3 style = {{fontSize: "1rem", marginRight: "0.25rem", marginTop: "auto", marginBottom: "auto"}} href = {link}>{m}</h3> <i onClick = {() => (removeFromGroupChat(cookies.token, m, selectedUser.id), window.location.reload())} id = "icon" class="bi bi-person-dash-fill"></i></Dropdown.Item>)
+            }
         }
+        res.push(<Dropdown.Item style = {{display: "flex", justifyContent: "space-between"}}>{user.email}<i onClick = {() => (removeFromGroupChat(cookies.token, user.email, selectedUser.id), window.location.reload())} id = "icon" class="bi bi-person-dash-fill"></i></Dropdown.Item>)
+        return (
+            <Dropdown.Menu>
+                {res}
+            </Dropdown.Menu>
+        )
+    }
+
+    const addMembers = () => {
+        return (
+            <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Add users</Modal.Title>
+            </Modal.Header>
+                    <div style = {{fontSize: "1rem", display: "flex", justifyContent: "center", height: "20rem"}}>
+                        <Dropdown autoClose="outside" show = {true}>
+                            <Dropdown.Toggle id="dropdown-basic" style = {{border: "none", backgroundColor: "white", color: "black"}} onClick = {() => document.getElementById("recipents").focus()}>
+                                To: <input onChange = {() => (setFilterRecipents(document.getElementById("recipents").value))} id = "recipents" style = {{width: "20rem"}} placeholder = "Type in the email of recipents" />
+                            </Dropdown.Toggle>
+                            {addFilteredUsers()}
+                        </Dropdown>
+                    </div>
+                    {linkUsers()}
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={() => (handleClose(), addToGroupChat(cookies.token, recipents, selectedUser.id), window.location.reload())}>
+                Save Changes
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )
     }
 
     return (
       <div id = "rightMessageWrapper">
-
+          {addMembers()}
           {!newChat && <div>
-            {resetRecipents()}
-            {selectedUser && <h3 style = {{"fontSize": "2.5vh", "textAlign": "center", marginLeft: "auto", marginRight: "auto", fontWeight:"800", width: "45vw", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"}}>Showing messages with {selectedUser.name}</h3>}
+            {selectedUser && <div style = {{marginLeft: "auto", marginRight: "auto", display: "flex"}}><h3 style = {{"fontSize": "2.5vh", "textAlign": "center",  fontWeight:"800", width: "45vw", textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"}}>Showing messages with {selectedUser.name}</h3>
+            <Dropdown drop = "start">
+                <Dropdown.Toggle style = {{border: "none", backgroundColor: "white"}}>
+                    <i class="bi bi-person-lines-fill" style = {{color: "black"}}>Members</i>
+                </Dropdown.Toggle>
+                {returnMembers()}
+            </Dropdown>
+            </div>}
             {showMessages()}  
             {selectedUser && inputTyper()}
           </div>}
-          {newChat && <div style = {{}}>
+          {newChat && <div >
                 <div style = {{fontSize: "1rem", display: "flex", justifyContent: "center", height: "20rem"}}>
                     <Dropdown autoClose="outside" show = {true}>
                         <Dropdown.Toggle id="dropdown-basic" style = {{border: "none", backgroundColor: "white", color: "black"}} onClick = {() => document.getElementById("recipents").focus()}>

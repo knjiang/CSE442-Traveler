@@ -126,6 +126,25 @@ class AddToGroupChatView(APIView):
         Add a [user[s]] to a group chat
         """
         id = request.data['id']
+        users = request.data['users']
+        chat = get_object_or_404(Chat,pk = id)
+        for u in users:
+            profile = get_object_or_404(Profile,user__email = u)
+            chat.users.add(profile)
+
+        return Response()
+
+class RemoveFromGroupChatView(APIView):
+    def post(self, request, format = None):
+        '''
+        Remove a user from group chat
+        '''
+        id = request.data['id']
+        user = request.data['user']
+        chat = Chat.objects.get(pk = id)
+        profile = get_object_or_404(Profile,user__email = user)
+        chat.users.remove(profile)
+        chat.save()
 
         return Response()
 
@@ -166,3 +185,26 @@ class DeleteAllGroupChatView(APIView):
         """
 
         return Response()
+
+class GetRecentChatView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def get(self, request, format=None):
+        """
+        Delete all group chats
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        chatLog = profile.chat_set.all()
+        counter = 0
+        res = []
+        users = []
+        for c in chatLog:
+            if counter < 5:
+                for u in c.users.all():
+                    users.append(u.user.email)
+                res.append({"id": c.id, "name": c.name, "nameChanged": c.nameChanged, "type": c.type, "users": users})
+            else:
+                break
+            counter += 1
+            users = []
+        return Response(res)

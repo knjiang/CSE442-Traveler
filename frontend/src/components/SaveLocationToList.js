@@ -111,25 +111,19 @@ function SaveLocationToList(props){
 
     return (
         <div >
-            <div style = {{"width": "100%", "textAlign": "right", "margin-top": "-6vh", "display": "flex", "justifyContent": "end"}}>
+            <div style = {{ "textAlign": "right", "display": "flex", "justifyContent": "end"}}>
                 {list_dropDown()}
             </div>
 
-            <Alert show={showSaveLocationE} variant="danger" onClose={() => setSLShowError(false)} dismissible>
-                    <Alert.Heading>Error!</Alert.Heading>
-                    <p>
-                    Error, Location already in list.
-                    </p>
+            <Alert show={showSaveLocationE} style = {{position: "fixed", right: "10vw"}} variant="danger" onClose={() => setSLShowError(false)} dismissible>
+                    Error, location already in selected list.
                 </Alert>                   
                 
-                <Alert show={showSaveLocationS} variant="success" onClose={() => setSLShowSuccess(false)} dismissible>
-                    <Alert.Heading>Success!</Alert.Heading>
-                    <p>
-                    Location has been added to selected list.
-                    </p>
+                <Alert show={showSaveLocationS} variant="success" style = {{position: "fixed", right: "10vw"}} onClose={() => setSLShowSuccess(false)} dismissible>
+                    Success, location added to selected list.
                 </Alert>
 
-            <Modal show={showNewList} onHide={handleClose}>
+            <Modal show={showNewList}  onHide={handleClose}>
                     <Alert show={showNewListE} variant="danger" onClose={() => setNLShowError(false)} dismissible>
                             <Alert.Heading>Error!</Alert.Heading>
                             <p>

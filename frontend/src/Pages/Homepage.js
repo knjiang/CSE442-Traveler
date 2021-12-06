@@ -39,8 +39,8 @@ function Homepage(props){
   return(
     <div>
       <div id = "masterDiv">
-        <Button onClick = {() => (setDropLocation(!useDropLocations), changeBTN())} style = {{color: dropTextColor, backgroundColor: dropBackColor, width: "5vw", "height": "5vh", borderTopLeftRadius: "2vh", borderBottomLeftRadius: "2vh", borderTopRightRadius: "0vh", borderBottomRightRadius: "0vh"}} >Map</Button>
-        <Button onClick = {() => (setDropLocation(!useDropLocations), changeBTN())} style = {{color:mapTextColor, backgroundColor: mapBackColor, width: "5vw", "height": "5vh", borderTopLeftRadius: "0vh", borderBottomLeftRadius: "0vh", borderTopRightRadius: "2vh", borderBottomRightRadius: "2vh"}}>List</Button>
+        <Button onClick = {() => (setDropLocation(!useDropLocations), changeBTN())} style = {{color: dropTextColor, backgroundColor: dropBackColor, width: "5rem", "height": "2rem", borderTopLeftRadius: "2vh", borderBottomLeftRadius: "2vh", borderTopRightRadius: "0vh", borderBottomRightRadius: "0vh"}} ><h1 style = {{marginTop: "auto", marginBottom: "auto", fontSize: "1rem"}}>Map</h1></Button>
+        <Button onClick = {() => (setDropLocation(!useDropLocations), changeBTN())} style = {{color:mapTextColor, backgroundColor: mapBackColor, width: "5rem", "height": "2rem", borderTopLeftRadius: "0vh", borderBottomLeftRadius: "0vh", borderTopRightRadius: "2vh", borderBottomRightRadius: "2vh"}}><h1 style = {{marginTop: "auto", marginBottom: "auto", fontSize: "1rem"}}>List</h1></Button>
         <br/>
         {useDropLocations && <LocationPicker/>}
         {!useDropLocations && <MapPicker/>}
