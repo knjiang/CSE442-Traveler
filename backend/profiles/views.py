@@ -524,7 +524,7 @@ class GetSharedListCommentView(APIView):
         comments = []
         if (ShareableListPageComment.objects.filter(shareable_list=shareable_link).exists()):
             for comment in ShareableListPageComment.objects.filter(shareable_list=shareable_link):
-                comments.append((comment.profile.user.email, comment.body))
+                comments.append([comment.profile.user.email, comment.body])
         return Response({"list_comments": comments})
 
 

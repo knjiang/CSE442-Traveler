@@ -1,6 +1,6 @@
 import {useState,useEffect} from "react"
 import {getShareableContents} from "../apis/locations"
-import {getDescription, addListComment, getProfile} from "../apis/profiles"
+import {getDescription, addListComment, getListComment} from "../apis/profiles"
 import { useCookies } from "react-cookie"
 
 function SharedListPage(props){
@@ -10,24 +10,18 @@ function SharedListPage(props){
     const [descriptions,setDescriptions] = useState(false)
     const [cookies,setCookie] = useCookies(['token']);
     const [text,setText] = useState('')
-    const [user,setUser] = useState({
-        email: '',
-    })
-
+    const [comments, setComments] = useState([])
     const primary_user = props.parentUser
     const setPrimaryUser = props.parentSetUser 
 
     useEffect(() => {
-        
-        getProfile(cookies.token)
+        const pathname = window.location.pathname.substr(7)
+
+        getListComment(pathname)
             .then(response => response.json())
             .then(data => {
-                setUser({
-                    email: data.email
-                  });
-        })
-
-        const pathname = window.location.pathname.substr(7)
+                setComments(data.list_comments)
+            })
         
         getShareableContents(pathname)
         .then(response => response.json())
@@ -59,7 +53,7 @@ function SharedListPage(props){
     const handleSubmit = (e) => {
             e.preventDefault()
             const pathname = window.location.pathname.substr(7)
-            addListComment(cookies.token, user.email, text, pathname)
+            addListComment(cookies.token, text, pathname)
     }
 
     const returnLocations = () => {
@@ -89,6 +83,14 @@ function SharedListPage(props){
         </div>
 
         <h1 style = {{fontSize: "3vh"}}> Comments: </h1>
+        <ul>
+                    {comments.map((c) => 
+                        <li>
+                            {c[0]} - {c[1]}
+                        </li>
+                    )}
+        </ul>
+        <br/>
         {returnLocations()}
         
         </div>
