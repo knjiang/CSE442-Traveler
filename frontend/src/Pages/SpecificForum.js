@@ -7,6 +7,7 @@ import { useCookies } from 'react-cookie';
 import { getProfile } from '../apis/profiles';
 import ForumComment from '../components/ForumComment';
 import ShareTag from '../components/ShareTag';
+import { Link } from 'react-router-dom';
 
 const SpecificForum = (props) =>{
 
@@ -161,7 +162,15 @@ const SpecificForum = (props) =>{
 
     return(
         <ListGroup className="mt-4" onClick={() => handlePicker()} >
-            <h1>{pathname.replace(/-/g, ' ')}</h1>
+            <div style = {{marginTop: "-3vh", display: "flex", justifyContent:"space-evenly"}}>
+                <h1 style = {{ marginRight: "auto", width: "15vw", height: "4vh"}}>{pathname.replace('-', ' ')} </h1>
+                <Link to={{
+                    pathname: "/post",
+                    state: pathname.replace('-', ' ')
+                }} style = {{height: "4vh", display: "flex", justifyContent: "center", 
+                textAlign: "center", fontSize: "2vh"}} 
+                className="btn btn-success">New Post</Link>
+            </div>
             {LocationThreads()}
             {showModal()}
             <ShareTag cookies = {cookies} show = {showTag} postID = {selectedTag} callback = {callbackTagModal}/>
