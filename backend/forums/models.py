@@ -24,4 +24,4 @@ class Emoji(models.Model):
 
 class Tag(models.Model):
     tagged = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)

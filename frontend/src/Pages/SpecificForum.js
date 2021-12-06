@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import{ListGroup,ListGroupItem,Button, Modal} from "react-bootstrap";
 import {getLocation} from "../apis/locations";
-import {useHistory} from "react-router";
 import '../components/Forum.css'
 import { GetPostByLocation, AddComment, GetCommentFromPost } from '../apis/forums'
 import { useCookies } from 'react-cookie';
 import { getProfile } from '../apis/profiles';
 import ForumComment from '../components/ForumComment';
+import ShareTag from '../components/ShareTag';
 
 const SpecificForum = (props) =>{
-
-    const history = useHistory();
 
     const pathname = window.location.pathname.substr(7)
 
@@ -25,6 +23,8 @@ const SpecificForum = (props) =>{
     const [showPicker, setShowPicker] = useState(false)
     const user = props.parentUser
     const setUser = props.parentSetUser 
+    const [showTag, setShowTag] = useState(false)
+    const [selectedTag, setSelectedTag] = useState()
 
     useEffect (() => {
         if (cookies.token && !user.logged_in){
@@ -56,6 +56,15 @@ const SpecificForum = (props) =>{
             setSelectedComment(data)
         })
     }
+    const tagPerson = (postID) => {
+        console.log(postID)
+        setSelectedTag(postID)
+        setShowTag(true)
+        console.log('hi')
+    }
+    const callbackTagModal = () => {
+        setShowTag(false)
+    }
 
     const LocationThreads = () => {
         //threads[0] = title, threads[1] = body, threads[2] = location, threads[3] = profile(name), threads[4] = id
@@ -70,6 +79,8 @@ const SpecificForum = (props) =>{
                             <div style = {{display: "flex", justifyContent: "space-between", width: "95%", marginLeft: "auto", marginRight: "auto", paddingTop: "1vh", paddingBottom: "1vh"}}>
                                 <h1 style = {{fontSize: "3.5vh", "maxWidth": "120vh",whiteSpace: "wrap", overflowWrap: "anywhere"}}>{threads[0]}</h1>
                                 <h1 style = {{marginTop: "auto", overflowWrap: "anywhere"}} id = "threadTitleText">Posted by: {threads[3]}</h1>
+                                <br/>
+                                <Button variant="secondary" id = "tagBTN" onClick = {(evt) => (evt.stopPropagation(),tagPerson(threads[4]))}> Tag </Button> 
                             </div>
                         </div>
                     ))}
@@ -153,7 +164,7 @@ const SpecificForum = (props) =>{
             <h1>{pathname.replace('-', ' ')}</h1>
             {LocationThreads()}
             {showModal()}
-
+            <ShareTag cookies = {cookies} show = {showTag} postID = {selectedTag} callback = {callbackTagModal}/>
         </ListGroup>
     )
 
