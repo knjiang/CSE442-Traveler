@@ -137,6 +137,22 @@ const addEmojiToComment = async(token, emoji_name, comment_id) => {
     })
 }
 
+const addTag = async(token, postID, email) => {
+    return fetch(`${BASE_URL}/api/forums/add_tag/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+            'X-CSRFToken': await getCsrfToken(),
+        },
+        method: "POST",
+        body : JSON.stringify({
+            "post_id": postID,
+            "email": email,
+        }),
+    })
+}
 
 export { AddPost, AddComment, GetPostByLocation, GetCommentFromPost,
-getUserPost, getUserComment, delUserPost, delUserComment, addEmojiToComment};
+getUserPost, getUserComment, delUserPost, delUserComment, addEmojiToComment, addTag};
