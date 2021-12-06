@@ -154,5 +154,17 @@ const addTag = async(token, postID, email) => {
     })
 }
 
+const GetPostByTag = (token) => { 
+    return fetch(`${BASE_URL}/api/forums/get_post_by_tag/`,
+    {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization' : 'Token ' + token,
+        },
+        method: "GET",
+    })
+}
+
 export { AddPost, AddComment, GetPostByLocation, GetCommentFromPost,
-getUserPost, getUserComment, delUserPost, delUserComment, addEmojiToComment, addTag};
+getUserPost, getUserComment, delUserPost, delUserComment, addEmojiToComment, addTag, GetPostByTag};
