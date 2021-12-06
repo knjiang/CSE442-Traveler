@@ -35,6 +35,8 @@ class GetProfileView(APIView):
             "from_location": profile.from_location,
             "background": profile.background,
             "visited": profile.visited,
+            "displayName": profile.displayName,
+            "profileLocation": profile.profileLocation,
         })
 
 class ChangeLocationView(APIView):
@@ -314,6 +316,40 @@ class ChangeBackgroundView(APIView):
         profile.background = request.data['background']
         profile.save()
         return Response()
+
+
+class ChangeUserNameView(APIView):
+    """
+    View to change name 
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        """
+        View to change name.
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        profile.displayName = request.data['displayName']
+        profile.save()
+        return Response()
+
+
+
+class ChangeProfileLocationView(APIView):
+    """
+    View to change name 
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        """
+        View to change name.
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        profile.profileLocation = request.data['profileLocation']
+        profile.save()
+        return Response()
+
 
 
 class ChangeVisitedView(APIView):

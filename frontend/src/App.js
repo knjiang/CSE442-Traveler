@@ -17,6 +17,8 @@ function App() {
     from_location: "",
     background: "",
     visited: "",
+    displayName: "",
+    profileLocation: "",
   })
 
   useEffect(() => {
@@ -32,6 +34,8 @@ function App() {
             from_location: data.from_location,
             background: data.background,
             visited: data.visited,
+            displayName: data.displayName,
+            profileLocation: data.profileLocation,
           })
         }
       })
