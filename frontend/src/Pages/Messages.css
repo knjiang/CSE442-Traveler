@@ -6,26 +6,30 @@
     display: flex;
     width: 100%;
     height: 100%;
-    margin-top: 4vh;
+    margin-top: 2rem;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #leftMessageWrapper {
-    width: 35%;
-    height: 80vh;
+    width: 25rem;
+    height: 38rem;
+    margin-left: auto;
+    margin-right: 1rem
 }
 
 #userList {
-    height: 70vh;
-    max-height: 70vh;
+    height: 33rem;
+    max-height: 33rem;
     overflow-y: auto;
     margin-top: 0vh;
 }
 
 #userListWrapper {
     cursor: pointer;
-    padding-bottom: 1vh;
-    padding-top: 1vh;
-    border-radius: 0.5vh;
+    padding-bottom: 0.4rem;
+    padding-top: 0.4rem;
+    border-radius: 0.2rem;
 }
 
 #userListWrapper:hover {
@@ -33,50 +37,51 @@
 }
 
 #messagesList {
-    height: 70vh;
-    max-height: 70vh;
+    height: 33rem;
+    max-height: 33rem;
     overflow-y: auto;
     width: 100%;
-    margin-top: 2vh;
+    margin-top: 1rem;
 }
 
 #rightMessageWrapper {
-    width: 65%;
-    height: 80vh;
+    width: 49rem;
+    height: 38rem;
+    margin-right: auto;
+    margin-left: 1rem;
 }
 
 #messageInput {
-    position: absolute;
-    bottom: 7.5vh;
-    margin-left: 2vw;
+    margin-left: 2rem;
+    margin-bottom: 5rem;
 }
 
 #messageInput input {
-    width: 43vw;
-    height: 5vh;
-    border-bottom-left-radius: 2vh;
-    border-top-left-radius: 2vh;
+    width: 40rem;
+    height: 2rem;
+    border-bottom-left-radius: 0.5rem;
+    border-top-left-radius: 0.5rem;
 }
 
 #messageInput Button {
-    width: 5vw;
-    height: 5vh;
-    margin-top: -0.7vh;
-    font-size: 2vh;
+    width: 5rem;
+    height: 2rem;
+    margin-top: -0.3rem;
+    font-size: 0.8rem;
 }
 
 #dmFrom {
-    font-size: 3vh;
+    font-size: 1rem;
     color: blue;
-    padding: 1vh;
+    padding: 0.2rem;
     display: flex;
     justify-content: left;
 }
 
 #dmTo {
-    font-size: 3vh;
+    font-size: 1rem;
     color: green;
-    padding: 1vh;
+    padding: 0.2rem;
     display: flex;
     justify-content: right;
 }
@@ -84,16 +89,16 @@
 #userLogoFrom {
     border: 2px solid blue;
     border-radius: 100%;
-    width: 6.25vh;
-    height: 6.25vh;
+    width: 3rem;
+    height: 3rem;
     text-align: center;
-    font-size: 2.5vh;
+    font-size: 1rem;
     margin-right: 0.5vw;
     margin-top: 0vh;
     background-color: blue;
     color: white;
     text-decoration: none;
-    min-width: 6.25vh;
+    min-width: 3rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -102,42 +107,42 @@
 #userLogoTo {
     border: 2px solid green;
     border-radius: 100%;
-    width: 6.25vh;
-    height: 6.25vh;
+    width: 3rem;
+    height: 3rem;
     text-align: center;
-    font-size: 2.5vh;
+    font-size: 1rem;
     margin-left: 0.5vw;
     margin-top: 0vh;
     background-color: green;
     color: white;
     text-decoration: none;
-    min-width: 6.25vh;
-    align-items: center;
+    min-width: 3rem;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 #messageTextFrom {
-    font-size: 2.5vh;
+    font-size: 1.25rem;
     border: 2px solid gray;
     border-bottom-left-radius: 0vh;
-    border-top-left-radius: 3vh;
-    border-bottom-right-radius: 3vh;
-    border-top-right-radius: 3vh;
-    padding: 1vh 3vh 1vh 3vh;
-    max-width: 38.5vw;
-    
+    border-top-left-radius: 2rem;
+    border-bottom-right-radius: 2rem;
+    border-top-right-radius: 2rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    max-width: 40rem;
+    overflow-wrap: anywhere;
 }
 
 #messageTextTo {
-    font-size: 2.5vh;
+    font-size: 1.25rem;
     border: 2px solid gray;
-    border-bottom-left-radius: 3vh;
-    border-top-left-radius: 3vh;
-    border-bottom-right-radius: 0vh;
-    border-top-right-radius: 3vh;
-    padding: 1vh 3vh 1vh 3vh;
-    max-width: 38.5vw;
+    border-bottom-left-radius: 2rem;
+    border-top-left-radius: 2rem;
+    border-bottom-right-radius: 0rem;
+    border-top-right-radius: 2rem;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+    max-width: 40rem;
     text-overflow: "";
     white-space: wrap;
     overflow-wrap: anywhere;
@@ -145,7 +150,7 @@
 
 #userText {
     cursor: pointer;
-    padding: 1vh 2vh 1vh 2vh;
+    padding: 0.5rem 1rem 0.5rem 1rem;
 }
 
 #peek {
@@ -156,4 +161,14 @@
     overflow: hidden;
     text-overflow: ellipsis;
     margin-top: -2vh;
+}
+
+#icon {
+    padding: 0.10rem 0.35rem 0.10rem 0.35rem;
+    border-radius: 2vh;
+}
+
+#icon:hover {
+    color: red;
+    background: rgb(255, 222, 222);
 }

@@ -1,7 +1,7 @@
 import { useEffect,useState, useRef } from "react";
 import { useCookies } from "react-cookie";
 import { addList, getListData, addLocationList } from '../apis/profiles'
-import { Button, Dropdown, DropdownButton } from 'react-bootstrap'
+import { Button, Dropdown } from 'react-bootstrap'
 
 function TopMyList(props){
     const user = props.parentUser
@@ -47,11 +47,11 @@ function TopMyList(props){
     const inputname = () => {
         return (
             <div>
-            <form onSubmit = {(e) => handleSubmitList(e)} key = "nameForm" style = {{"fontSize": "3vh", "marginTop":"auto", "marginBottom": "auto"}}>
-                Add a new list:                     
-                <input placeholder="Type the new list name here" type="text" id = "nameInput" className = "normal" style = {{"height":"5vh", "width":"20vw", "marginLeft": "0.5vw"}}/>
-                <Button style = {{"height":"5vh", "marginTop": "-0.0vh"}} onClick = {(e) => handleSubmitList(e)}>
-                <h1 style = {{"fontSize": "2vh"}}>Submit</h1>
+            <form onSubmit = {(e) => handleSubmitList(e)} key = "nameForm" style = {{"fontSize": "1.2rem", "marginTop":"auto", "marginBottom": "auto"}}>
+                Add a new list:      
+                <input placeholder="Type the new list name here" type="text" id = "nameInput" className = "normal" style = {{"height":"2rem", "width":"20rem", "marginLeft": "0.2rem"}}/>
+                <Button style = {{"height":"2rem", "marginTop": "auto"}} onClick = {(e) => handleSubmitList(e)}>
+                <h1 style = {{"fontSize": "0.8rem", marginTop: "auto", marginBottom: "auto"}}>Submit</h1>
                 </Button>
             </form>
             </div>
@@ -62,7 +62,7 @@ function TopMyList(props){
     const addLocalDrop = () => {
         let res = []
         if (typeof selectList != undefined && allLocation && typeof dataList != undefined) {
-            for (let i of allLocation){
+            for (let i of allLocation.sort()){
                 if (!dataList[selectedList].includes(i))
                 res.push(<Dropdown.Item id = "dropLocationItem" onClick={() => handleAddLocationList(i)}><h1 id = "dropLocationItemText">{i}</h1></Dropdown.Item>)
             }
@@ -99,7 +99,11 @@ function TopMyList(props){
                 <div style = {{"textAlign":"center"}}>
                         {inputname()}
                     </div>
-                {selectedList && <DropdownButton drop = "down" id = "addLocalBTN" title = "Add Location">{addLocalDrop()}</DropdownButton>}
+                {selectedList && <Dropdown drop = "down" id = "addLocalBTN">
+                    <Dropdown.Toggle id = "addLocalBTN">
+                    Add Location
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu style = {{maxHeight: "30rem", overflow: "scroll"}}>{addLocalDrop()}</Dropdown.Menu></Dropdown>}
                 {!selectedList && <Button drop = "down" id = "addLocalBTN" id = "addLocalBTNOff" title = "Select a list">Select a list</Button>}
             </div>
         )
