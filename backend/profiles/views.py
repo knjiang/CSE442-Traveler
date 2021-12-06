@@ -9,7 +9,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 from rest_framework import authentication
 from django.contrib.auth.models import User
 from .models import ListDescriptions, Profile, LocationList, Location, SavedLocation, ShareableLink, ShareableListPageComment
-from chat.models import LastSent, Messages
+from chat.models import Chat, Messages
 from forums.models import Forum, Post, Comment, Emoji
 from .serializers import ProfileSerializer
 from rest_framework.renderers import JSONRenderer
@@ -35,6 +35,8 @@ class GetProfileView(APIView):
             "from_location": profile.from_location,
             "background": profile.background,
             "visited": profile.visited,
+            "displayName": profile.displayName,
+            "profileLocation": profile.profileLocation,
         })
 
 class ChangeLocationView(APIView):
@@ -316,6 +318,40 @@ class ChangeBackgroundView(APIView):
         return Response()
 
 
+class ChangeUserNameView(APIView):
+    """
+    View to change name 
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        """
+        View to change name.
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        profile.displayName = request.data['displayName']
+        profile.save()
+        return Response()
+
+
+
+class ChangeProfileLocationView(APIView):
+    """
+    View to change name 
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        """
+        View to change name.
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        profile.profileLocation = request.data['profileLocation']
+        profile.save()
+        return Response()
+
+
+
 class ChangeVisitedView(APIView):
     """
     View to change displayed visited countries
@@ -551,7 +587,7 @@ class ResetView(APIView):
         if request.user.email in authorized:
             if (obj == 'all'):
                 Messages.objects.all().delete()
-                LastSent.objects.all().delete()
+                Chat.objects.all().delete()
                 LocationList.objects.all().delete()
                 Location.objects.all().delete()
                 Post.objects.all().delete()
@@ -561,5 +597,5 @@ class ResetView(APIView):
                 Profile.objects.all().delete()
             elif (obj == 'message'):
                 Messages.objects.all().delete()
-                LastSent.objects.all().delete()
+                Chat.objects.all().delete()
         return Response()

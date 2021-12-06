@@ -8,9 +8,11 @@ class Profile(models.Model):
     from_location = models.TextField(max_length=30,default="")
     background = models.TextField(max_length=50,default="")
     visited = models.TextField(max_length=50,default="")
+    displayName = models.TextField(max_length=50, default="")
+    profileLocation = models.TextField(max_length=50, default="")
 
     def __str__(self):
-        return self.user.username
+        return self.user.email
 
 class Language(models.Model):
     name = models.TextField(max_length=30)

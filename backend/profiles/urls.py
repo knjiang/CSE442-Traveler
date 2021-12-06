@@ -29,6 +29,8 @@ EditDescriptionView,
 GetDescriptionView,
 AddSharedListCommentView,
 GetSharedListCommentView,
+ChangeUserNameView,
+ChangeProfileLocationView,
 ResetView
 )
 
@@ -60,5 +62,7 @@ urlpatterns = [
     path('delete_visited_data', GetVisitedDataView.as_view()),
     path ('add_sharedlist_comments/', AddSharedListCommentView.as_view()), 
     path ('get_sharedlist_comments/', GetSharedListCommentView.as_view()),
+    path('change_username/', ChangeUserNameView.as_view()), 
+    path('change_profile_location/', ChangeProfileLocationView.as_view()), 
     path ('reset/', ResetView.as_view())
 ]

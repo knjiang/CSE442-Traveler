@@ -3,6 +3,8 @@ import { getUserInfo } from '../apis/profiles';
 import {getFriends, getFriendRequests, sendRequest} from '../apis/friends';
 import { useCookies } from 'react-cookie';
 import { Link } from 'react-router-dom'
+import {Button} from 'react-bootstrap'
+import './Homepage.css'
 
 function Searched_Profile(props){
 
@@ -57,7 +59,8 @@ function Searched_Profile(props){
 
         {(user.email in friends || user.email in friendRequests) ? <p>Already friends or user sent a request to you.</p> : <button onClick={() => addFriend()}> Send Friend Request </button>}
     
-        <Link to = {{pathname: '/messages', state: {'userInfo': user}}}>Message {user.username}</Link>
+        {(primary_user.email != user.email) && <Link to = {{pathname: '/messages', state: {'userInfo': user}}}>Message {user.username}</Link>}
+        {(primary_user.email == user.email) && <Button id = "notAllowed" style = {{cursor: "now-allowed"}}>Message {user.username}</Button>}
         </div>
 
         
