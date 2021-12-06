@@ -8,7 +8,9 @@ from .views import (
     GetPostView, 
     DeletePostView, 
     DeleteCommentView,
-    AddEmojiToComment
+    AddEmojiToComment,
+    AddTag,
+    GetPostFromTagView,
 )
 
 app_name = "forums"
@@ -22,5 +24,7 @@ urlpatterns = [
     path('get_comment/', GetCommentView.as_view()),
     path('del_post/', DeletePostView.as_view()),
     path('del_comment/', DeleteCommentView.as_view()),
-    path('add_emoji_to_comment/', AddEmojiToComment.as_view())
+    path('add_emoji_to_comment/', AddEmojiToComment.as_view()),
+    path('add_tag/', AddTag.as_view()),
+    path('get_post_by_tag/', GetPostFromTagView.as_view()),
 ]

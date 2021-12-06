@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import authentication
 
 from profiles.models import Profile, Location
-from .models import Post,Comment, Emoji
+from .models import Post,Comment, Emoji, Tag
 from django.contrib.auth.models import User
 
 import json
@@ -90,12 +90,17 @@ class GetPostFromLocationView(APIView):
         """
         Get all posts 
         """
+        
         location_name = request.query_params.get('location')
-        locationObject = Location.objects.get(name = location_name).id
+        
+        locationObject = Location.objects.get(name = location_name)
+        
         all_posts = Post.objects.filter(location = locationObject)
+        
         res = {}
         for p in all_posts:
             res[p.id] = [p.title, p.body, p.location.name, p.profile.user.username, p.id]
+        
         return Response(res)
 
 class GetPostView(APIView):
@@ -186,3 +191,34 @@ class AddEmojiToComment(APIView):
         if not Emoji.objects.filter(comment=comment,name=emoji_name).exists():
             Emoji.objects.create(comment=comment,name=emoji_name)
         return Response()
+
+class AddTag(APIView):
+    """
+        View to add a tag to a post
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        post_id = request.data['post_id']
+        email = request.data['email']
+        post = get_object_or_404(Post,id=post_id)
+        tagged = get_object_or_404(Profile,user__email=email)
+        if not Tag.objects.filter(post=post,tagged=tagged).exists():
+            Tag.objects.create(post=post,tagged=tagged)
+        return Response()
+
+class GetPostFromTagView(APIView):
+    """
+    View to get all posts 
+    """
+    def get(self, request, format=None):
+        """
+        Get all posts 
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        all_tags = Tag.objects.filter(tagged = profile)
+        res = {}
+        for t in all_tags:
+            p = t.post
+            res[p.id] = [p.title, p.body, p.location.name, p.profile.user.username, p.id]
+        return Response(res)

@@ -3,52 +3,56 @@
     text-align: left;
 }
 
-#leftList {
-    border: 1px black solid;
-    width: 40%;
-    height: 70vh;
-    text-align: left;
-    margin-left: auto;
-    border-top-left-radius: 2vh;
-    border-bottom-left-radius: 2vh;
-}
-
-#listOptions {
-    position: static;
-    display: inline-flex;
-    text-align: right;
-    margin-left: 21vw;
-}
-
 #nameText {
     text-align: left;
-    padding-left: 2vw;
-    border: 1px white solid;
-    font-size: 3vh;
-    padding-top: 1vh;
-    padding-bottom: 1vh;
-    margin-bottom: -0.25vh;
+    padding-left: 0.4rem;
+    border: 0.1rem white solid;
+    font-size: 0.3rem;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    margin-bottom: 0rem;
     cursor: pointer;
-    width: 100%;
     display: flex;
-    height: 7vh;
+    height: 3.2rem;
+    width: 21rem;
     justify-content: space-between;
+}
+
+#nameText > h1 {
+    font-size: 1.25rem;
+    margin-top: auto;
+    margin-bottom: auto;
+    max-width: 13.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #nameTextSelected {
     text-align: left;
-    padding-left: 2vw;
-    border: 1px white solid;
-    font-size: 3vh;
-    background-color: rgb(41,98,255);
-    color: white;
-    padding-top: 1vh;
-    padding-bottom: 1vh;
-    margin-bottom: -0.25vh;
+    padding-left: 0.4rem;
+    border: 0.1rem white solid;
+    font-size: 0.3rem;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    margin-bottom: 0rem;
     cursor: pointer;
-    width: 100%;
     display: flex;
+    height: 3.2rem;
+    width: 21rem;
     justify-content: space-between;
+    background-color: blue;
+    color: white;
+}
+
+#nameTextSelected > h1 {
+    font-size: 1.25rem;
+    margin-top: auto;
+    margin-bottom: auto;
+    max-width: 13.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #nameDivSelected {
@@ -58,11 +62,10 @@
 
 #dataText {
     text-decoration: none;
-    font-size: 3vh;
     display: block;
     color: black;
-    font-weight: 600;
-    padding-bottom: 1vh;
+    font-weight: 500;
+    padding-bottom: 0.5rem;
     width: 100%;
 }
 
@@ -72,16 +75,16 @@
 
 #dataTextInside {
     width: 100%;
-    height: 4vh;
-    font-size: 3.5vh;
+    height: 3rem;
+    font-size: 1.5rem;
     text-align: left;
-    margin-bottom: -1.5vh;
-    margin-top: 0.5vh;
-    padding-bottom: 6vh;
-    padding-top: 1vh;
-    padding-left: 2vw;
+    margin-bottom: -1.5rem;
+    margin-top: 0rem;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    padding-left: 1rem;
     text-align: right;
-    padding-right: 2vw;
+    padding-right: 1rem;
 }
 
 #nameText:hover {
@@ -91,24 +94,23 @@
 }
 
 #optButtonDiv {
-    margin-bottom: 3vh;
+    margin-bottom: 2rem;
     text-align: right;
-    width: 64%;
+    width: 20rem;
     margin-left: auto;
     display: flex;
-    margin-right: 1vw;
+    margin-right: 1rem;
 }
 
 #delListBTN {
     background-color: rgb(255, 198, 198);
     color: black;
-    border-top: 0px;
-    border-bottom: 0.3vh solid black;
+    border-bottom: 0.1rem solid black;
     border-left: 0px;
     border-right: 0px;
-    height: 6vh;
-    width: 8vw;
-    font-size: 2vh;
+    height: 2.5rem;
+    width: 6rem;
+    font-size: 0.75rem;
     margin-left: auto;
 }
 
@@ -121,12 +123,12 @@
     background-color: rgb(255, 255, 255);
     color: black;
     border-top: 0px;
-    border-bottom: 0.3vh solid black;
+    border-bottom: 0.1rem solid black;
     border-left: 0px;
     border-right: 0px;
-    height: 6vh;
-    width: 10vw;
-    font-size: 2vh;
+    height: 2.5rem;
+    width: 8rem;
+    font-size: 0.85rem;
 }
 
 #dropLocationItem {
@@ -135,11 +137,11 @@
     cursor: pointer;
     width: 100%;
     text-align: left;
-    padding-left: 1vw;
+    padding-left: 0.5rem;
 }
 
 #dropLocationItemText {
-    font-size: 2.5vh;
+    font-size: 1rem;
 }
 
 #dropLocationItem:hover {
@@ -155,12 +157,18 @@
 #delLocationBTN {
     background-color: rgb(255, 198, 198);
     color: black;
-    height: 6vh;
-    width: 8vw;
-    font-size: 1.5vh;
-    margin-left: 2.5vh;
-    margin-top: 1vh;
+    height: 2.5rem;
+    width: 7rem;
+    margin-left: 1rem;
+    margin-top: 0.3rem;
     text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+#delLocationBTN > h1 {
+    font-size: 0.75rem;
+    margin-top: auto;
+    margin-bottom: auto;
     overflow: hidden;
 }
 
@@ -179,49 +187,51 @@
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 6vh;
+    margin-top: 2rem;
 }
 
 #topListWrapper {
     display: flex;
     margin-top: auto;
     justify-content: space-between;
-    border-bottom: 0.25vh solid black;
-    padding-bottom: 2vh;
+    border-bottom: 0.08rem solid black;
+    padding-bottom: 0.5rem;
 }
 
 #bottomListWrapper {
-    margin-top: 1vh;
+    margin-top: 0.5rem;
     display: flex;
+    justify-content: center;
 }
 
 #bottomLeftListWrapper {
-    width: 30%;
-    height: 60vh;
+    width: 22rem;
+    height: 30rem;
     border-bottom: 0.05rem solid black;
 }
 
 #bottomLeftListNameWrapper {
-    width: 100%;
-    height: 60vh;
+    width: 22rem;
+    height: 30rem;
     overflow-y: auto;
 }
 
 #bottomRightListWrapper {
-    width: 70%;
+    width: 50rem;
+    height: 30rem;
 }
 
 #descriptionDiv {
-    border-bottom: 0.25vh solid black;
-    padding-bottom: 1vh;
-    font-size: 3vh;
-    padding-left: 1.5vw;
+    border-bottom: 0.1rem solid black;
+    padding-bottom: 0.3rem;
+    font-size: 1rem;
+    padding-left: 0.3rem;
 }
 
 #descriptionDiv textarea {
-    font-size: 2vh;
-    width: 85%;
-    height: 7vh;
+    font-size: 0.8rem;
+    width: 40rem;
+    height: 2rem;
 }
 
 #shareBTN {
@@ -229,31 +239,49 @@
     margin-top: auto;
     margin-bottom: auto;
     margin-right: 0.5rem;
-    background-color: rgb(160, 160, 160);
-    height: 4vh;
-    width: 5vw;
-    font-size: 1.5vh;
+    background-color: rgb(151, 151, 151);
+    height: 2rem;
+    width: 4rem;
+    font-size: 0.8rem;
 }
 
 #shareBTN:hover {
-    background-color: rgb(77, 77, 77)
+    background-color: rgb(51, 51, 51)
 }
 
 
 #listDataWrapper {
-    height: 53vh;
+    height: 26rem;
     overflow-y: scroll;
 }
 
 #nameInput {
-    font-size: 2vh;
+    font-size: 0.8rem;
 }
 
 .red {
-    border: 0.25vh solid red;
+    border: 0.1rem solid red;
 }
 
 .normal {
     transition-duration: 1s;
-    border: 0.25vh solid black;
+    border: 0.1rem solid black;
+}
+
+#addLocalBTNOff {
+    background-color: rgb(255, 255, 255);
+    color: black;
+    border-top: 0px;
+    border-bottom: 0.1rem solid black;
+    border-left: 0px;
+    border-right: 0px;
+    height: 2.5rem;
+    width: 8rem;
+    font-size: 0.85rem;
+    color: gray;
+    border-color: gray;
+}
+
+#addLocalBTNOff:hover {
+    cursor: not-allowed;
 }

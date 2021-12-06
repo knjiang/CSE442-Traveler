@@ -2,11 +2,12 @@ import json
 from channels.generic.websocket import WebsocketConsumer
 from rest_framework.authtoken.models import Token
 from asgiref.sync import async_to_sync
-from django.contrib.auth.models import Group, User
-from .models import Messages, LastSent
+from django.contrib.auth.models import User
+from .models import Chat, Messages
 from profiles.models import Profile, Location, LocationList, SavedLocation
 from forums.models import Post, Comment, Emoji
 from django.db.models import Q
+from django.shortcuts import get_object_or_404
 
 class ChatConsumer(WebsocketConsumer):
 
@@ -23,39 +24,27 @@ class ChatConsumer(WebsocketConsumer):
                 self.channel_name
             )
             userInstance = Profile.objects.get(pk = self.user_id)
-            logs = Messages.objects.filter(Q(profile = userInstance)|
-                                            Q(sender = userInstance)).values_list("sender", "profile").distinct().order_by('creationDate').distinct()
-            messaged = len(set(logs))
-            count = 0
+            chatLog = userInstance.chat_set.all()
             res = []
-            ids = []
-            for i in logs.reverse():
-                if count >= messaged:
-                    break
-                if i[0] not in ids and i[0] != self.user_id:
-                    ids.append(i[0])
-                    count += 1
-                if i[1] not in ids and i[1] != self.user_id:
-                    ids.append(i[1])
-                    count += 1
-            for i in ids:
-                p = Profile.objects.get(pk = i).user.email
-                if p != userInstance.user.email:
-                    res.append(Profile.objects.get(pk = i).user.email)
-
-            logs = LastSent.objects.filter(Q(user_1 = userInstance)|
-                                            Q(user_2 = userInstance))
-            lastSent = {}
-            for m in logs:
-                if m.user_1 != userInstance:
-                    lastSent[m.user_1.user.email] = m.messages
-                if m.user_2 != userInstance:
-                    lastSent[m.user_2.user.email] = m.messages
+            for c in chatLog:
+                temp = {}
+                users = []
+                messages = []
+                for u in c.users.all():
+                    users.append(u.user.email)
+                for a in c.chatLog.all():
+                    messages.append({"sender": a.sender.user.email, "message": a.message})
+                temp["id"] = c.id
+                temp["users"] = users
+                temp["peek"] = messages[0] if messages else []
+                temp["type"] = c.type
+                temp["name"] = c.name
+                temp["nameChanged"] = c.nameChanged
+                res.append(temp)
             self.accept()
             self.send(text_data=json.dumps({
                 'status': 'updateConnected',
-                'users': res,
-                'lastSent': lastSent
+                'chat': res
             }))
         else:
             pass
@@ -70,63 +59,56 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data):
         data = json.loads(text_data)
         if data["status"] == "send":
-            receiver = data["receiver"]
-            message = data["message"]
-            self.receiver_id = User.objects.get(email__exact=receiver).id
-            # Send message to room group
-            receiverInstance = Profile.objects.get(pk = self.receiver_id)
-            senderInstance = Profile.objects.get(pk = self.user_id)
-            Messages.objects.create(sender = senderInstance, profile = receiverInstance, messages = message)
-            async_to_sync(self.channel_layer.group_send)(
-                'room-{}'.format(self.receiver_id),
-                {
-                    'type': 'chat_message',
-                    'message': message,
-                    'from': self.user_id
-                }
-            )
-            if LastSent.objects.filter(user_1 = senderInstance, user_2 = receiverInstance).first():
-                LastSent.objects.get(user_1 = senderInstance, user_2 = receiverInstance).delete()
-                LastSent.objects.create(user_1 = senderInstance, user_2 = receiverInstance, messages = message)
-            else:
-                LastSent.objects.create(user_1 = senderInstance, user_2 = receiverInstance, messages = message)
-
-            if LastSent.objects.filter(user_2 = senderInstance, user_1 = receiverInstance).first():
-                LastSent.objects.get(user_2 = senderInstance, user_1 = receiverInstance).delete()
-                LastSent.objects.create(user_2 = senderInstance, user_1 = receiverInstance, messages = message)
-            else:
-                LastSent.objects.create(user_2 = senderInstance, user_1 = receiverInstance, messages = message)
-            self.send(text_data=json.dumps({
-                'status': 'updateChat',
-                'message': message,
-                'from': self.user_email,
-                'to': User.objects.get(email__exact=receiver).email
-            }))
+            sender = get_object_or_404(Profile,user__email=data['from'])
+            id = data['info']['id']
+            users = data['info']['users']
+            message = data['message']
+            chat = Chat.objects.get(pk = id)
+            Messages.objects.create(sender = sender, message = message, chat = chat)
+            ids = []
+            for m in users:
+                u = get_object_or_404(Profile,user__email=m)
+                ids.append(u.id)
+            for i in ids:
+                async_to_sync(self.channel_layer.group_send)(
+                    'room-{}'.format(i),
+                    {
+                        'type': 'chat_message',
+                        'message': message,
+                        'from': data['from'],
+                        'id': id,
+                        'users': users,
+                        'new': data['new'],
+                        'nameChanged': chat.nameChanged,
+                        'name': chat.name
+                    }
+                )
+            chat.save()
         elif data["status"] == "get":
-            friend = data["user"]
-            self.friend_id = User.objects.get(email__exact=friend).id
-            friendInstance = Profile.objects.get(pk = self.friend_id)
-            userInstance = Profile.objects.get(pk = self.user_id)
-            logs = Messages.objects.filter(Q(profile = userInstance, sender = friendInstance)|
-                                           Q(profile = friendInstance, sender = userInstance))
-            res = []
-            for m in logs:
-                res.append([m.messages, m.sender.user.email, m.profile.user.email])
+            id = data["id"]
+            chat = Chat.objects.get(pk = id)
+            messages = []
+            for a in chat.chatLog.all():
+                messages.append({"sender": a.sender.user.email, "message": a.message})
             self.send(text_data=json.dumps({
-                'status': 'getMessage',
-                'message': res
+                'status': 'receiveMessages',
+                'message': messages
             }))
 
     #inwards
     def chat_message(self, event):
         message = event['message']
-        senderInstance = Profile.objects.get(pk = self.user_id)
-        logs = Messages.objects.filter(profile = senderInstance) #latest(bottom) to oldest
-        latest = logs[len(logs) - 1]
+        sender = event['from']
+        id = event['id']
+        users = event['users']
         # Send message to WebSocket
         self.send(text_data=json.dumps({
             'status': 'updateChat',
-            'message': latest.messages,
-            'from': latest.sender.user.email,
-            'to': latest.profile.user.email
+            'message': message,
+            'from': sender,
+            'id': id,
+            'users': users,
+            'new': event['new'],
+            'nameChanged': event['nameChanged'],
+            'name': event['name']
         }))

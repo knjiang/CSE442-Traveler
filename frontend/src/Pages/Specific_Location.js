@@ -6,6 +6,7 @@ import NavBar from '../components/NavBar'
 import SaveLocationtoList from "../components/SaveLocationToList";
 import './Specific_Location.css'
 import { Spinner } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 /*This is the page that shows the location the user clicked*/
 
@@ -51,21 +52,30 @@ function Specific_Location (props) {
     else {
       countryAPI = (spaceIndex === -1 ? pathname : pathname.substr(0, spaceIndex))
     }
+    let countryConverter = {"United-States-of-America": "usa", "United-Kingdom": "uk", "China": "republicofchina"}
+    if (countryConverter[pathname] !== undefined) {
+      countryAPI = countryConverter[pathname]
+    }
+    if (countryAPI == "United") {
+      countryAPI = pathname
+    }
     fetch(`https://restcountries.com/v3.1/name/` + countryAPI + '?fields=name,capital,currencies,population,region,timezones,flags,languages,currencies')
     .then(response => response.json())
     .then(data => {
-      data = data[0]
-      let money = ""
-      let length = Object.values(data["currencies"]).length
-      let counter = 0
-      for (let c of Object.values(data["currencies"])){
-        money += c["name"] + ' [' + c["symbol"] + ']'
-        counter += 1
-        if (counter < length){
-          money += ', '
+      if (!data.status) {
+        data = data[0]
+        let money = ""
+        let length = Object.values(data["currencies"]).length
+        let counter = 0
+        for (let c of Object.values(data["currencies"])){
+          money += c["name"] + ' [' + c["symbol"] + ']'
+          counter += 1
+          if (counter < length){
+            money += ', '
+          }
         }
+        setLocationInfo({"Capital": data.capital, "Population": data.population, "Region": data.region, "Timezone": data.timezones, "Flag": data.flags, "Language": data.languages, "Currency": money})
       }
-      setLocationInfo({"Capital": data.capital, "Population": data.population, "Region": data.region, "Timezone": data.timezones, "Flag": data.flags, "Language": data.languages, "Currency": money})
     })
     setTimeout(function() { //Start the timer
       setErrorMsg(true) //After 1 second, set render to true
@@ -106,14 +116,21 @@ function Specific_Location (props) {
   }
 
   const check_location = window.location.pathname.substr(0, 11);
-  if (check_location == '/locations/' && currentLocation && realLocation) {
+  if (check_location == '/locations/' && locationInfo) {
     return(
       <div>
-          <div style = {{"display": "block", "textAlign": "center", "marginLeft": "0vw", "marginRight": "0vw", "marginTop": "3vh","marginBottom": "5vh"}}>
-            <h1 style = {{"fontSize": "5vh"}}>Welcome to {returnLocationName()}</h1>
+          <div style = {{display: "flex", justifyContent: "space-between","textAlign": "center", "marginLeft": "0vw", "marginRight": "0vw", "marginTop": "1.5rem","marginBottom": "2rem"}}>
+          {user.logged_in && <div> <Link style = {{borderRadius: "0.2rem", marginTop: "auto", marginBottom: "auto", padding: "0.5rem 0.3rem 0.5rem 0.3rem", backgroundColor: "green", color:"white", textDecoration:"None"}} 
+            Link to= {{pathname: '/forum/' + currentLocation}}>{currentLocation.replace(/-/g, ' ')} Forum</Link>
+            </div>}
+            <h1 style = {{"fontSize": "2rem"}}>Welcome to {returnLocationName()}</h1>
             {user.logged_in && <SaveLocationtoList parentCurrentLocation = {currentLocation} parentCookies = {cookies} parentUser = {user}/>}
           </div>
-          {returnLocationInfo()}
+
+          <div>
+              {returnLocationInfo()}
+          </div>
+
       </div>
       )
   }

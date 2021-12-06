@@ -110,7 +110,7 @@ const ForumContent = () =>{
         <div style = {{width: "35vw"}}>
             <div style = {{marginTop: "-3vh", display: "flex", justifyContent:"space-evenly"}}>
                 Search Country: <input id = "inputFilterForum" onChange = {() => filterLocations()} style = {{marginLeft: "auto", marginRight: "auto", width: "15vw", height: "4vh"}}/>
-                <Link style = {{height: "4vh", display: "flex", justifyContent: "center", textAlign: "center", fontSize: "2vh"}} className="btn btn-success" to="/post" >New Post</Link>
+    
             </div>
             <div style = {{marginTop: "-1vh", textAlign: "center"}}>
                 <ListGroup className="mt-4" style = {{"width": "100%", "display": "flex", height: "70vh"}}>

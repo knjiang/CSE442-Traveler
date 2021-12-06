@@ -8,9 +8,11 @@ class Profile(models.Model):
     from_location = models.TextField(max_length=30,default="")
     background = models.TextField(max_length=50,default="")
     visited = models.TextField(max_length=50,default="")
+    displayName = models.TextField(max_length=50, default="")
+    profileLocation = models.TextField(max_length=50, default="")
 
     def __str__(self):
-        return self.user.username
+        return self.user.email
 
 class Language(models.Model):
     name = models.TextField(max_length=30)
@@ -52,6 +54,11 @@ class ShareableLink(models.Model):
 
     def __str__(self):
         return self.url
+
+class ShareableListPageComment(models.Model):
+    body = models.TextField(max_length=100)
+    shareable_list = models.ForeignKey(ShareableLink, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

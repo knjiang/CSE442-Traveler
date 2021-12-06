@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import{ListGroup,ListGroupItem,Button, Modal} from "react-bootstrap";
 import {getLocation} from "../apis/locations";
 import '../components/Forum.css'
-import { GetPostByLocation, AddComment, GetCommentFromPost } from '../apis/forums'
+import { GetPostByTag, AddComment, GetCommentFromPost } from '../apis/forums'
 import { useCookies } from 'react-cookie';
 import { getProfile } from '../apis/profiles';
 import ForumComment from '../components/ForumComment';
 import ShareTag from '../components/ShareTag';
-import { Link } from 'react-router-dom'
 
-const SpecificForum = (props) =>{
+const MyTags = (props) =>{
 
     const pathname = window.location.pathname.substr(7)
 
@@ -42,7 +41,7 @@ const SpecificForum = (props) =>{
             }
             })
         }
-        GetPostByLocation(cookies.token, pathname.replace(/-/g, ' '))
+        GetPostByTag(cookies.token)
         .then(response => response.json())
         .then(data => {
             setAllThreads(data)
@@ -162,8 +161,7 @@ const SpecificForum = (props) =>{
 
     return(
         <ListGroup className="mt-4" onClick={() => handlePicker()} >
-            <h1>{pathname.replace(/-/g, ' ')}</h1>
-            <Link style = {{height: "2rem", display: "flex", justifyContent: "center", textAlign: "center", fontSize: "2vh", width: "8rem"}} className="btn btn-success" to={{pathname: "/post", state: {"country": pathname}}}>New Post</Link>
+            <h1>Tagged Posts</h1>
             {LocationThreads()}
             {showModal()}
             <ShareTag cookies = {cookies} show = {showTag} postID = {selectedTag} callback = {callbackTagModal}/>
@@ -172,4 +170,4 @@ const SpecificForum = (props) =>{
 
 }
 
-export default SpecificForum;
+export default MyTags;
