@@ -32,11 +32,20 @@
     border: 0.15rem solid rgb(84, 84, 255);
 }
 
+#threadWrapper:first-of-type {
+    border: 0.05rem solid black;
+    cursor: pointer;
+    background-color: rgb(247, 254, 255);
+    border-radius: 0.5vh;
+    margin-top: 5vh;
+}
+
 #threadWrapper {
     border: 0.05rem solid black;
     cursor: pointer;
     background-color: rgb(247, 254, 255);
     border-radius: 0.5vh;
+    margin-top: 2vh;
 }
 
 #threadWrapper:hover {
