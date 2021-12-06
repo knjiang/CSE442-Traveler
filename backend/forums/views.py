@@ -52,10 +52,6 @@ class AddCommentView(APIView):
         body = request.data['body']
         comment = Comment(post=post,body=body,profile=profile,comment_id=uuid.uuid4())
         comment.save()
-        if request.tags:
-            for user in request.tags:
-                user_profile = get_object_or_404(Profile,email=user)
-                Tag.objects.create(tagged=user_profile,comment=comment)
         return Response()
 
 class GetCommentFromPostView(APIView):
@@ -195,3 +191,34 @@ class AddEmojiToComment(APIView):
         if not Emoji.objects.filter(comment=comment,name=emoji_name).exists():
             Emoji.objects.create(comment=comment,name=emoji_name)
         return Response()
+
+class AddTag(APIView):
+    """
+        View to add a tag to a post
+    """
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def post(self, request, format=None):
+        post_id = request.data['post_id']
+        email = request.data['email']
+        post = get_object_or_404(Post,id=post_id)
+        tagged = get_object_or_404(Profile,user__email=email)
+        if not Tag.objects.filter(post=post,tagged=tagged).exists():
+            Tag.objects.create(post=post,tagged=tagged)
+        return Response()
+
+class GetPostFromTagView(APIView):
+    """
+    View to get all posts 
+    """
+    def get(self, request, format=None):
+        """
+        Get all posts 
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        all_tags = Tag.objects.filter(tagged = profile)
+        res = {}
+        for t in all_tags:
+            p = t.post
+            res[p.id] = [p.title, p.body, p.location.name, p.profile.user.username, p.id]
+        return Response(res)
