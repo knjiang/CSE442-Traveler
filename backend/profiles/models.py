@@ -54,7 +54,7 @@ class ShareableLink(models.Model):
         return self.url
 
 class ShareableListPageComment(models.Model):
-    body = models.TextField(max_length=50)
+    body = models.TextField(max_length=100)
     shareable_list = models.ForeignKey(ShareableLink, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
