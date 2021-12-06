@@ -30,7 +30,7 @@ const ForumPost = () =>{
             && document.getElementById('bodyText').value != ""){
                 AddPost(cookies.token, document.getElementById('titleText').value ,
                 document.getElementById('bodyText').value, country)
-                history.push('/forum')
+                history.push('/forum/' + country)
             }
             else{setAlertError(true)}
         }
