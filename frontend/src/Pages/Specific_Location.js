@@ -59,7 +59,6 @@ function Specific_Location (props) {
     if (countryAPI == "United") {
       countryAPI = pathname
     }
-    console.log(countryAPI)
     fetch(`https://restcountries.com/v3.1/name/` + countryAPI + '?fields=name,capital,currencies,population,region,timezones,flags,languages,currencies')
     .then(response => response.json())
     .then(data => {

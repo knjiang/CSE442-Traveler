@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef} from "react";
 import{ListGroup,ListGroupItem,Button, Pagination} from "react-bootstrap";
 import {getLocation} from "../apis/locations";
-import {useHistory, useLocation} from "react-router";
+import {useHistory} from "react-router";
 import {Link} from 'react-router-dom'
 import './Forum.css'
-
 
 const ForumContent = () =>{
 
@@ -16,8 +15,6 @@ const ForumContent = () =>{
     const itemsPerPage = 13
     const [active, setActive] = useState(1)
 
-    
-
     useEffect (() => {
         getLocation()
         .then(response => response.json())
@@ -26,9 +23,7 @@ const ForumContent = () =>{
             setList(data.map(({id, name}) => name))
             setFilteredList(data.map(({id, name}) => name))
           }
-        }
-        )
-
+        })
     }, []) // if its empty it only renders once
 
     const goToLocation = (location) =>{       
@@ -111,13 +106,11 @@ const ForumContent = () =>{
         setFilteredList(res)
     }
 
-    
-
     return(
-        
         <div style = {{width: "35vw"}}>
             <div style = {{marginTop: "-3vh", display: "flex", justifyContent:"space-evenly"}}>
                 Search Country: <input id = "inputFilterForum" onChange = {() => filterLocations()} style = {{marginLeft: "auto", marginRight: "auto", width: "15vw", height: "4vh"}}/>
+    
             </div>
             <div style = {{marginTop: "-1vh", textAlign: "center"}}>
                 <ListGroup className="mt-4" style = {{"width": "100%", "display": "flex", height: "70vh"}}>

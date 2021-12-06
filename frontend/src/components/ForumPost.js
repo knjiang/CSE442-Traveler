@@ -44,7 +44,7 @@ const ForumPost = () =>{
 
         useEffect (() => {
             if(a.state){
-                setCountry(a.state)
+                setCountry(a.state.country)
             }
             if (cookies.token && !user.logged_in){
                 getProfile(cookies.token)
