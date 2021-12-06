@@ -82,6 +82,9 @@ function UserProfile(props) {
         <br />
 
         <a href='/edit-profile'><Button id="editButton" variant="outline-dark"><h1 id="buttonText"> Edit Profile </h1></Button></a>
+        <br/>
+        <br/>
+        <a href='/my-tags'><Button id="editButton" variant="outline-dark"><h1 id="buttonText"> My Tags </h1></Button></a>
 
         <p style={{
           textAlign: 'center', fontStyle: 'italic', fontSize: '2vh', border: 'dotted', justifyContent: 'center',

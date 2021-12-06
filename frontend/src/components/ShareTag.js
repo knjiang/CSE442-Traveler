@@ -20,7 +20,6 @@ function ShareTag(props){
         <Modal.Title>Tag your friend!</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        post is {props.postID}
         <form onSubmit>
             Friend: <input style = {{"width": "10vw;"}} id = "friendName"></input>
             </form>

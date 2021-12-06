@@ -201,3 +201,19 @@ class AddTag(APIView):
         if not Tag.objects.filter(post=post,tagged=tagged).exists():
             Tag.objects.create(post=post,tagged=tagged)
         return Response()
+
+class GetPostFromTagView(APIView):
+    """
+    View to get all posts 
+    """
+    def get(self, request, format=None):
+        """
+        Get all posts 
+        """
+        profile = get_object_or_404(Profile,pk=request.user.id)
+        all_tags = Tag.objects.filter(tagged = profile)
+        res = {}
+        for t in all_tags:
+            p = t.post
+            res[p.id] = [p.title, p.body, p.location.name, p.profile.user.username, p.id]
+        return Response(res)
